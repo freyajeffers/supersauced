@@ -1,0 +1,33 @@
+```mermaid
+flowchart LR
+    subgraph Supabase[Supabase]
+        DB[(PostgreSQL DB)]
+        API[(PostgREST API)]
+        Auth[(GoTrue Auth)]
+        Realtime[(Realtime WS)]
+        Storage[(Storage Bucket)]
+        Edge[(Edge Functions)]
+    end
+    subgraph Directus[Directus CMS]
+        DirectusAPI[(Directus API)]
+    end
+    subgraph Cloudinary[Cloudinary]
+        Cloud[(Media CDN)]
+    end
+    subgraph Analytics[Analytics]
+        PostHog[(PostHog)]
+        Firebase[(Firebase Analytics)]
+    end
+    %% Connections
+    DirectusAPI -->|Sync migrations| DB
+    Edge -->|Upload URL| Cloud
+    Cloud -->|Media URLs| DB
+    DB --> API
+    Auth --> API
+    Realtime --> API
+    Storage --> API
+    Edge --> API
+    API -->|Events| Realtime
+    API -->|Analytics calls| PostHog
+    API -->|Analytics calls| Firebase
+```

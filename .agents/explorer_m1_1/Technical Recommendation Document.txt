@@ -1,0 +1,396 @@
+﻿TRD
+Create a technical recommendation document that describes the platform/tool each feature must support:
+    • Mobile app development
+    • Database/backend
+    • Recipe content storage
+    • Image/media storage
+    • Search/filtering
+    • Saved recipe state
+    • Build/deployment process
+    • Error monitoring
+    • Analytics, if included
+Document:
+    • Options Evaluated: What other software tools could technically do this?
+    • Recommendation: Any tool you know or see the tool suggested in the Product Requirement Doc
+    • Cost: Is it free, tier-based, or low-cost for an early-stage startup?
+    • Complexity: How hard is it to integrate?
+    • Risks: What could go wrong (e.g., slow video playback, security)?
+    • MVP vs. Later-Phase Needs: What do we absolutely need for the 6-week launch versus what gets delayed?
+Resources:
+    • Use the product requirement document to assist
+        ◦ “#6 User Flow” to determine how features are used
+        ◦ “#9 Technical Requirements” to see already suggested tools
+Note: 
+    • Feel free to give suggestions to the features assigned to another person (just label your work)
+    • Platforms the mobile app and website will serve: iOS (App Store, Phase 1 launch priority) and Android (Google Play, to follow shortly after iOS). ← helpful information when doing research.
+Assigned	Feature	Options Evaluated	Recommendation	Estimated Cost	Integration Complexity	Primary Technical Risks	MVP vs. Later-Phase Scope
+Steven	Mobile App Development	React Native (Expo)
+    • Single codebase for IOS and Android
+    • Components built in React Native will be rendered natively to the operating system (authentic look)
+    • Free & open source 
+        ◦ React Native Documentation 
+Swift
+    • Apple’s programming language for IOS; handles Android differently (need an additional code repository)
+    • Free
+    • Don’t think anyone code in Swift
+Flutter
+    • Single codebase
+    • Doesn’t rely on native UI components built into IOS and Android; doesn't feel authentic 
+    • Free & open source 
+    • Diverges from the JS ecosystem (Supabase), causing integration problem
+	React Native
+    • Single codebase for IOS and Android
+    • Components will be rendered natively to IOS or Android (authentic look)
+    • Uses same languages as JavaScript/TypeScript, and React (for frontend/web developers)
+    • Expo - toolkit that makes React Native easy to use
+        ◦ Provides pre-built features (camera, notifications, users’ 
+        ◦ local filesystem, etc)
+        ◦ Think react is the “car engine” and Expo is the car that comes with preinstalled features 
+    • Pairs well with Supabase 
+
+	React Native - completely free
+Expo - completely free
+
+
+
+	    • Low - Medium. Familiar to JS/React developers. 
+    • React native documentation 
+    • Expo helps abstract features 	    • Slightly slower for complex animations
+        ◦ However, for scrolling through cards and tapping recipes, that isn’t a problem
+        ◦ Doesn’t affect video quality, perform as usual
+    • Expo simplifies code setup, so we don’t have to deal with Xcode (Apple’s IDE) or Android Studio  (Android’s IDE)
+        ◦ However, for advance features like Bluetooth, we may need extra steps (not relevant)
+    • Upgrading Expo versions can break things
+        ◦ However, it’s manageable; don’t upgrade randomly during a project 
+These risks aren’t that relevant and will not cause a big issue during the 6 week process 	MVP:
+    • React Native (Expo) codebase - coding in VSCode
+    • Target IOS (App Store) first
+Later-Phase:
+    •  Target Android (Google Play)
+
+
+Connor	Website & QR Landing Pages 
+    • Deep Linking	Next.js
+    • Matches React Native implementation and has the most documentation.
+    • Most standard, it doesn’t excel at flexibility or performance.
+    • React Ecosystem
+    • Free & open source
+    • Has Official Supabase support.
+Remix React Router
+    • Best deep linking capabilities and cleanest architecture.
+    • Higher hosting complexity, slower speeds.
+    • React Ecosystem
+    • Free & open source
+    • Has Supabase Integration
+Astro
+    • Fastest performance/load times.
+    • Greater complexity for implementation, since it is not purely React.
+    • Any Ecosystems
+    • Free & open source
+    • Has Supabase Integration	Next.js
+    • Matches React Native (Expo) implementation, using the same JS/TypeScript (shared logic)
+    • Has lots of clear documentation.
+        ◦ Next.js Docs
+    • Standard and robust option.
+    • Exclusively uses React Ecosystem
+    • Free & open source
+    • Has Official Supabase support.	Development - Free & open source
+Hosting (Vercel) - Has free tiers, but can be paid	    • Low - Medium complexity, shares many similarities with React Native (Expo), so good for React/JS devs. 
+    • Low deployment complexity.	    • Mobile web loading may be slowed down for large JS bundles.
+        ◦ However the app should be the main platform for mobile, so this should be a worry.
+    • Critical Security Exposures
+        ◦ Bugs and vulnerabilities may appear when passing backend data and cause leaks.
+    • Architecture & Engineering Complexity
+        ◦ Blurred, complex mental models due to abstraction and potential hydration mismatches.
+    • Vendor Lock-In
+        ◦ It is difficult to host using any vendor other than Vercel and many features are lost.	MVP:
+    • Next.js codebase - coding in VSCode
+    • Next.js - website deep linking to app
+Connor & Steven	Build/Deployment Process 
+    • source control & tickets
+    • Error monitoring
+	STEVEN: 
+    • Expo Go app - a live preview of app
+        ◦ Expo Go Documentation
+        ◦ Clone the repo
+        ◦ Run npm install
+        ◦ Run npm expo start
+        ◦ Scan the QR code with phone camera
+    • Expo Application Services (EAS) - for building (compiling code into a deployable file) and submitting to the App Store. 
+    • Git/GitHub
+        ◦ Source control (git) to track versions of code
+        ◦ Branches for individual developers
+        ◦ pull request to view code before merging to main repo
+    • IDE:	
+        ◦ VSCode (IDE) - general web development and backend (runs on almost any computer and supports many extensions)
+        ◦ XCode (macOS) - Apple’s IDE, only works on macOS
+        ◦ Android Studio - Developing Android apps (too niche)
+—-
+Connor:
+    • Expo Go + Expo Development Build + Expo Application Services
+        ◦ Expo Go + Expo Development Build are simpler to use.
+        ◦ We will need to switch from Go to Development Build when we start using custom native code. (MVP → to full App)
+        ◦ Expo Application Services handles both CI/CD Builds and OTA Updates.
+    • React Native CLI + GitHub Actions + Fastlane + React Native Stallion
+        ◦ React Native CLI gives more control, but is more difficult to use.
+        ◦ React Native CLI requires local installation of Xcode and Android Studio
+        ◦ Uses GitHub Actions for tests, Fastlane for deployment, and React Native Stallion OTA Updates	STEVEN:
+    • Expo Go (general app testing)
+    • Expo Development Build (testing advanced features on your app: in-app purchases using Stripe)
+    • Expo Application Services 
+    • VS Code
+    • Git/GitHub	STEVEN: 
+    • Expo GO - completely free
+    • Expo Application Services -
+        ◦ Free plan - $0
+            ▪ Build 15 times on iOS and Android
+            ▪  Delivers over-the-air updates to 1000 active users  
+        ◦ Starter plan - $19 (scaling larger)
+            ▪ Larger users
+    • Expo Development Build - completely free
+    • VS Code - completely free
+    • Git/GitHub - completely free
+–	STEVEN:
+    • Expo Go → Expo Development Build 
+        ◦ Initial: low
+            ▪ Everyone downloads Expo Go to view the loaded project in it
+        ◦ Latter: low 
+            ▪ Installs a different app to view
+            ▪ Live changes reflect instantly (UI, tweaks, logic, styling)
+            ▪ However, only re-download if you add a new native package (camera, library, push notification, etc)
+    • Expo Application Services: low
+        ◦ Command line setups steps provided
+        ◦ 
+    • VS Code - low (standard dev tools)
+    • Git/GitHub - low (standard dev tools)
+	Connor: 
+    • App Bloating
+        ◦ Unused pre-bundled libraries and APIs in Expo will bloat the app.
+    • Dependency Issues and Version Mismatches
+        ◦ Third party libraries can fall out of sync with the Expo SDK version.
+    • Vender Lock-in
+        ◦ We are forced to use EAS and are subject to its pricing/load times.
+    • Lack of Sandboxing
+        ◦ The threat of giving poisoned extensions OS-level permissions through VScode
+    • Hard Coded Sensitive Data
+        ◦ Commit passwords, private keys, or API tokens in Github can be scraped by automated bots.	Connor:
+    • MVP:
+        ◦ Expo Go - MVP testing
+        ◦ VSCode - code development
+        ◦ Git/Github - development version control
+    • Later-Phase
+        ◦ Expo Development Build - app testing
+        ◦ Expo Application Services - app building and OTA updates
+Freya & Jacqueline	Database & Backend	    • Supabase (SQL)
+        ◦ Open-Source database that is useful in linking recipes to ingredients and steps.
+        ◦ Useful for dietary tags and review mechanisms.
+        ◦ Communicates with the front end to cache the recipe steps when needed.
+        ◦ Free tier seems sizable for our recipes and app needs for the MVP. Easily implemented.
+    • Firebase (Cloud)
+        ◦ REcipies store independently as text, can sync and show recipes as needed.
+        ◦ Searching systems may become a problem later for filtering
+        ◦ Free and easy to set up but we may run into problems and bottlenecks later down the line	Supabase (PostgreSQL).
+- Since our main goal is fixing meal decision fatigue, we need the app to filter recipes instantly. Postgres is way better at handling all the relational math for ingredient scaling and complex dietary filters.
+- It automatically spins up secure REST and GraphQL APIs for us, which saves us weeks of writing custom backend routing code.
+- Also, mobile connections drop all the time when people are moving around. Supabase has this thing called Supavisor for connection pooling, which will stop our database from crashing if people's cell service cuts out while they're cooking.	- It's super startup-friendly. The free tier will easily cover us through the whole 6-week MVP build and QA testing phase. When we do need to upgrade, the Pro plan is pretty predictable, unlike AWS where a random viral recipe could unexpectedly cost us a fortune in compute time.	- Low to Medium. We can use the Supabase CLI to automatically generate strict TypeScript types for our frontend. This is awesome because if someone changes a database column, the React Native app will just fail to compile locally instead of breaking for users in production.
+- Plus, we are plugging Directus (our CMS) straight into the same Postgres database, so we don't have to write any messy glue code to sync content between two completely different systems.
+	- Security (Row Level Security): Since the mobile app talks directly to the database, our Row Level Security (RLS) rules have to be flawless. If we mess up the config, someone could just easily scrape our entire recipe library or see other users' private info.
+- Directus Oopsies: Because the CMS connects directly to our production data, a non-technical content manager could accidentally change a database column type or delete a constraint from the admin panel and completely crash the app. We need to lock down their permissions hard so they can only touch recipe text and images.
+	- MVP (6-Week Launch): We strictly need to get the core tables set up (users, recipes, ingredients) and heavily index them so the dietary filters feel instant. We also absolutely need to lock down the RLS policies before we launch.
+- Later Phase (Phase 2+): Once we start selling DTC cubes, we'll need to hook this up to Shopify. I think we can use Supabase Edge Functions to listen for events and quietly sync our user profiles over to Shopify's customer records in the background, which will set us up perfectly for the rewards program down the line.
+
+Freya	Authentication	    • Shopify Multipass / Native Shopify SSO: I looked into just using Shopify's native login since our end goal is DTC e-commerce. But honestly, making users go through a whole store checkout login just to see a recipe feels like way too much friction. Plus, if Shopify's API goes down during Phase 1, no one can even get into the app.
+    • ​Firebase Auth / Auth0: These are the industry standards, but using them with our Supabase PostgreSQL database feels super messy. We'd have to write custom webhooks just to sync Firebase user IDs with our own database, which just adds lag and more stuff that can break.
+    • ​Supabase Auth (Integrated): This uses GoTrue and is built right into our database. When someone logs in, their data is instantly tied into our Row Level Security (RLS) rules without us having to write any extra glue code.	To hit our goal of "Zero Friction Paths", I really think we should use native Apple and Google sign-ins, plus passwordless magic links. Users will just close the app if we make them type out a password while their hands are messy from cooking.  
+​Schema Architecture & Relational Mapping: Supabase keeps the auth stuff separate from the public app data. To make sure our CRM and personalization work smoothly, here's how I think we should set up the tables:
+​auth.users (Managed by Supabase): This is a hidden system table that handles all the OAuth handshakes, password hashing, and sessions automatically.
+​public.users Table (The Core Identity): Needs an id (UUID), email, and created_at timestamp. We should link the id directly to auth.users(id) as a Foreign Key with an ON DELETE CASCADE rule. We can write a quick PostgreSQL trigger to automatically drop a row in here the exact second someone finishes signing up.  
+​public.user_profiles Table (The CRM Engine): We'll use this for the user_id, dietary_preferences (we can just use a Postgres array for things like vegan or high-protein), discovery_channel for marketing attribution, and the sauce_log to track what cubes they actually own. Keeping this separate from the core users table means we won't lock up the main database when people are constantly updating their profiles.  	​It's basically free for us right now. Supabase Auth gives us up to 50,000 Monthly Active Users (MAU) on the free tier, and the user schema just uses our regular PostgreSQL storage limits.	Low to Medium. Expo already has really good libraries for handling the Apple/Google logins on the frontend, so we don't have to deal with messy web-views. The only slightly tricky part for the backend is writing that first PostgreSQL trigger to safely sync auth.users with public.users when they first join, but it shouldn't be too bad.	​Insecure Token Storage: If we just dump session tokens into plain text AsyncStorage, someone could easily hijack a session. It's super important that we strictly enforce using expo-secure-store to lock the tokens in the iOS Keychain and Android Keystore.  
+​RLS Data Leakage: Since user profiles hold specific dietary preferences, we need really strict Row Level Security (RLS) on both the public.users and public.user_profiles tables. We have to make sure users can only query or edit rows that match their exact auth token so nobody scrapes our user data.  	MVP (6-Week Launch): We absolutely need the smooth onboarding via Apple, Google, and Magic Links working flawlessly. The schema has to capture their survey answers (like dietary stuff and their first Sauce Log setup) and push it to the user_profiles table right when they make an account.  
+​Later Phase (Phase 2+): Later on, we can add fields for birthday and retail_location_preferences for the rewards program. The coolest part is we'll add a shopify_customer_id to the users table. Then, we can use a Supabase Edge Function to quietly sync their app profile over to Shopify, so they don't have to make a new account when we launch the DTC store.  
+Freya	Recipe Data Schema	- Document Store (NoSQL / MongoDB / Firestore): I thought about just dumping the whole recipe—ingredients, steps, metadata, and all—into a single massive NoSQL document because it's super easy to read on the frontend. But honestly, if we ever need to update a specific cube's branding across all recipes, or do crazy filtering like "give me all vegan recipes under 15 mins," a document store is going to choke. We'd have to write really messy batch updates and duplicate a ton of data.
+- Graph Database (Neo4j): I looked at graph databases because they're really cool for mapping out how ingredients relate to each other, but it's way overkill for our Phase 1 MVP. We'd have to learn a whole new query language (Cypher) and it would just slow us down.
+- Relational Database (PostgreSQL): This forces us to be super strict with our data shape, which is exactly what we need to make sure the macros and serving sizes scale perfectly on the phone without breaking the app.
+	Relational schema via PostgreSQL (Supabase).
+- To hit our "Speed to Meal" goal (finding dinner in under 30 seconds), we need super fast filtering. By splitting everything up into strict recipes, recipe_ingredients, and recipe_steps tables, we can handle the math for the dynamic serving size adjuster natively on the backend.
+- We can use Postgres's built-in array types for the cube_tags[] and dietary_tags[]. If we slap a GIN index on those arrays, our app's search filters will feel lightning-fast even when people cross-reference a bunch of dietary tags at once.
+	- It's totally included in our existing Supabase database plan, so building out a complex schema doesn't add any extra infrastructure costs to our startup budget.
+	- Medium. It's a bit tricky because we have to set up really strict foreign key rules. Like, if a content manager deletes a draft recipe, we need an ON DELETE CASCADE rule to automatically wipe out the leftover ingredients and steps so our database doesn't turn into a messy swamp of orphaned rows.
+- Also, we have to use strict decimal data types for the ingredient quantities instead of normal floating-point numbers. Otherwise, the math gets weird (like showing 0.300000004 cups instead of 0.3) and it'll completely break the frontend UI.
+	- The N+1 Query Problem: If the mobile app grabs a list of 10 recipes, and then does 10 separate database calls to fetch the ingredients for each individual one, the app is going to lag out hard. We have to make sure we use joined views or Supabase's GraphQL endpoints to grab the whole payload in one single network trip.
+- Directus Data Types: Since the content team is typing this stuff directly into the Directus CMS, we need bulletproof database constraints. If someone accidentally types a word into the timer_seconds field instead of a number, the Guided Mode countdown timer will literally crash the app mid-cook. We have to lock down the data types at the database level.
+	- MVP (6-Week Launch): We absolutely need these three core tables mapped out perfectly so the Quick View, Guided Mode, and dietary filters actually work. Getting the dynamic serving size math right is a massive blocker for launch.
+- Later Phase (Phase 2+): Later on, we'll need to level up the schema for the "Sauce Log" feature. We'll have to build new tables that link the user's account directly to the physical cubes they have in their real-life pantry, so we can trigger low-stock push notifications and prompt them to buy more from our DTC store.
+
+Freya 	Saved recipe state	- Redux / Global State (Redux Toolkit): I spent some time looking into Redux because it's what everyone talks about for React state management, and it's taught in almost every bootcamp. But honestly, it's a massive overkill for what we need right now. To just track if someone clicked a heart or bookmark icon, we'd have to write so much boilerplate code—actions, reducers, configuring the store, and dispatchers. And the biggest dealbreaker is that Redux only handles client-side state. It doesn't actually talk to the database out of the box. If we used Redux, we'd have to bolt on heavy middleware like Redux Thunk or Redux Saga just to manage the asynchronous API calls to Supabase. That means we'd be manually writing code to track isLoading, isSuccess, and isError for every single button press. We just don't have the time in a 6-week MVP to manage all that plumbing when we really only need to sync a few simple user actions to the cloud.
+- Local Storage Only (AsyncStorage): We could just save their favorite recipes straight to the phone's local storage. But if they delete the app or log in on their iPad, all their saved dinners vanish. Plus, we need this engagement data on the backend to figure out which cubes are actually popular.
+- TanStack Query (React Query) + Supabase: This is the sweet spot. It handles the API calls, caches the data locally so the app feels crazy fast, and syncs everything to our database behind the scenes.
+	TanStack Query (React Query) syncing to Supabase.
+- For our goal of zero-friction cooking, we can't have the UI freeze with a loading spinner while it waits for the server to confirm a "save." 
+- React Query lets us use "optimistic updates". This means when a user taps the heart or bookmark, the button fills in instantly on their screen, and React Query quietly syncs that action to our Supabase database in the background.
+- It also handles caching automatically, so if they close the app and open their "Saved" tab again, the recipe library loads instantly on repeat visits without having to fetch it all from the network again.
+	- TanStack Query is completely free and open-source for our React Native frontend. The actual saved states just get stored as simple relational rows in our existing Supabase database, so it doesn't add any extra infrastructure costs.
+	- Medium. React Query is super powerful, but configuring the cache invalidation is kind of a headache. If we don't set up our query keys right, a user might un-save a recipe, but it still shows up in their "Saved" tab because the local cache didn't clear out. We have to be really precise with how we structure the frontend state logic.
+	- Network Drops (No Offline Mode): The PRD specifically says we aren't supporting offline use at launch. If someone saves a recipe while walking into a dead cell zone in the grocery store, the background sync will fail. We have to build really good API retry logic for transient network failures, and show a clear, friendly error message instead of letting the app silently crash or freeze on a blank screen.
+	- MVP (6-Week Launch): It's a hard requirement that when someone taps save, the recipe shows up in their Saved tab within 1 second, and that state has to survive if they close the app or switch phones. The optimistic UI updating is mandatory for launch.
+- Later Phase (Phase 2+): We'll start using all this saved recipe data to power the "Discovery Mode" algorithm. If the backend knows they save a lot of spicy, 15-minute chicken recipes, we can use that data to prioritize showing them similar cards in the swipe stack.
+
+Jacqueline	Recipe/Hero Image/Step Videos Content Storage	    • Supabase (SQL)
+        ◦ Uses the same setup as the backend database.
+        ◦ Can be easily implemented to support user photo uploads and comments.
+        ◦ Easy verification for users and of SuperSauced content for photo storage for recipes.
+        ◦ No extra configuration, photo storage tends to be cheap.
+    • AWS (Cloud)
+        ◦ More capabilities for later phase needs as recipes and storage needs grow.
+        ◦ Hard to set up and implement in the beginning stages. Requires login, security keys and extra measures. May not be suitable for the 6 week timeframe.
+        ◦ Cheap for cloud storage but would be a big portion of time and effort to get running and worrying properly.					
+Jacqueline	Content Admin	    • Supabase (SQL)
+        ◦ Raw spreadsheet view of content, admin can go in and fix problems directly.
+        ◦ Easy to delete data and make mistakes when importing and transition data.
+        ◦ Free with minimal setup
+    • Retool
+        ◦ Custom portal that us user friendly and safe, using database strings.
+        ◦ Can work moderately well with Supabase.
+        ◦ Clean website and easy to interact and understand with while using. Formats and changed can be pushed easily
+        ◦ Free for early stages with minimal members and data. May run into problems in the long term as things expand.					
+Josephine	Search/Filtering
+    • Recipe ingredient or title → show up
+    • “CH” → shows anything with CH…	
+    • InstantSearch
+        ◦ Geared towards store-fronts with products  
+        ◦ Various widgets from highlight, multi-index search, autocomplete, loading indicators, and infinite scroll. Ability to create personal widgets
+        ◦ Requires an Algolia plan. While there’s a free plan available, it is limited to 10,000 searches a month 
+    • React 
+        ◦ Create a built-in search bar and filter. Allows for more customization and images. 
+        ◦ React-native-autocomplete-input: automatically brings up recommendation search results as the user types 
+    • FlashList
+        ◦ Provides various options for scrolling and rendering items
+        ◦ Built for better performance on low-end devices 
+        ◦ Smooth and complex layout  	InstantSearch
+    • Its company, Algolia, has a built-in connector to Supabase, allowing for easy indexing
+    • Provides many widgets for ease of use and improved user experience
+    • Has automatic filtering though category filtering  
+    • Can integrate Google Analytics 	InstantSearch - 10,000 search requests per month, then $0.50 to $1.75 per additional 1,000 requests. Different plans depending on keyword search and AI capabilities. Best to start with the free “Build” plan.  	    • Low
+        ◦ While originally intended for store products, it can be shifted towards alternative purposes like an recipe  finder app
+        ◦ Requires an Algolia account and its API key 
+        ◦ Built for React and Vue deployment 	    • Primarily built more for website-based searching, however still designed to be used  with mobile devices 
+        ◦ Slightly slower mobile speeds	MVP:
+    • Implement search-bar functionality with category searching  
+    • Add the filter side-bar with the different recipe categories 
+Later-Phase
+    • Keep track of the number of search requests and if the Algolia pricing plan needs to be updated
+    • Add additional categories for the filter based on customer need 
+    • Update Supabase with additional recipes 
+Josephine	Data Fetching	    • TanStack Query (React Query)
+        ◦ Works with a variety of frameworks, including React 
+        ◦ Automatically caches data so the app won’t trigger another fetch elsewhere
+        ◦ Multiple components requesting the same API only creates one API call
+        ◦ Failed API requests automatically retry 
+        ◦ Pre-built DevTools for clearer debugging
+    • SWR
+        ◦ Backed by Vercel. Developed for React and Next.js applications 
+        ◦ Better performance from its smaller bundle size (5.3KB)
+        ◦ Automatic revalidation to keep the data fresh
+        ◦ Has a "cache first, update later" strategy to avoid blank loading states for users
+        ◦ Simplicer to master and works best with Next.js ecosystem 
+    • Apollo Client
+        ◦ Designed for modern React, JavaScript, and TypeScript
+        ◦ Used for managing remote and local specifically for GraphAPI 
+        ◦ Provides normalized in-memory cache to eliminate duplicate data and maintain a consistent UI.	TanStack Query
+    • Official documentation and examples with Supabase and Next.js  
+    • Pre-built DevTools is an excellent debugging tool. Can display when the app’s queries were last fetched and can manually trigger refreshes. Helpful when testing why certain data is refreshing too often or not enough
+    • Has useful features like optimistic updates to make the UI feel more instant for the user and infinity queries for possible infinite scrolling 
+    • More active developer community leading to better programming support	TanStack Query - completely free & open source	Medium - steeper learning curve 
+    • Doesn’t need any other dependencies 
+    • Does provide automatic SSR dehydration/hydration between the TanStack Router and TanStack Query
+	    • Larger package size (11.4 KB) compared to other applications 
+    • Had a recent software supply chain attack attempting to look for credentials. However, it was resolved within hours.
+    • While it’s designed for better performance and less boilerplate code, it’s has many advanced features that can add unnecessary complexity 	MVP
+    • TanStack Query - install library and code within VSCode, hopefully with React or Next.js
+    • Set up the necessary API requests 
+
+Later-Phase Scope
+    • Continue to stay updated on new version  TanStack Query versions for any feature upgrades or possible bugs. 
+Carolyn	Analytics (TBD what tools)	Firebase Analytics, Mixpanel, Amplitude, PostHog
+    • Firebase Analytics — free, integrates as an Expo config plugin (no native Xcode/Android Studio work required)
+    • Mixpanel — stronger cohort/funnel analysis, but paid tiers escalate quickly past the free allotment
+    • Amplitude — similar to Mixpanel; steep pricing cliff between free and paid tiers
+    • PostHog — open-source, can self-host for full data ownership, but adds ops overhead we don't have bandwidth for in 6 weeks
+	Firebase Analytics
+    • Free at our scale, no cost concern pre-revenue
+    • Installs as an Expo config plugin — fits directly into the existing React Native (Expo) workflow, no native code changes needed
+    • Auto-tracks screen views and basic engagement out of the box
+    • Covers the core events we need to validate the product: recipe viewed, recipe saved, search performed, "start cooking" entered	Free
+    • Free, unlimited events at our expected early-stage volume
+    • Paid tier only applies to BigQuery export or very high event volume — not a concern for MVP
+	Low
+    • Expo config plugin handles native setup automatically — no manual Xcode/Android Studio configuration
+    • Estimated ~1 day of engineering time to integrate and verify core events
+    • Requires deciding on an event-naming convention up front so data stays usable as we add more events later
+	Low risk for MVP scope
+    • Data lives in Google's ecosystem; less powerful cohort/funnel UI than Mixpanel/Amplitude if we need deeper analysis later
+    • App Privacy section in App Store Connect must accurately list what Firebase collects — mismatch is a common App Review rejection reason
+    • Apple's App Tracking Transparency (ATT) prompt is NOT required for standard first-party analytics like this — only needed if we add cross-app ad tracking later	MVP:
+    • Integrate Firebase Analytics via Expo config plugin
+    • Track: recipe viewed, recipe saved, recipe shared, search performed, filter applied, "start cooking" entered, sign-up completed
+Later-Phase:
+    • Mixpanel or Amplitude for deeper retention/cohort analysis once we have real usage data
+    • PostHog/self-hosted only if data residency becomes a hard requirement
+Carolyn	Apple Store Distribution	Apple Developer Program is the only path to the App Store — the real choice is in beta distribution and build tooling
+    • TestFlight — Apple's built-in, free beta distribution tool
+    • Expo Application Services (EAS) Build/Submit — already our build pipeline (see Steven/Connor's Build/Deployment row); also handles App Store submission
+    • Fastlane + React Native CLI — alternative CI/CD path with more manual control, requires local Xcode/Android Studio
+	Apple Developer Program + App Store Connect + TestFlight, submitted via EAS Submit
+    • EAS Submit (already part of our Expo-based build pipeline) handles the App Store Connect upload directly — no separate Fastlane setup needed for MVP
+    • TestFlight for beta testing — free, built in, no extra tooling
+    • No real alternative to Apple's own pipeline for distribution itself — enrollment and App Review are mandatory regardless of build tool
+	$99/year (Apple Developer Program); everything else free
+    • Apple Developer Program: $99/year flat, required before any submission work can begin
+    • TestFlight: free
+    • EAS Build/Submit: covered under the existing Expo free tier (15 builds/month) referenced in the Build/Deployment row — may need the $19 Starter plan if we exceed that during testing
+	Low, but time-sensitive
+    • Enrollment itself is simple but can take 24–48 hours to verify — longer if a D-U-N-S number is needed for an org account
+    • App Store Connect setup (bundle ID, app record) is straightforward, low effort
+    • EAS Submit integrates directly with our existing Expo build, minimal extra configuration
+	Timeline risk is the primary concern, not technical risk
+    • Late enrollment becomes the critical path blocker for the entire launch — must start in week 1
+    • App Review rejection is common on first submission (broken links/placeholder content, inaccurate metadata, incomplete App Privacy disclosures) — budget for at least one resubmission cycle
+    • Review time is typically 24–48 hours but can stretch around major Apple events — don't submit on the last possible day
+    • App Privacy questionnaire must match what the Analytics integration actually collects, or it risks rejection
+	MVP:
+    • Enroll in Apple Developer Program (start immediately, week 1)
+    • Create App Store Connect record and bundle ID
+    • TestFlight internal beta → external beta
+    • Submit via EAS Submit, leaving 1 buffer cycle for possible rejection
+    • Target iOS (App Store) only, per Phase 1 priority
+Later-Phase:
+    • Android / Google Play submission
+    • Fastlane automation, if we move to weekly release cadence post-launch
+
+
+Research Notes
+Research notes:
+Platforms - App Store and Android (also for web)
+Mobile framework - React Native (single codebase for IOS and android)
+    • React Query - caching (recipe library feels instant on repeat visits) - relevant for recipe list and filter UI work
+Database - Supabase - (authentication like Google signin, Apple signin hero images)
+    • Next.js website and React native app talk to same Supabase database
+Website & QR Landing Pages - Next.js website hosted on vercel (speed, search engine)
+
+To create the react native app (expo) in terminal: npx create-expo-app@latest MyApp
+
+MyApp/
+├── app/              ← your screens live here (file-based routing)
+├── components/       ← reusable UI components
+├── assets/           ← images, fonts, icons
+├── constants/        ← colors, theme values
+├── hooks/            ← custom React hooks
+├── package.json      ← dependencies (you'll see react-native listed in here)
+└── app.json          ← Expo config (app name, icons, splash screen)
+
+Constraint:
+We want recipe on website and app. We need separate codebase for the app and website. Next.js for website and react native for app. However, both website and app talk to the same database in Supabase.
+
+
+
+

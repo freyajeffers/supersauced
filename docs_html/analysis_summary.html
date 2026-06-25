@@ -1,0 +1,31 @@
+<h1>Super Sauced Database Schema Analysis Summary</h1>
+<p>TL;DR: The schema provides fast, relational, and secure storage for users, recipes, ingredients, and steps, with GIN indexing, RLS, and cascade deletes.
+This document summarizes the final backend architecture and database schema design for the Super Sauced MVP.</p>
+<h2>Core Database Schema Design</h2>
+<p>The Super Sauced database schema is designed for speed, precision, and relational integrity. It consists of four main tables in the <code>public</code> schema, integrated with Supabase's <code>auth</code> schema:</p>
+<ol>
+<li><strong><code>user_profiles</code></strong>: Linked to <code>auth.users</code> via a foreign key <code>ON DELETE CASCADE</code>. It acts as the CRM engine tracking dietary preferences (<code>onboarding_survey</code> JSONB) and recipe cube inventory (<code>sauce_log</code> JSONB).</li>
+<li><strong><code>recipes</code></strong>: Stores the primary recipe library metadata, including arrays of <code>cube_tags</code> and <code>dietary_tags</code> for fast searching.</li>
+<li><strong><code>recipe_ingredients</code></strong>: Uses strict <code>NUMERIC(10,1)</code> for quantities to ensure exact scaling when serving sizes are adjusted.</li>
+<li><strong><code>recipe_steps</code></strong>: Defines the guided cooking process, supporting Cloudinary video streaming and deferred uniqueness on the step numbers.</li>
+</ol>
+<hr />
+<h2>Architectural Mechanisms &amp; Optimization</h2>
+<h3>1. Speed to Meal Array Indexing</h3>
+<p>Generalized Inverted Indexes (GIN) are applied to <code>recipes.cube_tags</code> and <code>recipes.dietary_tags</code>. This supports rapid set intersection queries when filtering recipes by multiple dietary tags or product SKUs (e.g. finding recipes matching both &quot;Vegan&quot; and &quot;Spicy Cube&quot; in under 100ms).</p>
+<h3>2. Relational Integrity &amp; Automatic Cascades</h3>
+<p>Foreign key constraints with <code>ON DELETE CASCADE</code> prevent orphaned records:</p>
+<ul>
+<li>Deleting a user in <code>auth.users</code> automatically deletes their <code>public.user_profiles</code> entry.</li>
+<li>Deleting a recipe in <code>public.recipes</code> automatically cascades to delete all ingredients in <code>public.recipe_ingredients</code> and steps in <code>public.recipe_steps</code>.</li>
+</ul>
+<h3>3. Deferrable Step Swapping</h3>
+<p>The unique constraint on <code>(recipe_id, step_number)</code> is configured as <code>DEFERRABLE INITIALLY DEFERRED</code>. This allows step numbers to be rearranged dynamically (e.g. swapping steps 1 and 2 in a transaction) without trigger or unique constraint violations.</p>
+<hr />
+<h2>Security Verification (Row Level Security)</h2>
+<p>RLS policies are enforced on all tables:</p>
+<ul>
+<li><strong><code>user_profiles</code></strong>: Restricted such that users can only select, insert, and update their own profile records.</li>
+<li><strong><code>recipes</code></strong>, <strong><code>recipe_ingredients</code></strong>, <strong><code>recipe_steps</code></strong>: Standard users and anonymous traffic can only select records if <code>is_published</code> is true. Users with the <code>cms_editor</code> role claims in their JWT bypass this restriction to view draft content.</li>
+</ul>
+<p>All functions and triggers are verified to run within expected performance thresholds and handle missing or null input gracefully.</p>

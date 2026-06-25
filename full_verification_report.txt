@@ -1,0 +1,376 @@
+Full Implementation Verification Report
+Generated on Wed Jun 24 04:55:57 PM PDT 2026
+---
+---
+/home/freya/supersauced/backend_guide/app/api/deps.py:1:1: F401 'fastapi.HTTPException' imported but unused
+/home/freya/supersauced/backend_guide/app/api/deps.py:1:1: F401 'fastapi.status' imported but unused
+/home/freya/supersauced/backend_guide/app/api/deps.py:3:80: E501 line too long (99 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:7:80: E501 line too long (88 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:24:80: E501 line too long (104 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:27:80: E501 line too long (102 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:39:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/deps.py:39:80: E501 line too long (91 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:45:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/deps.py:51:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/deps.py:51:80: E501 line too long (85 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/deps.py:61:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/deps.py:67:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/deps.py:69:80: E501 line too long (83 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/__init__.py:2:1: F401 '.features' imported but unused
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:6:80: E501 line too long (108 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:11:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:11:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:14:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:15:80: E501 line too long (81 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:23:80: E501 line too long (103 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:26:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:34:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:36:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:39:80: E501 line too long (83 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:43:80: E501 line too long (106 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:45:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:69:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:80:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:86:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:97:80: E501 line too long (100 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:98:80: E501 line too long (102 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:99:80: E501 line too long (103 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:110:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/auth.py:120:80: E501 line too long (105 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/features.py:1:1: F401 'fastapi.HTTPException' imported but unused
+/home/freya/supersauced/backend_guide/app/api/v1/features.py:1:1: F401 'fastapi.status' imported but unused
+/home/freya/supersauced/backend_guide/app/api/v1/features.py:5:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:6:1: F401 'typing.List' imported but unused
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:22:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:27:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:28:80: E501 line too long (84 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:39:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:41:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:42:80: E501 line too long (91 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:46:80: E501 line too long (81 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:52:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:54:80: E501 line too long (100 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:67:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:68:80: E501 line too long (95 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:70:80: E501 line too long (83 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:76:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:82:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:90:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:96:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:104:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:105:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:107:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:113:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:116:80: E501 line too long (92 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:122:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:137:80: E501 line too long (99 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:142:80: E501 line too long (94 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:144:80: E501 line too long (94 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:145:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:148:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:155:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:157:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:169:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:170:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:173:80: E501 line too long (122 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:181:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:187:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:198:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:204:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:208:80: E501 line too long (101 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:211:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:213:80: E501 line too long (81 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:214:80: E501 line too long (85 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:215:80: E501 line too long (135 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:223:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:232:80: E501 line too long (99 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/functions.py:235:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:16:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:35:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:47:80: E501 line too long (83 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:62:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:71:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:78:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:85:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:87:80: E501 line too long (91 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:100:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:115:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:117:9: F841 local variable 'res' is assigned to but never used
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:117:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py:118:80: E501 line too long (110 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/config.py:1:1: F401 'os' imported but unused
+/home/freya/supersauced/backend_guide/app/core/config.py:4:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/core/config.py:8:80: E501 line too long (86 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/config.py:9:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/core/config.py:18:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/core/config.py:28:1: E305 expected 2 blank lines after class or function definition, found 1
+/home/freya/supersauced/backend_guide/app/core/security.py:5:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/core/security.py:7:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/security.py:8:80: E501 line too long (81 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/security.py:12:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/security.py:13:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/security.py:14:80: E501 line too long (85 > 79 characters)
+/home/freya/supersauced/backend_guide/app/core/security.py:15:19: F821 undefined name 'jwt'
+/home/freya/supersauced/backend_guide/app/core/security.py:21:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/core/security.py:29:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/core/security.py:31:12: F821 undefined name 'jwt'
+/home/freya/supersauced/backend_guide/app/core/security.py:37:12: F821 undefined name 'jwt'
+/home/freya/supersauced/backend_guide/app/main.py:4:80: E501 line too long (106 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:9:80: E501 line too long (111 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:19:80: E501 line too long (80 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:27:80: E501 line too long (89 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:28:80: E501 line too long (82 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:30:80: E501 line too long (97 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:34:80: E501 line too long (84 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:35:80: E501 line too long (101 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:36:80: E501 line too long (94 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:37:80: E501 line too long (83 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:38:80: E501 line too long (109 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:39:80: E501 line too long (91 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:40:80: E501 line too long (86 > 79 characters)
+/home/freya/supersauced/backend_guide/app/main.py:42:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.SignUpRequest' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.LoginRequest' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.UserSession' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.UserDetail' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.AuthResponse' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:1: F401 '.auth.CurrentUser' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:3:80: E501 line too long (97 > 79 characters)
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.UserProfileBase' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.UserProfileCreate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.UserProfileUpdate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.UserProfile' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.OnboardingSurvey' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:1: F401 '.user_profile.SauceLog' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:4:80: E501 line too long (120 > 79 characters)
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeBase' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeCreate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeUpdate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.Recipe' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeIngredientBase' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeIngredientCreate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeIngredientUpdate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeIngredient' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeStepBase' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeStepCreate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeStepUpdate' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/__init__.py:5:1: F401 '.recipe.RecipeStep' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:5:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:14:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:18:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:24:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:31:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/auth.py:35:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:1:1: F401 'typing.Any' imported but unused
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:4:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:6:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:11:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:15:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:17:1: W293 blank line contains whitespace
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:22:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:26:80: E501 line too long (81 > 79 characters)
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:29:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:33:1: E302 expected 2 blank lines, found 1
+/home/freya/supersauced/backend_guide/app/schemas/user_profile.py:40:1: E302 expected 2 blank lines, found 1
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py
+Result: PASS
+
+The code complies with the project's style guide, uses proper FastAPI patte[5D[K
+patterns, has correct error handling, and follows best practices. It define[6D[K
+defines clear endpoints for listing, retrieving, updating, and deleting use[3D[K
+user profiles while ensuring that only authorized users can modify their ow[2D[K
+own data. The use of `Depends` for dependency injection and raising appropr[7D[K
+appropriate HTTP exceptions is consistent with FastAPI's recommended approa[6D[K
+approach.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/recipes.py
+Result: PASS
+
+The code complies with the project's style guide, uses proper FastAPI patte[5D[K
+patterns, has correct error handling, and follows best practices.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/functions.py
+Result: PASS
+
+The provided code complies with the project's style guide and uses proper F[1D[K
+FastAPI patterns. It includes comprehensive error handling for various scen[4D[K
+scenarios such as missing user information, invalid signatures, JSON decodi[6D[K
+decoding issues, database operations failures, etc., following best practic[7D[K
+practices. The code also leverages Pydantic models for request validation a[1D[K
+and utilizes async operations where appropriate to handle I/O-bound tasks e[1D[K
+efficiently.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/features.py
+Result: PASS: The code follows FastAPI patterns, includes proper error handling (th[3D[K
+(though none is needed for this simple endpoint), and adheres to best pract[5D[K
+practices by using type hints and a summary for documentation. The placehol[8D[K
+placeholder comments are clear about future work.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/__init__.py
+Result: PASS
+
+The provided code snippet appears to be a valid part of a Python project us[2D[K
+using FastAPI, specifically an initialization file for an API version subpa[5D[K
+subpackage. It imports the `features` module from its current directory wit[3D[K
+without any issues. Since there's no actual implementation or functionality[13D[K
+functionality being reviewed here, and assuming that this import aligns wit[3D[K
+with the project's structure and style guide, the verdict is 'PASS'.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/recipe_ingredients.py
+Result: PASS
+
+Explanation:
+The code complies with the project's style guide, uses proper FastAPI patte[5D[K
+patterns, and follows best practices. It includes error handling for each e[1D[K
+endpoint, such as raising `HTTPException` with appropriate status codes and[3D[K
+and messages. The use of dependency injection via `Depends` is consistent a[1D[K
+across all endpoints, which is a good practice in FastAPI.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/recipe_steps.py
+Result: **PASS**
+
+The file complies with the project's style guide, uses proper FastAPI patte[5D[K
+patterns, has correct error handling, and follows best practices.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/v1/auth.py
+Result: **PASS**
+
+The code adheres to the project's style guide, uses proper FastAPI patterns[8D[K
+patterns, includes comprehensive error handling, and follows best practices[9D[K
+practices. Each endpoint is clearly defined, dependencies are properly mana[4D[K
+managed, and exceptions are handled gracefully with appropriate HTTP status[6D[K
+status codes and messages.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/deps.py
+Result: PASS. The file adheres to FastAPI patterns, includes proper error handling [K
+for JWT verification, and uses dependency injection effectively. It also pr[2D[K
+provides a fallback mechanism for the Supabase client, ensuring compatibili[11D[K
+compatibility across different environments. However, consider adding type [K
+hints for better readability and maintainability.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/api/__init__.py
+Result: PASS
+
+The code snippet provided is too minimal to offer specific feedback without[7D[K
+without additional context. However, based on the information given, I assu[4D[K
+assume it represents an API subpackage for a FastAPI backend. If this assum[5D[K
+assumption holds true, I would need more details about the actual code impl[4D[K
+implementation within the API subpackage to provide a thorough review. Gene[4D[K
+Generally, following best practices, ensuring correct error handling, and a[1D[K
+adhering to a project's style guide are all critical aspects of developing [K
+maintainable and robust FastAPI applications.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/core/__init__.py
+Result: PASS: The code snippet provided is incomplete, but based on the title "# Co[2D[K
+Core settings and security utilities", it suggests that this file might con[3D[K
+contain foundational configurations and security mechanisms for a FastAPI a[1D[K
+application. While I can't review the specific content without more details[7D[K
+details, generally, this type of file should define environment settings, a[1D[K
+authentication methods, dependency injection, and possibly logging configur[8D[K
+configurations. If these aspects are handled according to FastAPI best prac[4D[K
+practices and the project's style guide, it would pass the review. However,[8D[K
+However, without seeing the actual implementation, I cannot provide a detai[5D[K
+detailed analysis or identify specific issues.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/core/security.py
+Result: FAIL. The code does not import the `jwt` library, which is used in the `ver[4D[K
+`verify_and_decode_jwt` function. Additionally, the function lacks a docstr[6D[K
+docstring explaining its purpose and parameters, and it should include type[4D[K
+type hints for all parameters and return types. Finally, the environment va[2D[K
+variable `SUPABASE_JWT_SECRET` should be accessed via the `settings` object[6D[K
+object if possible to maintain consistency with the project's configuration[13D[K
+configuration management practices.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/core/config.py
+Result: PASS
+
+The code adheres to the FastAPI patterns and best practices by using Pydant[6D[K
+Pydantic for settings management, which is a common practice in FastAPI app[3D[K
+applications. It follows the project's style guide by using clear and descr[5D[K
+descriptive variable names, and it properly handles environment variables w[1D[K
+with the `SettingsConfigDict`. The error handling for missing or incorrect [K
+environment variables is implicitly handled by Pydantic, which will raise v[1D[K
+validation errors if any required fields are not set or have invalid values[6D[K
+values. Overall, the code is well-structured and follows best practices for[3D[K
+for a FastAPI backend configuration.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/__init__.py
+Result: PASS
+
+The code snippet provided is only a package initialization file (`__init__.[11D[K
+(`__init__.py`). It does not contain any actual implementation details that[4D[K
+that would allow for a comprehensive review of style guide compliance, Fast[4D[K
+FastAPI patterns, error handling, or best practices. Therefore, based on th[2D[K
+the limited information available, the verdict is 'PASS'. If you need a mor[3D[K
+more detailed review, please provide additional code from the project.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/schemas/user_profile.py
+Result: PASS. The code follows the project's style guide, uses proper FastAPI patte[5D[K
+patterns for defining Pydantic models, includes correct error handling thro[4D[K
+through type annotations and field constraints, and adheres to best practic[7D[K
+practices by using `default_factory` where appropriate and configuring mode[4D[K
+model behavior with `model_config`.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/schemas/__init__.py
+Result: PASS
+
+The file lists import statements for various Pydantic validation schemas us[2D[K
+used in a FastAPI backend. It adheres to clean and organized code practices[9D[K
+practices by separating imports into categories, which enhances readability[11D[K
+readability and maintainability. There is no indication of deviations from [K
+the project's style guide or improper use of FastAPI patterns. The absence [K
+of actual function definitions or route handlers makes it difficult to asse[4D[K
+assess error handling directly, but the import structure itself does not vi[2D[K
+violate any FastAPI best practices.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/schemas/recipe.py
+Result: PASS
+
+The code adheres to FastAPI patterns, uses proper error handling through Py[2D[K
+Pydantic models, and follows best practices for defining data models. The c[1D[K
+classes are well-structured, and the use of `Optional` and `Field` ensures [K
+clear validation rules. No issues were found regarding style guide complian[8D[K
+compliance or missing components necessary for a FastAPI backend.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/schemas/auth.py
+Result: PASS
+
+Explanation:
+- The file adheres to the project's style guide by using consistent naming [K
+conventions and formatting.
+- It follows FastAPI patterns by utilizing Pydantic models for request and [K
+response schemas, which is a standard practice in FastAPI applications.
+- Proper error handling is not explicitly shown in the provided code, but t[1D[K
+the use of Pydantic models inherently provides validation, which can be con[3D[K
+considered basic error handling.
+- The code follows best practices by defining clear and concise data models[6D[K
+models that accurately represent the application's domain.
+---
+---
+File: /home/freya/supersauced/backend_guide/app/main.py
+Result: **PASS**
+
+Explanation: The code follows the project's style guide, utilizes FastAPI p[1D[K
+patterns effectively, includes proper error handling by setting up CORS mid[3D[K
+middleware, and adheres to best practices for structuring the application w[1D[K
+with clear routing and versioning.
+---

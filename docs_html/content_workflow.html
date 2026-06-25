@@ -1,0 +1,493 @@
+<h1>Content Workflow &amp; Integration Guide</h1>
+<p>This guide establishes the complete Content Workflow, Database Mapping, Role-Based Access Control (RBAC), and Media Asset Pipeline for the Super Sauced platform. It details the integration between Directus CMS, Supabase (PostgreSQL), Cloudinary, and the mobile client application (React Native / Expo).</p>
+<hr />
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-directus-cms-to-supabase-database-mapping">Directus CMS to Supabase Database Mapping</a></li>
+<li><a href="#2-role-based-access-control-rbac-setup">Role-Based Access Control (RBAC) Setup</a></li>
+<li><a href="#3-media-storage-pipeline-specifications">Media Storage Pipeline Specifications</a></li>
+<li><a href="#4-directus-cms-media-integrations">Directus CMS Media Integrations</a></li>
+<li><a href="#5-cdn-preloading-mechanics-for-guided-cooking">CDN Preloading Mechanics for Guided Cooking</a></li>
+</ol>
+<hr />
+<h2>1. Directus CMS to Supabase Database Mapping</h2>
+<p>Directus CMS interfaces directly with Supabase via PostgreSQL database reflection. The CMS maps database tables to <strong>Collections</strong> and columns to <strong>Fields</strong>. Standard UI controls and validation constraints must be configured in Directus to guarantee that all entered data satisfies the Supabase schema requirements.</p>
+<h3>1.1 Collections &amp; Fields Schema Mapping</h3>
+<p>Below is the exact field-by-field mapping between the Supabase PostgreSQL database tables and the Directus CMS dashboard interface.</p>
+<h4>A. Recipes Collection (<code>recipes</code> / <code>public.recipes</code>)</h4>
+<ul>
+<li><strong>Database Table</strong>: <code>public.recipes</code></li>
+<li><strong>Primary Key</strong>: <code>id</code> (UUID, auto-generated via <code>gen_random_uuid()</code>)</li>
+</ul>
+<p>| Database Column | Directus Field Name | Type | UI Interface | Constraints &amp; UI Validation Rules |
+| :--- | :--- | :--- | :--- | :--- |
+| <code>id</code> | <code>id</code> | UUID | Primary Key (Hidden) | Automatically generated. Read-only. |
+| <code>title</code> | <code>title</code> | String | Text Input | Required. Max length: 255. |
+| <code>slug</code> | <code>slug</code> | String | Text Input | Required, Unique. Auto-slugified from <code>title</code> via Directus Flows. |
+| <code>description</code> | <code>description</code> | Text | Text Area | Optional recipe overview. |
+| <code>hero_image_url</code> | <code>hero_image_url</code> | String | Text Input | Supabase Storage URL. Direct string input. |
+| <code>difficulty</code> | <code>difficulty</code> | Integer | Dropdown (Choices) | Required. Choices: <code>1</code> (Easy), <code>2</code> (Medium), <code>3</code> (Hard). |
+| <code>cook_time_minutes</code> | <code>cook_time_minutes</code> | Integer | Numeric Input | Optional. Min value: <code>0</code>. |
+| <code>calories_per_serving</code> | <code>calories_per_serving</code>| Integer | Numeric Input | Optional. Min value: <code>0</code>. |
+| <code>protein_g</code> | <code>protein_g</code> | Integer | Numeric Input | Optional. Min value: <code>0</code>. |
+| <code>fat_g</code> | <code>fat_g</code> | Integer | Numeric Input | Optional. Min value: <code>0</code>. |
+| <code>carbs_g</code> | <code>carbs_g</code> | Integer | Numeric Input | Optional. Min value: <code>0</code>. |
+| <code>cube_tags</code> | <code>cube_tags</code> | Array | Tags Input | Stored as <code>TEXT[]</code>. Choices correspond to product SKUs. |
+| <code>dietary_tags</code> | <code>dietary_tags</code> | Array | Tags Input | Stored as <code>TEXT[]</code>. Choices correspond to lifestyle labels. |
+| <code>servings_default</code> | <code>servings_default</code> | Integer | Numeric Input | Optional. Min value: <code>1</code>. |
+| <code>is_published</code> | <code>is_published</code> | Boolean | Toggle (Switch) | Default: <code>false</code>. Controls visibility on production apps. |
+| <code>created_at</code> | <code>created_at</code> | Timestamp | Datetime (Read-only)| Automatically populated on insert. |
+| <code>updated_at</code> | <code>updated_at</code> | Timestamp | Datetime (Read-only)| Automatically updated via database trigger. |
+| -- | <code>ingredients</code> | O2M Relation | One-to-Many | Inline nested grid linking <code>recipe_ingredients</code>. |
+| -- | <code>steps</code> | O2M Relation | One-to-Many | Inline nested grid linking <code>recipe_steps</code>. |</p>
+<h4>B. Recipe Ingredients Collection (<code>recipe_ingredients</code> / <code>public.recipe_ingredients</code>)</h4>
+<ul>
+<li><strong>Database Table</strong>: <code>public.recipe_ingredients</code></li>
+<li><strong>Primary Key</strong>: <code>id</code> (UUID, auto-generated)</li>
+<li><strong>Relationship</strong>: Many-to-One (M2O) to <code>recipes</code> (<code>recipe_id</code>)</li>
+</ul>
+<p>| Database Column | Directus Field Name | Type | UI Interface | Constraints &amp; UI Validation Rules |
+| :--- | :--- | :--- | :--- | :--- |
+| <code>id</code> | <code>id</code> | UUID | Primary Key (Hidden) | Automatically generated. Read-only. |
+| <code>recipe_id</code> | <code>recipe_id</code> | M2O Relation | Relationship | References parent <code>recipes.id</code>. Hidden in inline grid. |
+| <code>quantity</code> | <code>quantity</code> | Decimal / Float | Numeric Input | Required. Set step to <code>0.1</code> in Directus configuration. Min: <code>0.0</code>. |
+| <code>unit</code> | <code>unit</code> | String | Dropdown / Choices | Optional. Choices: <code>cups</code>, <code>tsp</code>, <code>tbsp</code>, <code>g</code>, <code>oz</code>, <code>pieces</code>, <code>ml</code>. |
+| <code>name</code> | <code>name</code> | String | Text Input | Required. Name of the ingredient (e.g., &quot;Kosher Salt&quot;). |
+| <code>notes</code> | <code>notes</code> | Text | Text Input | Optional preparation notes (e.g., &quot;finely chopped&quot;). |
+| <code>position</code> | <code>position</code> | Integer | Sort (Hidden) | Bound to Directus O2M sort index to track display order. |</p>
+<h4>C. Recipe Steps Collection (<code>recipe_steps</code> / <code>public.recipe_steps</code>)</h4>
+<ul>
+<li><strong>Database Table</strong>: <code>public.recipe_steps</code></li>
+<li><strong>Primary Key</strong>: <code>id</code> (UUID, auto-generated)</li>
+<li><strong>Relationship</strong>: Many-to-One (M2O) to <code>recipes</code> (<code>recipe_id</code>)</li>
+</ul>
+<p>| Database Column | Directus Field Name | Type | UI Interface | Constraints &amp; UI Validation Rules |
+| :--- | :--- | :--- | :--- | :--- |
+| <code>id</code> | <code>id</code> | UUID | Primary Key (Hidden) | Automatically generated. Read-only. |
+| <code>recipe_id</code> | <code>recipe_id</code> | M2O Relation | Relationship | References parent <code>recipes.id</code>. Hidden in inline grid. |
+| <code>step_number</code> | <code>step_number</code> | Integer | Numeric Input | Required. Step sequence number. Min: <code>1</code>. |
+| <code>description</code> | <code>description</code> | Text | Text Area | Required. Cooking instructions. |
+| <code>video_url</code> | <code>video_url</code> | String | Text Input | Optional Cloudinary streaming URL. |
+| <code>timer_seconds</code> | <code>timer_seconds</code> | Integer | Numeric Input | Optional timer. Min: <code>0</code>. |
+| <code>tip</code> | <code>tip</code> | Text | Text Input | Optional tip or technique advice. |</p>
+<hr />
+<h3>1.2 Directus UI and Validation Setup Guidelines</h3>
+<ol>
+<li><strong>Strict Decimal Precision</strong>:
+To support exact scaling (e.g., multiplying quantities for serving adjustments), the database type of <code>recipe_ingredients.quantity</code> is defined as <code>NUMERIC(10,1)</code>. In the Directus field interface settings, configure the Numeric input to use a decimal step of <code>0.1</code> and disable automatic rounding. This prevents common floating-point errors (e.g., rendering <code>0.300000004</code> instead of <code>0.3</code>) in the mobile user interface.</li>
+<li><strong>O2M Nesting and Sorting</strong>:
+The relations <code>ingredients</code> and <code>steps</code> within the <code>recipes</code> collection must be configured as <strong>One-to-Many (O2M)</strong> nested tables.
+<ul>
+<li>Ensure &quot;Allow Reordering&quot; is enabled.</li>
+<li>For <code>recipe_ingredients</code>, bind the Directus Sort field to the database column <code>position</code>.</li>
+<li>Moving rows dynamically updates this column value to preserve presentation order.</li>
+</ul>
+</li>
+<li><strong>Deferrable Unique Constraint</strong>:
+The <code>recipe_steps</code> table enforces a unique index on <code>(recipe_id, step_number)</code> to prevent duplicate step indices. This is declared in the database as:<pre><code class="language-sql">CONSTRAINT unique_recipe_step UNIQUE (recipe_id, step_number) DEFERRABLE INITIALLY DEFERRED
+</code></pre>
+This deferral is critical. When a Content Editor rearranges step rows (e.g., swapping Step 1 and Step 2), Directus issues update commands in a batch within a single transaction. Deferring the constraint checking to the transaction commit prevents transient uniqueness violations during the update steps.</li>
+</ol>
+<hr />
+<h2>2. Role-Based Access Control (RBAC) Setup</h2>
+<p>To enforce editorial integrity and maintain draft privacy, access rules are configured at both the CMS application layer (Directus) and the database storage layer (Supabase Row-Level Security).</p>
+<pre><code>                      ┌──────────────────────┐
+                      │    Directus CMS      │
+                      └──────────┬───────────┘
+                                 │
+                   ┌─────────────┴─────────────┐
+                   ▼                           ▼
+      ┌─────────────────────────┐ ┌─────────────────────────┐
+      │  Content Creator/Author │ │ Content Editor/Publisher│
+      ├─────────────────────────┤ ├─────────────────────────┤
+      │ • Can only edit drafts  │ │ • Can publish content   │
+      │ • Can read all recipes  │ │ • Full CRUD access      │
+      └─────────────────────────┘ └─────────────────────────┘
+                                 │ (Writes bypass DB RLS via admin keys)
+                                 ▼
+                     ┌───────────────────────┐
+                     │ Supabase PostgreSQL DB│
+                     ├───────────────────────┤
+                     │ RLS Policies Active:  │
+                     │ • Anon/User: Pub only │
+                     │ • QA/Editor: All      │
+                     └───────────────────────┘
+</code></pre>
+<h3>2.1 CMS Layer (Directus Permissions)</h3>
+<p>Three system roles govern operations within the CMS:</p>
+<h4>A. Administrator (System Default)</h4>
+<ul>
+<li><strong>Permissions</strong>: Full read, write, create, and delete privileges on all collections, including system metadata and schema definitions.</li>
+</ul>
+<h4>B. Content Creator / Author</h4>
+<p>Designed for writers/creators who input recipe data. They can write drafts but cannot publish them or edit already-published content.</p>
+<ul>
+<li><strong><code>recipes</code> Collection</strong>:
+<ul>
+<li><strong>Create</strong>: Allowed.</li>
+<li><strong>Read (Filter JSON)</strong>: Authors can read all published recipes or any draft recipe they created.<pre><code class="language-json">{
+  &quot;_or&quot;: [
+    {
+      &quot;is_published&quot;: { &quot;_eq&quot;: false },
+      &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+    },
+    {
+      &quot;is_published&quot;: { &quot;_eq&quot;: true } }
+  ]
+}
+</code></pre>
+</li>
+<li><strong>Update (Filter JSON)</strong>: Authors can only edit drafts they created. The <code>is_published</code> field must be configured as <strong>Read-Only</strong> for this role in field-level settings.<pre><code class="language-json">{
+  &quot;is_published&quot;: { &quot;_eq&quot;: false },
+  &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+}
+</code></pre>
+</li>
+<li><strong>Delete (Filter JSON)</strong>: Authors can only delete drafts they created.<pre><code class="language-json">{
+  &quot;is_published&quot;: { &quot;_eq&quot;: false },
+  &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><code>recipe_ingredients</code> &amp; <code>recipe_steps</code> Collections</strong>:
+<ul>
+<li><strong>Create (Validation Filter JSON)</strong>: Creators can only add ingredients/steps to drafts they own.<pre><code class="language-json">{
+  &quot;recipe_id&quot;: {
+    &quot;is_published&quot;: { &quot;_eq&quot;: false },
+    &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+  }
+}
+</code></pre>
+</li>
+<li><strong>Read (Filter JSON)</strong>:<pre><code class="language-json">{
+  &quot;recipe_id&quot;: {
+    &quot;_or&quot;: [
+      {
+        &quot;is_published&quot;: { &quot;_eq&quot;: false },
+        &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+      },
+      {
+        &quot;is_published&quot;: { &quot;_eq&quot;: true }
+      }
+    ]
+  }
+}
+</code></pre>
+</li>
+<li><strong>Update / Delete (Filter JSON)</strong>:<pre><code class="language-json">{
+  &quot;recipe_id&quot;: {
+    &quot;is_published&quot;: { &quot;_eq&quot;: false },
+    &quot;user_created&quot;: { &quot;_eq&quot;: &quot;$CURRENT_USER&quot; }
+  }
+}
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h4>C. Content Editor / Publisher</h4>
+<p>Designed for reviewers who approve, modify, and publish draft content.</p>
+<ul>
+<li><strong><code>recipes</code>, <code>recipe_ingredients</code>, <code>recipe_steps</code></strong>: Full CRUD access. Can update all columns and set <code>is_published = true</code>.</li>
+<li><strong>System Collections</strong>: Read-only. Restricts configuration tampering.</li>
+</ul>
+<hr />
+<h3>2.2 Database Layer (Supabase RLS Policies)</h3>
+<p>The Supabase PostgreSQL database enforces <strong>Row-Level Security (RLS)</strong> to protect the API endpoints generated by PostgREST.</p>
+<ol>
+<li><strong>Anonymous &amp; Authenticated Users</strong>: Represent standard mobile consumers who are restricted to accessing only published recipes.</li>
+<li><strong>Staging / QA App Users (<code>cms_editor</code>)</strong>: Represent preview builds. The client signs in via an identity provider or custom claim, generating a JWT where <code>auth.jwt() -&gt;&gt; 'role'</code> is <code>'cms_editor'</code>. These builds are allowed to view draft recipes.</li>
+</ol>
+<h4>SQL DDL for RLS Policies:</h4>
+<pre><code class="language-sql">-- 1. Enable RLS on all tables
+ALTER TABLE public.recipes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.recipe_ingredients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.recipe_steps ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+
+-- 2. Recipes Table Policies
+CREATE POLICY &quot;Allow public SELECT on published recipes&quot;
+    ON public.recipes FOR SELECT
+    TO anon, authenticated
+    USING (is_published = true);
+
+CREATE POLICY &quot;Allow editors to SELECT all recipes&quot;
+    ON public.recipes FOR SELECT
+    TO authenticated
+    USING ((auth.jwt() -&gt;&gt; 'role') = 'cms_editor');
+
+-- 3. Recipe Ingredients Table Policies
+CREATE POLICY &quot;Allow public SELECT on published recipe ingredients&quot;
+    ON public.recipe_ingredients FOR SELECT
+    TO anon, authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.recipes
+            WHERE public.recipes.id = public.recipe_ingredients.recipe_id
+              AND public.recipes.is_published = true
+        )
+    );
+
+CREATE POLICY &quot;Allow editors to SELECT all recipe ingredients&quot;
+    ON public.recipe_ingredients FOR SELECT
+    TO authenticated
+    USING (
+        (auth.jwt() -&gt;&gt; 'role') = 'cms_editor'
+    );
+
+-- 4. Recipe Steps Table Policies
+CREATE POLICY &quot;Allow public SELECT on published recipe steps&quot;
+    ON public.recipe_steps FOR SELECT
+    TO anon, authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.recipes
+            WHERE public.recipes.id = public.recipe_steps.recipe_id
+              AND public.recipes.is_published = true
+        )
+    );
+
+CREATE POLICY &quot;Allow editors to SELECT all recipe steps&quot;
+    ON public.recipe_steps FOR SELECT
+    TO authenticated
+    USING (
+        (auth.jwt() -&gt;&gt; 'role') = 'cms_editor'
+    );
+
+-- 5. User Profiles (CRM) Policies (Access restricted to own profile only)
+CREATE POLICY &quot;Allow select own profile&quot; ON public.user_profiles
+    FOR SELECT TO authenticated USING (auth.uid() = id);
+
+CREATE POLICY &quot;Allow insert own profile&quot; ON public.user_profiles
+    FOR INSERT TO authenticated WITH CHECK (auth.uid() = id);
+
+CREATE POLICY &quot;Allow update own profile&quot; ON public.user_profiles
+    FOR UPDATE TO authenticated USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+</code></pre>
+<hr />
+<h2>3. Media Storage Pipeline Specifications</h2>
+<p>To optimize mobile performance and satisfy the core user journey constraint (&quot;Speed to Meal&quot;), video assets and static image assets are stored on distinct platforms.</p>
+<pre><code>┌────────────────────────────────────────────────────────────────────────────┐
+│                             Media Pipelines                                │
+└────────────────────────────────────────────────────────────────────────────┘
+         │                                                      │
+         ▼ (Step-by-Step Videos)                                ▼ (Hero Images)
+┌──────────────────────────────────┐                  ┌──────────────────────┐
+│          Cloudinary CDN          │                  │   Supabase Storage   │
+├──────────────────────────────────┤                  ├──────────────────────┤
+│  • MP4 H.264 / AVC Codec         │                  │  • Public Bucket     │
+│  • AAC-LC Audio Codec            │                  │  • Caching: 1 Year   │
+│  • Max Resolution: 720p / 1080p  │                  │  • Max size: 5MB     │
+│  • Size Limit: 10MB              │                  │  • WebP, Jpeg, Png   │
+│  • dynamic f_auto, q_auto parameters                └──────────────────────┘
+└──────────────────────────────────┘
+</code></pre>
+<h3>3.1 Cloudinary Video Specifications (Guided Cooking)</h3>
+<p>Step-by-step videos play in the mobile Guided Cooking screen. To ensure playback starts in under 3 seconds and prevents streaming interruptions, videos must comply with the following standards:</p>
+<ul>
+<li><strong>Format &amp; Container</strong>: <code>MP4</code> (with progressive download support) and <code>HLS</code> (<code>.m3u8</code> playlist) for adaptive streaming.</li>
+<li><strong>Video Codec</strong>: H.264 (AVC) - Main Profile, Level 4.1.</li>
+<li><strong>Audio Codec</strong>: AAC-LC (Stereo, 48kHz, 128kbps).</li>
+<li><strong>Resolution</strong>: 720p preferred (<code>720x1280</code> vertical or <code>720x720</code> square) for vertical devices. Maximum: <code>1080p</code>.</li>
+<li><strong>File Size Limit</strong>: 10 MB per step video.</li>
+<li><strong>Public ID Convention</strong>: <code>recipes/{recipe-slug}/steps/step-{step-number}</code>.</li>
+<li><strong>Dynamic Compression Parameters</strong>:
+Mobile applications must load videos using Cloudinary's dynamic optimization URL parameters to reduce bandwidth consumption:
+<ul>
+<li><code>f_auto</code>: Delivers optimal formats based on client capabilities (e.g., WebM for Android, HEVC/MP4 for iOS).</li>
+<li><code>q_auto</code>: Controls compression dynamically to output high quality at minimal byte sizes.</li>
+<li><code>vc_h264</code>: Assures output codec matches H.264.</li>
+<li><strong>Optimized URL Example</strong>:
+<code>https://res.cloudinary.com/your-cloud-name/video/upload/f_auto,q_auto,vc_h264/recipes/classic-marinara/steps/step-1.mp4</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>3.2 Supabase Storage Specifications (Hero Images)</h3>
+<p>Static recipe headers are fetched directly from a public Supabase Storage bucket.</p>
+<ul>
+<li><strong>Bucket Name</strong>: <code>recipe-hero-images</code></li>
+<li><strong>Access Level</strong>: Public (Read access is granted to all anonymous traffic).</li>
+<li><strong>Allowed File Types</strong>: <code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code>.</li>
+<li><strong>Max File Size Limit</strong>: 5 MB.</li>
+<li><strong>CDN Caching Header</strong>:
+The bucket metadata forces Cloudflare CDN to cache the assets permanently on edge servers:<pre><code>Cache-Control: public, max-age=31536000, immutable
+</code></pre>
+</li>
+</ul>
+<hr />
+<h2>4. Directus CMS Media Integrations</h2>
+<h3>4.1 Database Connection and API Authentication</h3>
+<ul>
+<li><strong>Direct Sync</strong>: Directus bypasses RLS for write operations using administrative PostgreSQL credentials, connecting via environment variables:<pre><code class="language-env">DB_CLIENT=&quot;pg&quot;
+DB_HOST=&quot;aws-0-us-west-1.pooler.supabase.com&quot;
+DB_PORT=5432
+DB_DATABASE=&quot;postgres&quot;
+DB_USER=&quot;postgres.your-project-id&quot;
+DB_PASSWORD=&quot;your-secure-db-password&quot;
+DB_SSL=&quot;true&quot;
+</code></pre>
+</li>
+<li><strong>API Tokens</strong>: Directus exposes metadata to staging/QA tools using a static bearer token (<code>DIRECTUS_KEY</code>) configured in Directus settings.</li>
+</ul>
+<hr />
+<h3>4.2 Supabase Storage S3 Adaptor Configuration</h3>
+<p>Directus writes files directly to the Supabase Storage bucket by using the S3 driver in its <code>.env</code> configuration file:</p>
+<pre><code class="language-env"># Directus Storage Driver Configuration for Supabase S3 Compatibility
+STORAGE_LOCATIONS=&quot;supabase&quot;
+STORAGE_SUPABASE_DRIVER=&quot;s3&quot;
+STORAGE_SUPABASE_KEY=&quot;your-supabase-service-role-key&quot;
+STORAGE_SUPABASE_SECRET=&quot;your-supabase-service-role-key&quot;
+STORAGE_SUPABASE_BUCKET=&quot;recipe-hero-images&quot;
+STORAGE_SUPABASE_ENDPOINT=&quot;https://your-supabase-project.supabase.co/storage/v1/s3&quot;
+STORAGE_SUPABASE_REGION=&quot;us-east-1&quot;
+STORAGE_SUPABASE_ROOT=&quot;/&quot;
+</code></pre>
+<hr />
+<h3>4.3 Cloudinary Automated Video Upload Hook</h3>
+<p>Content creators paste Cloudinary CDN video URLs directly into the <code>recipe_steps.video_url</code> field. To automate this, a custom Directus action hook can intercept uploads to directus files, push videos to Cloudinary, and save the resulting Cloudinary URL:</p>
+<pre><code class="language-javascript">// Directus Extension: extensions/hooks/cloudinary-upload/index.js
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+module.exports = ({ action }) =&gt; {
+  action('files.upload', async ({ payload, accountability }, { database }) =&gt; {
+    // Intercept if file type is video
+    if (payload.type &amp;&amp; payload.type.startsWith('video/')) {
+      try {
+        // Upload temporary Directus file to Cloudinary
+        const uploadResult = await cloudinary.uploader.upload(payload.filepath, {
+          resource_type: &quot;video&quot;,
+          folder: &quot;recipes&quot;,
+          use_filename: true,
+          unique_filename: true
+        });
+
+        // The secure Cloudinary URL is returned
+        console.log(`Successfully uploaded video to Cloudinary: ${uploadResult.secure_url}`);
+        
+        // This URL can be pasted into the recipe_steps.video_url field
+        return {
+          ...payload,
+          embed: uploadResult.secure_url
+        };
+      } catch (error) {
+        console.error(&quot;Cloudinary upload hook failed:&quot;, error);
+      }
+    }
+  });
+};
+</code></pre>
+<hr />
+<h2>5. CDN Preloading Mechanics for Guided Cooking</h2>
+<p>During Guided Cooking, latency spikes when switching steps will disrupt the user's cooking flow. To guarantee zero-buffer transitions, the React Native mobile application uses a <strong>sliding window caching logic</strong>.</p>
+<h3>5.1 Sliding Window Preload Strategy</h3>
+<p>While the user is cooking at Step $N$, the application maintains a cache window of size 3:</p>
+<ol>
+<li><strong>Step $N$ (Active)</strong>: Video plays immediately from the cached stream.</li>
+<li><strong>Step $N+1$ (Forward Preload)</strong>: App preloads the video to the local cache directory.</li>
+<li><strong>Step $N-1$ (Backward Cache)</strong>: App holds the previous video file in the cache in case the user navigates back.</li>
+</ol>
+<pre><code>       [Step N-1] &lt;=====&gt; [Step N] &lt;=====&gt; [Step N+1]
+      (Cached / Prev)    (Active Play)    (Preloading / Next)
+</code></pre>
+<hr />
+<h3>5.2 Preloading Code (React Native + Expo FileSystem)</h3>
+<p>The class below manages the local caching directories and handles download requests in the background:</p>
+<pre><code class="language-typescript">// utils/VideoCacheManager.ts
+import { Video } from 'expo-av';
+import * as FileSystem from 'expo-file-system';
+
+interface PreloadQueue {
+  currentUrl: string;
+  nextUrl?: string;
+  prevUrl?: string;
+}
+
+export class VideoCacheManager {
+  private static cacheDir = `${FileSystem.cacheDirectory}video-cache/`;
+
+  /**
+   * Initializes the video cache directory.
+   */
+  public static async init(): Promise&lt;void&gt; {
+    try {
+      const dirInfo = await FileSystem.getInfoAsync(this.cacheDir);
+      if (!dirInfo.exists) {
+        await FileSystem.makeDirectoryAsync(this.cacheDir, { intermediates: true });
+        console.log(&quot;Video cache directory initialized successfully.&quot;);
+      }
+    } catch (error) {
+      console.error(&quot;Failed to initialize video cache directory:&quot;, error);
+    }
+  }
+
+  /**
+   * Downloads a video from a remote URL to the local file system cache.
+   * If the file is already cached, it returns the local file URI immediately.
+   * 
+   * @param url The remote CDN video URL.
+   * @returns The local file URI or the fallback remote URL if download fails.
+   */
+  public static async preloadVideo(url: string): Promise&lt;string&gt; {
+    if (!url) return '';
+    
+    // Create a safe, unique filename using the URL
+    const filename = encodeURIComponent(url);
+    const localUri = `${this.cacheDir}${filename}`;
+
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(localUri);
+      if (fileInfo.exists) {
+        return localUri;
+      }
+
+      // Download file to disk asynchronously
+      console.log(`Preloading video in background: ${url}`);
+      const downloadRes = await FileSystem.downloadAsync(url, localUri);
+      console.log(`Video preloaded to local cache: ${downloadRes.uri}`);
+      return downloadRes.uri;
+    } catch (error) {
+      console.warn(&quot;Failed to preload video to local disk cache, falling back to remote:&quot;, error);
+      return url; // Fallback to streaming directly from CDN
+    }
+  }
+
+  /**
+   * Updates the preloading window when the active step transitions.
+   * 
+   * @param queue The queue containing active, next, and previous steps.
+   */
+  public static async updateQueue(queue: PreloadQueue): Promise&lt;void&gt; {
+    // Initiate background downloads for predicted steps
+    if (queue.nextUrl) {
+      this.preloadVideo(queue.nextUrl); 
+    }
+    if (queue.prevUrl) {
+      this.preloadVideo(queue.prevUrl);
+    }
+  }
+
+  /**
+   * Clear old cached items to prevent disk bloat.
+   */
+  public static async clearCache(): Promise&lt;void&gt; {
+    try {
+      const dirInfo = await FileSystem.getInfoAsync(this.cacheDir);
+      if (dirInfo.exists) {
+        await FileSystem.deleteAsync(this.cacheDir);
+        await this.init();
+      }
+    } catch (error) {
+      console.error(&quot;Failed to clear video cache:&quot;, error);
+    }
+  }
+}
+</code></pre>

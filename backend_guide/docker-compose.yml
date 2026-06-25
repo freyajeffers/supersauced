@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: supabase_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: supabase
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  gotrue:
+    image: supabase/gotrue:v2.191.0-rc.3
+    container_name: supabase_gotrue
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      GOTRUE_DB_DRIVER: pg
+      GOTRUE_DB_DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      GOTRUE_SITE_URL: http://localhost:8000
+      GOTRUE_JWT_SECRET: "${SUPABASE_JWT_SECRET}"
+    ports:
+      - "9999:9999"
+
+  realtime:
+    image: supabase/realtime:v2.26.0
+    container_name: supabase_realtime
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: supabase
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      PORT: 4000
+    ports:
+      - "4000:4000"
+
+  storage:
+    image: supabase/storage-api:v0.48.0
+    container_name: supabase_storage
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      POSTGREST_URL: http://db:5432
+      ANON_KEY: anonkey
+      SERVICE_ROLE_KEY: servicekey
+      JWT_SECRET: "${SUPABASE_JWT_SECRET}"
+    ports:
+      - "5000:5000"
+
+volumes:
+  db_data:

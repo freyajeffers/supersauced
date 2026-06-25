@@ -1,0 +1,535 @@
+﻿
+
+PRODUCT REQUIREMENTS DOCUMENT
+Mobile App · Consumer (B2C)
+
+
+Product Name	e.g. Super Sauced
+Version	e.g. v0.1 Draft
+Author(s)	Gina Oh
+Date	2026-06-04
+Status	Draft / In Review / Approved
+Target Launch	TBD
+
+
+1. Executive Summary
+
+What Are We Building?
+Super Sauced is launching a mobile app that gives customers instant access to a curated recipe library built around the Super Sauced cube lineup, accessible directly via QR code on the packaging.
+
+Problem Statement
+For the business: Super Sauced sells exclusively through retail, which means there is no direct touchpoint with customers after purchase. The brand has no visibility into who is buying, how often, or how they are using the product.
+
+For the customer: Most people do not know the full range of meals they can create with Super Sauced cubes. With the pain points of everyday meal decision fatigue and the pressure to get something on the table quickly and with minimal effort, users want guidance on effortless and nutritious meals. 
+
+Proposed Solution
+For customers: The app delivers a curated recipe library built around the Super Sauced lineup -- with step-by-step guides, GIFs, and save and share features that eliminate the "what do I make?" moment and simplify cooking into a more streamlined, low-effort experience.
+
+For the business: The app creates a direct channel that retail cannot provide -- capturing first-party customer data, building a CRM, and giving Super Sauced an ongoing touchpoint to drive repeat purchase and brand loyalty. It also lays the foundation for direct selling as the product line expands to DTC-friendly SKUs, and opens the door to rewards programs and customer loyalty initiatives, all within the Shopify ecosystem.
+
+Business Objective
+Establish a direct-to-consumer digital channel that captures first-party customer data, drives repeat purchases through recipe engagement, and builds brand loyalty beyond the retail shelf -- while creating the infrastructure to support future DTC sales and customer loyalty programs.
+
+Success Looks Like
+25% app download conversion ratio, with measurable engagement in recipe saves and return visits.
+
+2. Goals & Success Metrics
+
+User Goals
+    • Discover new recipes built around the Super Sauced cube lineup
+    • Reduce meal decision fatigue. Find what to cook quickly and effortlessly
+    • Cook with ease using simplified, step-by-step guidance
+    • Save and revisit favorite recipes
+
+
+Principle	Definition	Example requirement
+Speed to meal	A user should find a good dinner idea in under 30 seconds.	Home screen modules: “15 minutes,” “use what I have,” “high-protein,” “vegetarian,” and each cube flavor.
+Trust before breadth	Better to have 30 excellent, tested recipes than 300 weak ones.	Add a “tested” badge and internal checklist before publishing any recipe.
+Product as the shortcut	Every recipe should make the sauce cube feel essential, not pasted in.	Each recipe specifies which cube, how much, and what it replaces.
+Flexible templates beat rigid recipes	Support swaps and build-your-own meal frameworks.	Offer protein/veg/grain swaps and “make it a bowl / pasta / toast / soup” pathways.
+No hidden work	State exact quantities, prep, timing, equipment, and what can be skipped.	Recipe cards show active time, total time, cleanup level, and optional vs. required ingredients.
+No Brainer Guidance	The app must work while someone’s hands are messy and attention is split.	Large text, next/previous step, timers, and no screen lock during cooking.
+
+Business Goals
+    • Increase customer retention and repeat purchase rate
+    • Grow brand affinity through a value-added recipe experience
+    • Build a rich first-party customer data asset that retail cannot provide, including:
+        ◦ Demographics -- age and birthday data collected via rewards sign-up
+        ◦ Shopping behavior -- retail location preferences surfaced through targeted promos
+        ◦ Usage patterns -- time-of-day app activity and session frequency
+        ◦ Taste and lifestyle trends -- filter selections (e.g. vegan, high-protein, fiber-rich) reveal customer preferences and emerging demand signals
+        ◦ Cook time preferences -- filter usage (10 / 15 / 20 min meals) informs product and content strategy
+        ◦ SKU performance -- recipe filter data shows which sauce cubes are used most, informing inventory, marketing, and new product development
+KPIs
+Targets TBD -- primary focus is engagement (saves, hearts, return visits).
+
+Metric	Target
+Day 30 Retention	50%
+MAU Ratio	25%
+Recipe experience (hearts to “x” ratio)	9:1
+Conversion to account creation	25%
+App Store Rating	≥4.5
+
+3. User Personas
+9 personas across 5 Jobs-to-be-Done, grounded in market research. Full persona profiles maintained separately.
+
+User Persona Profiles here
+4. User Pain Points
+Problems 1-5 are grounded in persona research. Problems 6-9 are validated by Reddit, Hacker News, and recipe UX research.
+
+#	Pain Point	User Quote / Signal
+1	Customers don't know what to cook -- meal decision fatigue hits before they even open the fridge	"I'm so drained after work but still want something delicious and nutritious." -- Oscar
+2	Customers don't know the full range of meals they can make with Super Sauced cubes	"I bought it once but only ever made the same thing with it."
+3	Healthy eating routines break down due to boredom and repetition	"I know what works. I just get bored and fall off the nutrition wagon." -- Mike
+4	New cooks lack the confidence to make something that actually tastes good	"I want to cook, but I don't know how to make it taste good." -- Ned
+5	Time-strapped users can't justify the effort of cooking something elevated on a weeknight	"I want great food, but don’t have hours of time and effort to dedicate to every meal." -- Cathy
+6	Recipe websites bury the recipe behind walls of personal backstory and ads -- optimized for SEO, not the cook	"Just show me the recipe. I don't care about your childhood in Atlanta." -- Hacker News
+7	Mobile recipe UX is broken -- slow load times, pop-ups, and auto-play video make cooking from a phone painful	Recipe pages average 8-12 seconds to load on mobile; 15-30 ads served per page (stats)
+8	No step-by-step cooking mode -- users scroll back and forth through a wall of text with messy hands	"I scroll quickly to find the ingredients and that's it -- I have no idea how to actually follow the recipe." -- HN
+9	Finding a recipe that looks great, only to realize mid-scroll that you are missing key ingredients -- wasted time, wasted effort	"I search for something I can make with what I have, spend 10 minutes reading a recipe, and then realize I don't have three of the things I need."
+
+5. Solution Overview
+Super Sauced is launching a mobile app that gives customers who buy Super Sauced cubes in-store a clean, curated recipe experience built entirely around the product they already have. 
+Unlike generic recipe websites cluttered with ads and life stories, the Super Sauced app gets straight to the recipe, with a distraction-free, step-by-step, GIF-guided cooking experience designed to make every meal effortless and every cube worth buying again.
+
+Key User Journey
+Customer buys product in-store, scans QR code on packaging, lands on a recipe page on the Super Sauced Shopify website, sees a prompt to download the app for more recipes and a richer experience, downloads the app, signs in with an existing Shopify account or creates a new one (syncs bidirectionally with Shopify), then explores the full recipe library, saves favorites, hearts recipes, follows step-by-step cooking guides, and shares with others.
+
+Platform
+    • iOS -- App Store (launch priority)
+    • Android -- Google Play (to follow shortly after iOS launch)
+
+Key Assumptions
+    • Customers who scan the QR code are motivated enough to download the app if the web experience is compelling
+    • Recipe content is the primary value that brings users back (MVP), not social or community features (those come later)
+
+6. User Flows
+Primary end-to-end journeys for MVP flow. Wireframes and screen-level design live in Figma -- link here once available. Flows describe sequence and logic only, not UI layout.
+
+App Navigation Structure
+The app uses a bottom tab navigation with four tabs: Recipes (main library, default tab), Saved (bookmarked recipes), Discover (Discovery Mode -- Phase 2), and Profile (account, preferences).
+
+Flow 1 -- App Download (New User)
+    • User scans QR code on product packaging with phone camera
+    • Lands on recipe page at supersauced.com (Next.js) -- app download prompt visible above the fold
+    • Taps download link -- routed to App Store (iOS) or Google Play (Android)
+    • Downloads and opens app
+    • Sees sign-up screen -- chooses Apple Sign In, Google Sign In, or email magic link
+    • If email: enters address, receives magic link, taps to authenticate
+    • Prompted to enter phone number (should be verified)
+    • Onboarding survey shown (each question individually skippable):
+        ◦ Q1: Which Super Sauced cubes are you using? We’ll tailor your recipes based on your sauces! (multi-select, all SKUs listed, quantity selector – this will update Sauce Log in user’s Profile so they can track their inventory on hand)
+        ◦ Q2: Any dietary preferences? You can set or update this later in your profile. (multi-select: vegan, high-protein, gluten-free, dairy-free, etc.)
+        ◦ Q3: How did you hear about us? (single-select: In-Store, Instagram, Tik Tok, Linkedin, Word of Mouth, Other)
+    • Taps Continue or Skip -- lands on Recipes home tab
+    • Survey responses stored and used to personalize initial recipe feed and filter defaults
+
+Flow 2 -- Recipe Discovery and Cooking (Core Loop)
+    • Opens app (authenticated, session persists) -- lands on Recipes tab
+    • Browses recipe library or uses search / filters (cube/SKU, cook time, dietary tag, difficulty)
+    • Taps a recipe card -- views recipe detail
+    • Reviews: hero image, cook time, difficulty, serving size, ingredients list, instructions and “More Recipes You'll Love” suggestions below
+    • Adjusts serving size if needed -- ingredients and macros update in real time
+    • Taps Start Cooking or toggles on “Guided Mode” to enter step by step video and text instructions flow
+    • First step, clickable ingredient checklist shown based off serving size selected -- checks off each ingredient (or taps Next)
+    • Step 1 shown: video plays, description visible, step timer visible if applicable
+    • Taps Next to advance through each step; Back to return
+    • Screen stays awake throughout -- no auto-lock
+    • If step has a timer: taps countdown to start; taps to pause / reset
+    • Complete final step -- prompted to adjust sauce quantity in Sauce Log, give one click feedback on recipe fit (heart or x), save recipe for next time. 
+
+Flow 3 -- Returning User (Saved Recipes)
+    • Opens app (authenticated) -- lands on Recipes tab
+    • Taps Saved tab in bottom navigation
+    • Browses saved recipe library or can filter for something specific (same filter functions as default Recipe tab)
+    • Taps a saved recipe -- views recipe detail
+    • Starts cooking via Guided Mode or uses Quick View Mode (default)
+
+Flow 4 -- Engagement Actions (Heart, Save, Share)
+    • From recipe card (library view): taps bookmark icon to save
+    • From recipe detail (prompting user most likely has tried recipe): taps heart if they liked,  bookmark to save for future, or share button to share
+    • Heart: count increments immediately; syncs to Supabase in background
+    • Save: recipe added to Saved tab immediately; syncs to Supabase in background
+    • Share: native share sheet opens -- user selects destination (iMessage, WhatsApp, Instagram, copy link, etc.)
+
+Flow 5 -- Discovery Mode (Phase 2)
+    • User taps Discover tab in bottom navigation
+    • Optional filter panel shown -- set preferences: cube/SKU, dietary tag, cook time, difficulty (same as main Recipe tab)
+    • First recipe card shown full-screen: hero image, recipe name, cook time, difficulty, key macros
+    • Two interactions available on each card:
+        ◦ Tap the card (Match) -- interested; opens the full recipe detail page
+        ◦ Swipe left (Skip) -- not for me; next card shown immediately
+    • Full recipe detail page has all standard features: Guided Mode, serving size adjuster, save, heart, share, More Recipes You'll Love
+    • From recipe detail, user taps Back -- returns to Discover mode at exactly the same position in the stack; the matched card does not repeat ever User continues swiping left through remaining cards or taps into another match at any time
+    • Stack cycles through the filtered recipe library; when exhausted, should see a “null” screen that also prompts users to adjust filters for more recipes. User should never see a recipe they swiped away in the Discovery Mode (it can still appear in Recipes page though)
+    • Saving a recipe from within recipe detail works identically to saving from the Recipes tab -- appears in Saved tab
+
+Flow 6 -- Content Team: Recipe Publishing (Directus)
+    • Content team member opens Directus admin dashboard
+    • Creates new Recipe record -- fills all fields: title, description, difficulty (1-3), macros, cook time, cube tags, dietary tags
+    • Creates RecipeIngredient records and links to recipe
+    • Creates RecipeStep records: writes description, uploads MP4 to Cloudinary, pastes Cloudinary URL, sets timer_seconds if step has a timed element, adds tip text if applicable
+    • Uploads hero image to Supabase Storage -- links URL to recipe record
+    • Saves recipe as draft -- not visible in app or on website
+    • Previews recipe via staging URL to QA content and video playback
+    • Sets is_published = true -- recipe appears in app library and on supersauced.com immediately
+    • Can edit or unpublish recipes (going into edit mode will automatically unpublish recipes). Can republish recipes at any time.
+
+
+7. User Stories & Feature Specs
+Full requirements and engineering tickets are maintained in GitHub. This section summarizes user stories and acceptance criteria by feature group.
+
+Customer-Facing Features
+
+Feature	Phase	User Story	Acceptance Criteria
+Authentication & Accounts	Phase 1	As a customer, I want to sign up and log in quickly -- with Apple, Google, or email -- so I can start exploring recipes without friction.	    • Apple Sign In and Google Sign In available on iOS and Android
+    • Email magic link (passwordless) available as a fallback option
+    • Session persists across app restarts
+    • Account syncs to Shopify customer record when DTC purchases are enabled (Phase 2+)
+Onboarding Survey	Phase 1	As a new user, I want to answer a few quick questions about my cubes and preferences so the app feels relevant to me from the start -- but I want to be able to skip anything I don't want to answer.	    • Survey shown once after first sign-up; never shown again
+    • Every question has a visible Skip option; entire survey can be dismissed with Skip All
+    • Responses stored to Supabase and used to personalize initial recipe feed and filter defaults
+    • Survey responses feed brand attribution and CRM data in admin analytics
+Recipe Library, Search & Filters	Phase 1	As a customer, I want to browse, search, and filter recipes so I can quickly find something to cook tonight.	    • Library loads in under 2 seconds; content reflects latest published recipes
+    • Filters by cube/SKU, cook time, dietary tag, and difficulty level return correct results
+    • Search returns relevant matches within 1 second
+Guided Mode (step-by-step + video)	Phase 1	As a customer, I want to follow a recipe step by step with videos so I can cook with confidence and never lose my place.	    • Videos load without blocking step navigation; mode is usable one-handed on iOS and Android
+    • Ingredients list accessible without leaving the step view
+    • Step timer displays a countdown when a step has a defined duration; tappable to start / pause / reset
+    • Screen does not auto-lock while Guided Mode is active; lock restored on exit
+Quick View Mode (text-only)	Phase 1	As a customer who knows what I am doing, I want to see the full recipe at a glance without videos so I can reference it quickly.	    • Quick View loads instantly with no extra network requests
+    • Toggle between Guided and Quick View is seamless with no data reload
+    • All ingredients and instructions visible without truncation
+Ingredient Pre-Cook Checklist	Phase 1	As a customer about to start cooking, I want to check off all my ingredients before I begin Guided Mode so I know I have everything before my hands get messy or I begin cooking something with a time constraint.	    • Ingredient checklist shown as the first screen when entering Guided Mode
+    • Each ingredient has a checkbox; user taps to mark as confirmed
+    • User can proceed to step 1 after reviewing the list or tapping Skip
+    • Checklist state is local and resets each session
+Serving Size Adjuster	Phase 1	As a customer, I want to adjust serving size so ingredient quantities and macros scale automatically.	    • Quantities scale correctly to 1 decimal place
+    • All macro values (calories, protein, fat, carbs) update immediately on change
+    • Selection persists when toggling between Guided and Quick View Mode
+Nutrition & Macros	Phase 1	As a customer, I want to see the full nutritional breakdown per serving so I can make informed decisions about what I eat.	    • Recipe detail displays calories, protein (g), fat (g), and carbs (g) per serving
+    • All macro values scale correctly with the serving size adjuster
+    • Macros visible in both Quick View and Guided Mode
+Save / Bookmark Recipes	Phase 1	As a customer, I want to save recipes so I can find them quickly the next time I cook.	    • Saved recipe appears in Saved Recipes within 1 second of tapping save
+    • Saved state persists after app close and across device switches
+Heart / Like Recipes	Phase 1	As a customer, I want to heart a recipe to show I love it and see which recipes others love most.	    • Heart count updates immediately on tap
+    • Heart state persists across sessions and devices
+    • Aggregate counts visible in admin dashboard
+Share Recipes	Phase 1	As a customer, I want to share a recipe with a friend so they can try it too.	    • Share sheet appears within 1 second
+    • Shared link opens correct recipe in-app or on website
+    • Works across iMessage, WhatsApp, Instagram, and more
+More Recipes You'll Love	Phase 1	As a customer who just viewed or saved a recipe, I want to see related recipe suggestions so I can discover more meals I can make with my Super Sauced cubes.	    • Related recipes shown at the bottom of every recipe detail page
+    • Recommendations based on shared cube/SKU tag and dietary tags
+    • Minimum 3 related recipes displayed; section hidden if fewer than 3 exist
+    • Tapping a suggestion navigates to that recipe detail view
+Post-Cook Rating & Comment	Phase 1	As a customer who just finished cooking, I want to rate the recipe so I can share how it went and help others decide whether to try it.	    • Congrats screen shown automatically at the end of Guided Mode with fun, on-brand copy
+    • Thumbs up or thumbs down rating -- required before submitting (can dismiss screen without rating)
+    • Optional text comment field below the rating
+    • Ratings and comments stored to Supabase; data available in admin analytics from day one
+    • Public display of ratings and comments on recipe detail pages ships in Phase 2
+    • Screen can be dismissed without rating or commenting -- no friction forced
+QR Code & Web-to-App Handoff	Phase 1	As a customer who bought Super Sauced in-store, I want to scan the QR code and land on the recipe it references so I am inspired to cook right away. (later versions can have custom QR per SKU)	    • QR scan loads recipe landing page within 3 seconds
+    • App download prompt visible above the fold on mobile
+    • Deep link routes to correct recipe in-app after install; works on iOS and Android
+
+Business / Admin Features
+
+Feature	Phase	User Story	Acceptance Criteria
+Recipe Creation	Phase 1	As a content team member, I want to create a new recipe with all required fields -- title, ingredients, steps, cube/SKU tags, difficulty, macros, cook time, and a hero image -- so it is ready for review before going live.	    • New recipe can be created and saved as a draft in Directus without publishing
+    • All required fields (including difficulty, macros, step timers) are editable before publish
+    • Draft recipes are not visible in the app until explicitly published
+Recipe Editing	Phase 1	As a content team member, I want to edit any existing recipe -- updating text, swapping step videos, changing tags or metadata -- so content stays accurate without a code deploy.	    • Any published or draft recipe can be edited and re-saved at any time in Directus
+    • Changes to a published recipe reflect in the app within the agreed sync window
+    • Replacing a video in Cloudinary using the same URL handle updates Guided Mode automatically
+Publishing & Unpublishing	Phase 1	As a content team member, I want to control when a recipe goes live and take it down if needed so we are always in control of what customers see.	    • Recipe toggled between draft and published via Directus admin
+    • Unpublished recipes are immediately removed from the user facing app library
+    • Published recipe appears in app within the agreed sync window after going live
+Step Video Upload (Cloudinary)	Phase 1	As a content team member, I want to upload step videos to Cloudinary and reference them in each recipe step so they play correctly in Guided Mode.	    • MP4 step videos upload to Cloudinary and generate a stable CDN URL
+    • Cloudinary URL stored in the step record in Supabase via Directus
+    • Replacing a video in Cloudinary using the same URL handle updates Guided Mode automatically
+Tagging & Categorization	Phase 1	As a content team member, I want to assign cube/SKU tags, dietary tags, difficulty, and cook time labels to each recipe so they surface correctly under app filters.	    • Tags set in Directus reflect in app filter options without a code change
+    • A recipe with no tags does not appear under any filter
+    • Tag taxonomy (cube names, dietary labels, difficulty levels, cook time options) is documented and consistent
+Admin Analytics Dashboard	Phase 1 (may have to push to 2)	As a Super Sauced team member, I want to see how customers engage with recipes and filters so I can make better content and product decisions.	    • All metrics filterable by date range
+    • SKU-level engagement visible per cube product
+    • Dashboard shows saves, hearts, shares, search terms, filter usage, and time-of-day activity
+    • Accessible to authorized team members only
+
+Phase 2 Features
+Confirmed for Phase 2 -- prioritized after Phase 1 launch.
+    • Discovery Mode -- dedicated Discover tab; recipe cards shown one at a time, filterable by cube/SKU, dietary tag, cook time, and difficulty; tap a card to match (opens full recipe detail with all features); swipe left to skip; back from recipe detail returns to the exact position in the stack
+    • Push notification campaigns (OneSignal)
+    • Public display of post-cook ratings and comments on recipe detail pages (Phase 1 collects the data; Phase 2 surfaces it)
+
+Deferred Features
+Out of scope for Phase 1 and 2. Will be revisited based on user data and business priorities.
+    • Recipe comments and user reviews
+    • Community / social feed
+    • AI-powered personalized recipe recommendations (tag-based More Recipes You'll Love ships Phase 1)
+    • Hands-free voice navigation in Guided Mode
+    • Ingredient substitution suggestions
+    • Rewards / loyalty program
+    • DTC purchasing / in-app commerce
+    • Premium subscription tier (RevenueCat integration)
+    • Empty Sauce log notification/ nudge and/or running low notification at “congrats” screen after user completes a recipe for a given SKU that is running low on inventory in the Sauce log
+    • Cooking guides that give tips and “cheatsheets” to cooking (e.g. bake times for proteins, etc)
+    • Meal prep week builder that allows users to pull in saved recipes and consolidate ingredients list across week’s meals
+
+8. Non-Functional Requirements
+These requirements apply across all features. Internet connection required -- the app does not support offline use at launch.
+
+Category	Requirement	Standard
+Performance	Cold launch time	App reaches the home screen in under 3 seconds on a mid-range device on LTE
+	Recipe page load	Recipe detail page (text + metadata) renders in under 2 seconds; images load progressively and do not block text
+	Video load (Guided Mode)	Video begin playing within 3 seconds of entering a step; steps are navigable before the video fully loads; video should play on loop infinitely
+	Search response	Search results return within 1 second of query submission
+	Filter response	Applying or removing a filter updates the recipe list within 1 second
+Security	Authentication	Shopify OAuth 2.0 used for SSO; tokens stored securely using platform keychain (iOS Keychain / Android Keystore); never stored in plain text
+	Data in transit	All API communication over TLS 1.2+; no unencrypted HTTP requests permitted
+	Local data	No sensitive PII stored locally on device; session tokens invalidated on logout
+	Privacy compliance	GDPR and CCPA compliant at launch; data collection limited to what is described in the privacy policy; users can request account deletion
+Reliability	Uptime target	99.9% availability for all app-dependent backend services (Shopify API, analytics)
+	No offline mode	Internet connection required to use the app; when connectivity is lost, display a clear, friendly message -- no silent failures or blank screens
+	Error handling	All API errors surface a human-readable message; app never crashes silently; retry logic on transient network failures
+	Content sync	Recipe content updates in Shopify are reflected in the app within the agreed sync window; stale content does not persist beyond that window
+Accessibility	WCAG standard	WCAG 2.1 AA compliance required at launch; tested before each release
+	Screen readers	Full VoiceOver (iOS) and TalkBack (Android) support; all interactive elements have descriptive labels
+	Dynamic type	App layout responds correctly to system font size settings (small through accessibility XL) without breaking or truncating content
+	One-handed use	All primary actions (save, heart, share, step navigation) reachable with one thumb in the bottom 60% of the screen on standard phone sizes
+	Color contrast	All text meets a minimum 4.5:1 contrast ratio against its background; never rely on color alone to convey meaning
+	Motion / GIFs	Guided Mode respects the device's Reduce Motion setting; GIF autoplay can be paused
+Scalability	Recipe catalog	Architecture handles a growing recipe library (target: hundreds to low thousands of recipes) without degradation in search or filter performance
+	User growth	Backend and Shopify API usage can scale to support growing MAU without rearchitecting at Phase 1 volumes; capacity reviewed before each phase launch
+Platform Compatibility	iOS support	Minimum iOS version TBD -- to be confirmed with engineering based on feature dependencies and target device coverage
+	Android support	Minimum Android version TBD -- to be confirmed with engineering; target 90%+ of active Android devices in the US
+	Device sizes	Layout tested and functional on standard phone sizes (4.7" to 6.7"); tablet layouts are out of scope for Phase 1
+	App stores	Compliant with App Store Review Guidelines (Apple) and Google Play Developer Policy at submission
+
+9. Technical Requirements
+Final confirmed stack. Shopify is commerce-only. Recipe content and app data live in Supabase. Implementation details and schema migrations live in GitHub.
+
+Area	Detail
+Platforms	iOS (App Store, Phase 1 launch priority) and Android (Google Play, to follow shortly after iOS).
+Mobile Framework	Expo (React Native) -- managed workflow confirmed. Single codebase for iOS and Android. Cloud builds via Expo EAS (no local Xcode / Android Studio required). Over-the-air JS updates via Expo Updates -- bug fixes ship without App Store review. Expo Router for file-based navigation. NativeWind for styling. TypeScript throughout.
+Database & Backend	Supabase -- PostgreSQL database with auto-generated REST and GraphQL API, Supabase Auth, Supabase Storage, and Edge Functions. All recipe content, user data, saves, hearts, and engagement data live here. Row Level Security (RLS) configured from day one. Connection pooling via Supavisor for React Native. TypeScript types auto-generated from schema via Supabase CLI.
+Recipe Data Schema	Recipe table: title, slug, description, hero_image_url, servings_default, cook_time_minutes, difficulty (1-3), calories_per_serving, protein_g, fat_g, carbs_g, cube_tags[], dietary_tags[], is_published. RecipeStep table: step_number, description, video_url (Cloudinary MP4), timer_seconds (nullable), tip (nullable). RecipeIngredient table: quantity (decimal), unit, name, notes.
+Content Admin	Directus -- open-source headless CMS connected directly to the Supabase PostgreSQL database. Provides the content team a form-based interface for creating, editing, publishing, and managing recipes and steps without engineering involvement. Self-hosted on a $10-20/month Fly.io or DigitalOcean droplet. No separate CMS database -- Directus reads and writes the same Supabase tables the app uses.
+Step Videos	Cloudinary -- all Guided Mode step videos hosted and delivered via Cloudinary CDN. Uploaded as MP4 (H.264, optimized for mobile). Cloudinary delivers adaptive quality based on connection speed. Video URLs stored in RecipeStep table in Supabase. Replace-without-URL-change workflow for seamless content updates.
+Hero Images	Supabase Storage -- recipe hero images stored and delivered via Supabase CDN. Included in the Supabase plan at no additional cost. Cloudinary reserved for video.
+Authentication	Supabase Auth -- Apple Sign In (iOS / Android), Google Sign In (iOS / Android), and email magic link (passwordless). No Shopify SSO dependency at launch. Session tokens stored in platform keychain (iOS) / Keystore (Android). When DTC commerce goes live, a Supabase Edge Function syncs user records to Shopify customer records in the background (Phase 2+).
+Data Fetching	TanStack Query (React Query) in the React Native app -- caching (recipe library feels instant on repeat visits), background refetching, and optimistic updates (save / heart actions update UI immediately, sync to Supabase in background).
+Deep Linking	Universal Links (iOS) and Android App Links for web-to-app handoff. QR codes on packaging resolve to Next.js recipe landing pages; each page embeds a deep link that routes the user to the correct recipe in-app after install.
+Website & QR Landing Pages	Next.js (App Router) on Vercel -- recipe pages use Incremental Static Regeneration (ISR) for fast, cached QR landing pages. JSON-LD Recipe structured data (schema.org) on every page for SEO and Google rich results. Content fetched from Supabase at build / revalidation time. Jump-to-recipe anchor on every page so QR users land on the recipe without scrolling past the app download prompt.
+Analytics	PostHog -- product analytics, session replay, and feature flags in one platform. Free tier covers 1M events/month. Feature flags used for phased rollouts and A/B tests without requiring a new app release. See Section 11 for the full tracking plan.
+Error Monitoring	Sentry -- mobile crash reporting and error tracking for iOS and Android. GitHub integration surfaces errors directly in the development workflow. Free tier covers early-stage volume; ~$26/month starter plan at scale.
+Push Notifications	Phase 2 -- OneSignal. Free up to 10K subscribers. Uses FCM (Android) and APNs (iOS). Visual campaign dashboard lets the marketing team send and schedule pushes without engineering. Supports in-app banners and segmented campaigns.
+Commerce	Phase 2+ -- Shopify. DTC product sales, orders, and payments when the product line expands to direct-to-consumer SKUs. Supabase user records synced to Shopify customer records at that point. Shopify has no role in recipe content, authentication, or app data.
+Subscription & Payments	Phase 3 -- RevenueCat. In-app subscription and purchase management for iOS and Android. Free tier covers early stage. Add when / if a premium content tier is introduced. Integrates cleanly with Expo and Supabase.
+App Store Distribution	Apple App Store and Google Play Store. Builds managed via Expo EAS. App must comply with App Store Review Guidelines and Google Play Developer Policy at all times.
+Source Control & Tickets	GitHub -- feature branches, pull requests, and issue tracking. Supabase TypeScript types shared across React Native app, Next.js website, and Edge Functions. Functional requirements and acceptance criteria from this PRD maintained as GitHub Issues.
+
+10. Design Requirements
+
+Visual Direction
+The Super Sauced app should feel bold, warm, and unapologetically confident -- a brand that takes great food seriously but never takes itself too seriously. Visual references: Tasty (food-forward photography, high energy), Recess (playful DTC personality, bold color), Fly By Jing (premium product photography, cultural confidence). The result is an app that feels premium but approachable, exciting but not chaotic.
+Food photography is the primary design element throughout. Recipes lead with appetite-inspiring hero images. UI chrome supports the content rather than competing with it. Brand personality lives in micro-copy -- empty states, loading messages, the Congrats screen -- not in visual noise.
+
+Brand Color System
+Use color guidelines here
+
+Typography
+App typeface: Rubik (Google Fonts, free). Bold and Black weights carry strong brand personality for headlines; Regular and Medium are clean and readable for body and UI. Works seamlessly across iOS and Android via Expo's font loading.
+    • All type must meet WCAG AA contrast ratios -- refer to the Brand Color System for approved pairings
+
+UX Principles
+    • Food first -- the recipe image is always the hero. UI never competes with content.
+    • One-handed by default -- every primary action (save, heart, share, next step, timer) is reachable with one thumb in the bottom 60% of the screen.
+    • Zero friction paths -- minimize taps between QR scan and recipe, and between recipe and cooking. The core loop (open app, find recipe, start cooking) should feel effortless.
+    • Brand in the details -- micro-copy, empty states, the Congrats screen, and loading states are all opportunities to express the Super Sauced voice. These moments should never be generic.
+    • Accessible by default -- design for WCAG AA compliance and dynamic type scaling from the very first mockup. Not a retrofit.
+    • Confident simplicity -- the app does fewer things than a generic recipe app but does them better. Resist feature creep in the UI; every element on screen should earn its place.
+
+Screen-Specific Design Requirements
+Screen / Component	Design Requirements
+Recipe Card (library)	Food photography is the hero -- full-bleed or dominant image. Key metadata (cook time, difficulty, macros callout) legible at a glance without opening the recipe. Save and heart actions accessible directly from the card without tapping in. Bold recipe name typography.
+Recipe Detail Page	Hero image at top, full-bleed. Recipe name, macros, cook time, and difficulty visible before scroll. Serving adjuster prominent and easy to interact with one hand. Ingredients and steps clearly separated. More Recipes You'll Love section at bottom feels editorial, not algorithmic.
+Guided Mode -- Step View	Distraction-free -- UI chrome is minimal. Video centered and prominent. Step description below video, large and readable at arm's length. Step counter (e.g. Step 2 of 6) clearly visible. Next / Back navigation thumb-reachable. Timer displayed inline with step when present. Screen stay-awake indicator subtle but visible.
+Ingredient Pre-Cook Checklist	Clean, uncluttered list. Checkboxes large enough to tap one-handed with a finger. Skip option clearly available but not more prominent than the list. Progress feel -- checked items visually confirmed.
+Congrats Screen	Celebratory, brand-forward moment. Bold, fun headline (e.g. 'You absolutely nailed it.' or 'Look at you go.'). Super Sauced brand personality on full display -- warm, cheeky, not corporate. Thumbs up / down large and easy to tap. Comment field below, clearly optional. Dismiss option present but not the focal point.
+Onboarding Survey	Light and low-friction. Progress indicator (e.g. 1 of 3) shows brevity. Skip clearly available on each question -- never hidden. Multi-select chips for cubes and dietary tags; visually satisfying to tap. Consistent with the rest of the onboarding tone: welcoming, not interrogative.
+Discovery Mode Card (Phase 2)	Full-bleed food photography. Recipe name, cook time, difficulty, and one key macro overlaid on the card with readable contrast. Swipe left affordance subtle but discoverable (e.g. a faint left arrow or card edge peek). Tap interaction feels like opening, not selecting. Filter access from within the tab -- icon in header, not a bottom sheet interrupt.
+Bottom Navigation	Four tabs: Recipes, Saved, Discover (Phase 2), Profile. Icons clear and recognizable. Active tab uses brand red. Labels always visible (no icon-only). Tab bar stays visible in Guided Mode so users can exit without feeling trapped.
+Empty States	Every empty state (no saved recipes, no search results, empty Discover stack) has a Super Sauced branded illustration or message with brand personality -- never a generic blank screen. Should feel like an invitation, not an error.
+User Profile	TBDefined
+
+Design Deliverables
+    • Figma file -- to be created as the first design deliverable, covering design system, component library, and all primary screens
+    • Design system: color tokens, typography scale, spacing system, component library (cards, buttons, inputs, navigation, tags)
+    • High-fidelity mockups for all flows -- iOS priority, Android to followHandoff-ready Inspect file with spacing, assets, and interaction notes for engineering
+11. Analytics & Tracking Plan
+All metrics should be instrumented at or before launch -- retrofitting tracking is costly. Full event schema (user ID, recipe ID, cube tag, session ID, serving size, mode, etc.) to be documented in GitHub before engineering handoff.
+
+Metric	Definition & Formula	Business Signal
+Growth & Retention
+Monthly Active Users (MAU)	# of unique users who open the app at least once in a rolling 30-day window	Baseline engagement health; track the trend and delta, not the absolute number
+New Users	# of users completing account creation for the first time in the period	Acquisition rate; measures how well the QR-to-download funnel converts
+Returning Users	# of users who were active last period AND active this period	Core retained base; the healthiest growth signal
+Churned Users	# of users active last period but NOT active this period	Early warning; spikes may signal content staleness or UX friction
+Net User Growth	New Users - Churned Users (per period)	True growth signal -- strips the vanity out of raw MAU
+Day 7 Retention Rate	% of new users who return on or after Day 7 -- # returning Day 7 / # in acquisition cohort	Strongest early signal of whether the product has a genuine hook
+Day 30 Retention Rate	% of new users still active 30 days after first open -- # active Day 30 / # in acquisition cohort	Long-term stickiness; benchmark for content-driven apps is 20-30%
+Onboarding
+Onboarding Completion Rate	% of users who finish account setup after first app open -- # completed onboarding / # first opens	Friction indicator; drop-off here means losing users before they see any value
+Onboarding Drop-off by Step	% of users who exit at each onboarding step -- # who exited at step N / # who entered step N	Pinpoints exactly where setup breaks down; informs UX iteration priority
+QR-to-Download Conversion Rate	% of Shopify recipe page visitors (from QR scan) who tap the app download link -- # taps / # QR-originated page views	Measures how well the web-to-app handoff is working
+Recipe Engagement
+Recipe Views	# of recipe detail page opens in the period (total and per recipe)	Baseline content demand; which recipes attract the most attention
+Save Rate	% of recipe views that result in a save -- # saves / # views (per recipe and overall)	Intent signal; a save means the user wants to cook this
+Heart Rate	% of recipe views that result in a heart -- # hearts / # views (per recipe and overall)	Popularity signal; drives content ranking and future curation decisions
+Share Rate	% of recipe views that result in a share -- # shares / # views (per recipe and overall)	Organic growth signal; high share rate = word-of-mouth potential
+Guided Mode Completion Rate	% of Guided Mode sessions where the user reaches the final step -- # sessions at final step / # Guided Mode sessions started	Tells us whether users are actually cooking, not just browsing
+Saves per Active User (monthly)	Total saves in period / MAU	Depth of engagement; rising number means content is resonating
+Hearts per Active User (monthly)	Total hearts in period / MAU	Affinity metric; complements saves to show emotional connection with content
+Content Mode Preference
+Guided Mode Usage Rate	% of recipe opens that start a Guided Mode session -- # Guided Mode starts / # recipe detail opens	Tells us how many users are cooking vs. browsing; informs GIF content investment
+Quick View Usage Rate	% of recipe opens that use Quick View -- # Quick View opens / # recipe detail opens
+
+(user stays on longer than 1min)	Signals experienced cooks; high Quick View share = confident, returning user base
+Mode Switch Rate	% of recipe sessions where the user toggles between modes -- # sessions with a mode switch / # total recipe sessions	UX signal; frequent switching may indicate friction in one mode
+Serving Size
+Mean Serving Size	Average serving size selected across all sessions with an adjustment -- sum of selected serving sizes / # sessions where size was changed	Household size proxy; tells us the average group our users are cooking for
+Mode Serving Size	Most frequently selected serving size across all adjustment sessions	Single most common household type; informs recipe defaults and content framing
+Serving Size Distribution	% of adjustment sessions by size -- # sessions at size N / # total adjustment sessions; reported for 1, 2, 4, 6, 8+	Full household composition picture; guides portion guidance and recipe scaling
+Top 5% User Serving Habits	Mean and mode serving size calculated within the top 5% of users by session count	Power user household proxy; most engaged cooks inform premium content and loyalty strategy
+Search & Discovery
+Top Search Terms	Ranked list of search queries by # of times entered in the period	Content gap finder; high-volume terms with thin results = recipes to prioritize
+Zero-Result Search Rate	% of searches returning no results -- # zero-result searches / # total searches	Direct measure of content gaps; should trend toward 0 as library grows
+Filter Usage Rate	% of sessions that include at least one filter selection -- # sessions with any filter / # total sessions	Tells us how actively users are using discovery tools vs. pure scrolling
+Top Filters Used	Ranked count of each filter selection (cube/SKU, cook time, dietary tag) -- # times each filter applied in the period	Taste and lifestyle trend data; directly informs product development and SKU strategy
+SKU & Cube Performance
+Cube Filter Selection Count	# of times each cube/SKU filter is selected in the period, reported per SKU	Reveals which cubes drive the most recipe interest; feeds inventory and marketing decisions
+Save Rate by Cube	% of views for recipes tagged with a given cube that result in a save -- # saves / # views, per cube tag	Content quality signal per SKU; low save rate = recipe content needs improvement
+Heart Rate by Cube	% of views for recipes tagged with a given cube that result in a heart -- # hearts / # views, per cube tag	Fan affinity per SKU; which cubes have the strongest emotional pull
+Behavioral Signals
+Peak Usage Hours	# of app sessions per hour bucket (e.g. 6-9am, 12-1pm, 5-8pm) across all users in the period	Reveals when customers are meal planning and cooking; informs push notification timing (Phase 2)
+Session Frequency	Avg # of sessions per active user per month -- total sessions / MAU	Habit formation indicator; rising frequency = the app is becoming a kitchen staple
+Onboarding Survey
+Survey Completion Rate	% of new users who answer at least one survey question -- # users who answered >= 1 question / # users who saw the survey	Measures whether the survey creates friction; target is high completion given questions are skippable
+Skip Rate per Question	% of users who skip each individual question -- # skips on question N / # users who reached question N	Shows which questions feel too personal or confusing; informs future survey design
+Cube Purchase Distribution	% breakdown of reported cube purchases across all SKUs -- # users who selected cube X / # users who answered Q1	First-party purchase signal; validates retail sell-through data and informs content prioritization
+Dietary Preference Distribution	% breakdown of dietary preference selections across all tags -- # users who selected tag X / # users who answered Q2	Audience lifestyle profile at sign-up; seeds personalization and informs filter content investment
+Brand Discovery Channel Mix	% breakdown of how users report discovering Super Sauced -- # users selecting each option / # users who answered Q3	Marketing attribution signal; shows which acquisition channels are driving the most downloads
+Post-Cook Rating & Comments (Phase 1 -- display in Phase 2)
+Congrats Screen Impression Rate	% of Guided Mode completions that result in the Congrats screen being shown -- # Congrats screens shown / # Guided Mode sessions reaching final step	Measures how many users are actually finishing recipes end-to-end
+Rating Submission Rate	% of Congrats screen impressions that result in a thumbs up or down rating -- # ratings submitted / # Congrats screens shown	Engagement with the rating feature; low rate = screen is being dismissed; high rate = users want to give feedback
+Heart	% of submitted ratings that give hearts to recipe -- # hearts / # total ratings submitted	Post-cook satisfaction score per recipe; distinct from hearts (pre-cook intent) -- high hearts + low thumbs up = appealing but hard to execute
+“X” rate	% of submitted ratings that are “X”ed out -- # “X” ratings / # total ratings submitted	Execution failure signal; spikes on specific recipes indicate unclear instructions or ingredient issues
+Comment Submission Rate	% of ratings that include a written comment -- # comments submitted / # ratings submitted	Depth of post-cook engagement; comments feed qualitative content improvements and future community feed
+Discovery Mode (Phase 2)
+Discovery Mode Session Rate	% of active users who open the Discover tab at least once in the period -- # users with >= 1 Discover session / MAU	Adoption signal; tracks whether users find and return to the feature
+Match Rate	% of cards shown that result in a tap (match) -- # taps / # total cards shown	Affinity signal; rising rate means the card content is compelling enough to open
+Skip Rate	% of cards shown that result in a left swipe -- # swipe lefts / # total cards shown	Rejection signal; patterns in skipped cards reveal which recipe types consistently fail to connect
+Discovery-to-Save Rate	% of matched (tapped) recipes that are subsequently saved -- # saves initiated from Discover / # matches	Intent quality; high match rate with low save rate = users are curious but not committing
+Discovery-to-Cook Rate	% of matched recipes that result in a Guided Mode session -- # Guided Mode starts from Discover / # matches	Conversion quality; the strongest signal that Discovery Mode is driving actual cooking behavior
+Top Skipped Recipe Tags	Ranked list of cube/SKU and dietary tags on recipes with the highest skip rates in the period	Content signal; consistently skipped tags inform which recipe types to reduce or reframe in the Discover stack
+CRM & Demographics  (collected via account creation + future rewards program)
+Age Distribution	% of registered users by age bracket (18-24, 25-34, 35-44, 45-54, 55+) -- # users in bracket / total registered users with age on file	Audience composition; informs tone, content focus, and marketing targeting
+Birthday Data Coverage	% of registered users with a birthday on file -- # users with birthday / total registered users	Enables birthday promos; tracks progress toward CRM completeness
+Retail Location Data	# of users who have indicated a preferred retailer (surfaced via geo-targeted promos)	Feeds retailer partnership conversations and regional inventory signals
+
+Analytics Platform
+PostHog -- confirmed. See Section 9 for full platform rationale.
+
+12. Risks & Assumptions
+R = Risk (something that could go wrong). A = Assumption (something we are treating as true). Revisit this list at the start of each sprint.
+
+	Type	Risk / Assumption	Likelihood	Mitigation
+A	Assumption	Users who scan the QR code on packaging are motivated enough to download the app after landing on the Shopify recipe page	Medium	Optimize the web-to-app handoff page (prominent download prompt, clear value proposition above the fold). Measure QR-to-download conversion from day one and iterate on page copy and layout.
+A	Assumption	Apple Sign In and Google Sign In meaningfully reduce sign-up friction compared to email-only registration	Low	Confirmed best practice for consumer mobile apps. Monitor onboarding completion rate and drop-off by auth method post-launch.
+A	Assumption	A recipe library of [TBD] recipes at launch is sufficient to provide enough variety to retain users through the first 30 days	Medium	Define a minimum recipe count before launch begins. Prioritize content diversity across all cubes, dietary tags, and cook time buckets rather than raw quantity.
+R	Risk	Supabase + Directus integration introduces unexpected complexity or instability at production scale	Low	Both are well-documented, actively maintained open-source tools with official integration support. Run a technical spike in the first sprint to validate the connection. Self-host Directus on a reliable cloud provider.
+R	Risk	Cloudinary step video delivery is slow on poor mobile connections, breaking the Guided Mode experience	Medium	Use Cloudinary's adaptive quality delivery. Preload the next step's video while the user is on the current step. Define a maximum video file size and enforce it in the content team workflow.
+R	Risk	Expo managed workflow hits a native capability ceiling for a feature added in Phase 2 or 3	Low	Expo's managed workflow supports the vast majority of consumer app features. If a custom native module is ever needed, eject to bare workflow via npx expo prebuild -- a non-destructive migration.
+R	Risk	Supabase Row Level Security (RLS) is misconfigured at launch, exposing recipe or user data incorrectly	Medium	Configure and test RLS policies as the first infrastructure task before any data is written. Include RLS policy review in the engineering definition of done for every data-touching feature.
+R	Risk	App Store review rejection delays Phase 1 launch -- Apple is strict about health, food, and data collection	Medium	Review App Store guidelines before submission, particularly around health/nutrition claims and dietary data collection. Allow 2-3 weeks of buffer in the launch timeline for review cycles.
+R	Risk	Low organic retention after initial novelty -- users download, browse once, and do not return	High	Design return habits into the product: More Recipes You'll Love, post-cook ratings, and saved recipes all create reasons to return. Plan Phase 2 push notifications proactively. Monitor Day 7 and Day 30 retention as the leading indicators.
+R	Risk	Recipe content quality or quantity is insufficient to sustain engagement, causing users to exhaust the library quickly	Medium	Set a minimum content cadence (e.g. 2 new recipes per week post-launch). Track recipe view diversity -- if users are repeatedly viewing the same small set of recipes, it signals a content gap.
+R	Risk	Discovery Mode (Phase 2) drives high match rates but low cook rates -- users swipe for entertainment, not to cook	Medium	Track match-to-cook conversion from day one after launch. If the rate is low, introduce a friction point (e.g. a prompt after 10 left-swipes: 'Ready to pick one?') to drive decision rather than endless browsing.
+A	Assumption	The internal content team can manage recipe creation, video upload, and publishing in Directus without ongoing engineering support after initial onboarding	Medium	Run a content team training session before launch. Document the full publishing workflow. Build a simple content QA checklist. If Directus proves too complex, evaluate a lightweight custom admin form.
+A	Assumption	Each Super Sauced cube SKU has enough distinct recipe use cases to justify its own filter at launch	Low	Confirm minimum recipe count per cube before enabling its filter. Do not surface a cube filter if fewer than 3 recipes are tagged with it at launch.
+A	Assumption	The app drives measurable repeat purchase behavior that can be attributed to app engagement	Medium	Instrument QR scan source tracking and coupon/promo code attribution in Phase 2. Design at least one in-app prompt that connects recipe completion to a retail purchase call to action.
+
+13. Open Questions & Task List
+This section tracks two things: decisions that still need an answer, and work that needs to get done before or at launch. Assign an owner and deadline to everything. Items without owners are blockers.
+
+Open Questions
+Questions that need a decision before engineering or design can proceed. 
+
+Area	Question	Owner	Due
+Product	What is the minimum number of recipes required in the library before Phase 1 launches?	[Owner]	TBD
+Product	Is guest browsing (no account required) allowed, or must users sign up to view recipes?	[Owner]	TBD
+Product	What is the exact list of dietary preference options and allergen options shown in the onboarding survey and profile settings?	[Owner]	TBD
+Product	What is the cheeky copy direction for the Congrats screen? Who writes and approves it?	[Owner]	TBD
+Product	What are the exact answer options for the brand discovery survey question (Q3: How did you hear about us)?	[Owner]	TBD
+Product	Should the difficulty filter use numeric levels (1-3) or label-based tiers (Easy / Medium / Advanced)?	[Owner]	TBD
+Content	Who owns recipe content creation -- internal team, external creators, or a mix? What is the target publishing cadence post-launch?	[Owner]	TBD
+Content	What is the minimum number of recipes per cube SKU before that cube's filter is enabled in the app?	[Owner]	TBD
+Content	How are allergens structured in the recipe data -- at the ingredient level, the recipe level, or both?	[Owner]	TBD
+Content	What Cloudinary folder structure and MP4 naming convention will the content team follow for step videos?	[Owner]	TBD
+Content	What is the approval workflow in Directus -- open publish or gated review?	[Owner]	TBD
+Technical	What is the agreed content sync window between Directus / Supabase and the app after a recipe is published?	[Owner]	TBD
+Technical	What is the maximum MP4 file size for step videos and what compression standard will be enforced?	[Owner]	TBD
+Technical	What is the target Phase 1 launch date?	[Owner]	TBD
+Technical	Which Supabase plan (Free vs. Pro) will be used at launch and who manages the project?	[Owner]	TBD
+Technical	Who manages Cloudinary account setup, billing, and content team access?	[Owner]	TBD
+Business	Who has access to the PostHog analytics dashboard and at what permission level?	[Owner]	TBD
+Business	What retail locations will appear as options in the brand discovery survey?	[Owner]	TBD
+Business	When does Phase 2 planning begin -- date, MAU threshold, or retention benchmark?	[Owner]	TBD
+Business	Are there legal or regulatory requirements for collecting dietary preference and allergen data that need review before launch?	[Owner]	TBD
+
+Pre-Launch Task List
+Concrete deliverables required before Phase 1 launch. Status: Not Started / In Progress / Complete / Blocked.
+
+Area	Task	Owner	Status	Due
+Product & Design	Define minimum recipe count and content mix required for Phase 1 launch	[Owner]	Not Started	TBD
+Product & Design	Define dietary preference options and allergen options list (onboarding + profile)	[Owner]	Not Started	TBD
+Product & Design	Define difficulty level labels (numeric vs word-based) and confirm with design	[Owner]	Not Started	TBD
+Product & Design	Write and approve Congrats screen copy (multiple variants for design to explore)	[Owner]	Not Started	TBD
+Product & Design	Define brand discovery survey answer options (retailer list, discovery channels)	[Owner]	Not Started	TBD
+Product & Design	Create Figma file -- design system, color tokens, Rubik type scale, component library	[Owner]	Not Started	TBD
+Product & Design	Design all Phase 1 screens (high-fidelity mockups, iOS priority)	[Owner]	Not Started	TBD
+Product & Design	Design Guided Mode step view with video, timer, and ingredient checklist states	[Owner]	Not Started	TBD
+Product & Design	Design Congrats screen -- minimum 2 layout and copy explorations	[Owner]	Not Started	TBD
+Product & Design	Design onboarding survey flow (skippable states, progress indicator)	[Owner]	Not Started	TBD
+Product & Design	Design empty states for all primary screens (no saved recipes, no search results, etc.)	[Owner]	Not Started	TBD
+Product & Design	Prepare handoff-ready Figma Inspect file for engineering	[Owner]	Not Started	TBD
+Content	Confirm recipe content ownership and establish publishing cadence	[Owner]	Not Started	TBD
+Content	Define allergen data structure with engineering (ingredient-level vs recipe-level)	[Owner]	Not Started	TBD
+Content	Define Cloudinary folder structure and MP4 naming convention; document for content team	[Owner]	Not Started	TBD
+Content	Set up Directus, train content team, document full recipe publishing workflow	[Owner]	Not Started	TBD
+Content	Create full launch recipe library (minimum count TBD) across all cube SKUs	[Owner]	Not Started	TBD
+Content	Produce and upload step MP4 videos to Cloudinary for all launch recipes	[Owner]	Not Started	TBD
+Content	Upload hero images to Supabase Storage for all launch recipes	[Owner]	Not Started	TBD
+Content	Tag all launch recipes with cube/SKU, dietary tags, difficulty, cook time, and allergens	[Owner]	Not Started	TBD
+Content	Input macro data (calories, protein, fat, carbs) for all launch recipes	[Owner]	Not Started	TBD
+Content	QA all recipes in staging -- check video playback, macros, tags, and filters	[Owner]	Not Started	TBD
+Technical	Set up GitHub repo with branch strategy and issue tracking; port PRD acceptance criteria to GitHub Issues	[Owner]	Not Started	TBD
+Technical	Set up Supabase project -- define schema, configure RLS policies, generate TypeScript types	[Owner]	Not Started	TBD
+Technical	Set up and self-host Directus (Fly.io or DigitalOcean); connect to Supabase	[Owner]	Not Started	TBD
+Technical	Set up Cloudinary account, create folder structure, grant content team access	[Owner]	Not Started	TBD
+Technical	Initialise Expo project with Expo Router, NativeWind, TypeScript, and Supabase SDK	[Owner]	Not Started	TBD
+Technical	Configure Supabase Auth (Apple Sign In, Google Sign In, email magic link)	[Owner]	Not Started	TBD
+Technical	Set up Next.js site on Vercel with ISR and JSON-LD Recipe schema on recipe pages	[Owner]	Not Started	TBD
+Technical	Configure Universal Links (iOS) and Android App Links for web-to-app deep linking	[Owner]	Not Started	TBD
+Technical	Integrate PostHog -- mobile SDK in Expo app, web SDK in Next.js; validate event schema	[Owner]	Not Started	TBD
+Technical	Integrate Sentry for crash reporting and error monitoring on iOS and Android	[Owner]	Not Started	TBD
+Technical	Set up Expo EAS for cloud builds and OTA update pipeline	[Owner]	Not Started	TBD
+Technical	Complete engineering sprint planning; confirm Phase 1 launch date	[Owner]	Not Started	TBD
+Technical	Set up Apple App Store and Google Play developer accounts; configure app signing	[Owner]	Not Started	TBD
+Business & Legal	Legal review -- dietary preference and allergen data collection compliance (GDPR, CCPA)	[Owner]	Not Started	TBD
+Business & Legal	Define PostHog analytics dashboard access and permission levels per team role	[Owner]	Not Started	TBD
+Business & Legal	Confirm Cloudinary billing ownership and plan tier for launch	[Owner]	Not Started	TBD
+Business & Legal	Confirm Supabase plan (Free vs Pro) and billing ownership	[Owner]	Not Started	TBD
+Business & Legal	Define Phase 2 launch trigger criteria (date, MAU, or retention threshold)	[Owner]	Not Started	TBD
+Business & Legal	Draft and publish App Store privacy policy and data usage disclosure	[Owner]	Not Started	TBD
+

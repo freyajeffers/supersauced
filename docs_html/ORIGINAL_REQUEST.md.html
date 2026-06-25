@@ -1,0 +1,52 @@
+<h1>Original User Request</h1>
+<h2>Initial Request — 2026-06-23T21:22:09Z</h2>
+<p>Develop and document the complete backend architecture, database schema, and integration plans for the Super Sauced B2C mobile app MVP. This includes Supabase/PostgreSQL database design, Row Level Security (RLS) policies, PostgREST API specifications, Directus CMS content workflow setup, and authentication configurations.</p>
+<p>Working directory: /home/freya/supersauced/docs
+Integrity mode: development</p>
+<p>Detailed logging: Keep detailed logs of all decisions, progress, and remaining tasks in a log file in the working directory so that the work can be resumed later if we run out of quota.</p>
+<h2>Requirements</h2>
+<h3>R1. Relational Database Schema &amp; Indexes (Supabase/PostgreSQL)</h3>
+<p>Define a complete, production-ready SQL script (<code>schema.sql</code>) to set up the core database tables (<code>user_profiles</code>, <code>recipes</code>, <code>recipe_ingredients</code>, and <code>recipe_steps</code>). The schema must enforce strict relational integrity via foreign keys and cascade deletes to avoid orphaned data. It must use strict <code>NUMERIC(10,1)</code> decimal types for ingredient quantities to prevent scaling errors. It must also implement Generalized Inverted Indexes (GIN) on array fields (<code>cube_tags</code> and <code>dietary_tags</code>) to support sub-100ms recipe filtering.</p>
+<h3>R2. Row Level Security (RLS) Policies</h3>
+<p>Write SQL scripts inside <code>schema.sql</code> to configure and enforce Row Level Security (RLS) on all database tables. The policies must prevent users from accessing or modifying other users' profiles, while allowing public read access to published recipes, step metadata, and ingredients. It must define admin/service_role bypasses for CMS operations.</p>
+<h3>R3. PostgREST / Supabase API Specifications</h3>
+<p>Document the exact API endpoints and query structures generated via PostgREST for the mobile frontend in <code>api_spec.md</code>. Provide concrete code examples (e.g. JavaScript/TypeScript client queries using the Supabase SDK) showing how the client will fetch the recipe library, perform search and filter queries, read specific recipe details (avoiding the N+1 query problem), and sync/toggle saved states and likes.</p>
+<h3>R4. Directus CMS &amp; Media Workflow Setup</h3>
+<p>Design and document the integration between the Supabase PostgreSQL database and Directus CMS in <code>content_workflow.md</code>. Include instructions on schema connection, configuring role-based access control (RBAC) to prevent non-technical staff from modifying database schemas, and the asset pipeline (Cloudinary CDN for loop videos and Supabase Storage for hero images).</p>
+<h3>R5. Authentication &amp; Onboarding Database Flow</h3>
+<p>Document the authentication pipeline using Supabase Auth (Apple Sign-In, Google Sign-In, and Email Magic Links) in <code>auth_integration.md</code>. Detail the database trigger and function that automatically maps new authenticated users from <code>auth.users</code> to <code>public.users</code>/<code>public.user_profiles</code> and stores onboarding survey responses.</p>
+<h2>Acceptance Criteria</h2>
+<h3>Verification &amp; Syntax Correctness</h3>
+<ul>
+<li>[ ] The generated <code>schema.sql</code> must execute without errors in a PostgreSQL 16+ Docker container environment.</li>
+<li>[ ] All expected files (<code>schema.sql</code>, <code>api_spec.md</code>, <code>content_workflow.md</code>, <code>auth_integration.md</code>) must exist in <code>/home/freya/supersauced/docs</code>.</li>
+</ul>
+<h3>Database Schema (schema.sql)</h3>
+<ul>
+<li>[ ] Defines <code>public.user_profiles</code> table, referencing <code>auth.users(id)</code> with <code>ON DELETE CASCADE</code>.</li>
+<li>[ ] Defines <code>public.recipes</code> table with columns for difficulty, cook time, macros, and array tags.</li>
+<li>[ ] Defines <code>public.recipe_ingredients</code> table using <code>NUMERIC(10,1)</code> for quantity, linked to recipes.</li>
+<li>[ ] Defines <code>public.recipe_steps</code> table with UNIQUE constraint on recipe_id + step_number, linked to recipes.</li>
+<li>[ ] Creates GIN indexes on <code>recipes(cube_tags)</code> and <code>recipes(dietary_tags)</code>.</li>
+<li>[ ] Sets <code>ALTER TABLE ... ENABLE ROW LEVEL SECURITY</code> on all tables.</li>
+<li>[ ] Implements a trigger function and trigger on <code>auth.users</code> to automatically populate <code>public.user_profiles</code> on sign-up.</li>
+</ul>
+<h3>API Specifications (api_spec.md)</h3>
+<ul>
+<li>[ ] Documents fetching the recipe list with filtering.</li>
+<li>[ ] Shows how to fetch a recipe, its steps, and ingredients in a single network request.</li>
+<li>[ ] Shows how to toggle saved/bookmarked recipes.</li>
+<li>[ ] Includes complete TypeScript/Supabase SDK code snippets.</li>
+</ul>
+<h3>Content CMS &amp; Media (content_workflow.md)</h3>
+<ul>
+<li>[ ] Outlines steps to connect Directus to Supabase.</li>
+<li>[ ] Defines Role-Based Access Control (RBAC) rules for the Content Team.</li>
+<li>[ ] Describes how media links (Cloudinary and Supabase Storage) are managed.</li>
+</ul>
+<h3>Authentication &amp; Integrations (auth_integration.md)</h3>
+<ul>
+<li>[ ] Documents Apple, Google, and Email Magic Link auth flows.</li>
+<li>[ ] Recommends secure token storage (<code>expo-secure-store</code>) for React Native.</li>
+<li>[ ] Maps out the Phase 2+ Shopify sync mechanism.</li>
+</ul>

@@ -1,0 +1,20 @@
+/home/freya/.gemini/antigravity-cli/brain/741f7fc1-a7e9-47c2-9786-73842af13459/verify_full.sh: line 17: ./.gemini/antigravity-cli/brain/741f7fc1-a7e9-47c2-9786-73842af13459/verify_docs_full.sh: Permission denied
+Running code lint and formatting checks...
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/features.py
+would reformat /home/freya/supersauced/backend_guide/app/schemas/__init__.py
+would reformat /home/freya/supersauced/backend_guide/app/core/config.py
+would reformat /home/freya/supersauced/backend_guide/app/core/security.py
+would reformat /home/freya/supersauced/backend_guide/app/schemas/auth.py
+would reformat /home/freya/supersauced/backend_guide/app/api/deps.py
+would reformat /home/freya/supersauced/backend_guide/app/schemas/user_profile.py
+would reformat /home/freya/supersauced/backend_guide/app/main.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/user_profiles.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/recipe_ingredients.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/auth.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/recipe_steps.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/recipes.py
+would reformat /home/freya/supersauced/backend_guide/app/api/v1/functions.py
+
+Oh no! 💥 💔 💥
+14 files would be reformatted, 5 files would be left unchanged.
+Full verification complete. Report saved to /home/freya/supersauced/full_verification_report.txt

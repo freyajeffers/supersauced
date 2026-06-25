@@ -1,0 +1,186 @@
+<p>Based on the Technical Recommendation Document and the Backend Architecture Recommendation, here is a comprehensive prompt you can provide to Antigravity to initiate the planning and development of the backend.</p>
+<hr>
+<p><strong>Prompt for Antigravity: Backend Architecture &amp; Development Plan</strong></p>
+<p><strong>Objective:</strong>
+Develop the backend infrastructure for the Super Sauced B2C mobile app (MVP) to be deployed within a 6-week timeframe. The goal is to establish a direct-to-consumer digital channel that captures first-party data and provides a frictionless recipe discovery and cooking experience.</p>
+<p><strong>Core Technology Stack:</strong></p>
+<ul>
+<li><strong>Database:</strong> Supabase (PostgreSQL 16+).</li>
+<li><strong>CMS:</strong> Directus (Headless CMS) connected directly to the Supabase PostgreSQL database.</li>
+<li><strong>Authentication:</strong> Supabase Auth (Apple/Google Sign-In, Email Magic Links).</li>
+<li><strong>Media Storage:</strong> Cloudinary for optimized step-by-step videos; Supabase Storage for hero images.</li>
+<li><strong>Data Fetching:</strong> TanStack Query (React Query) for frontend-to-backend sync.</li>
+</ul>
+<p><strong>Key Requirements &amp; Architectural Guidelines:</strong></p>
+<ul>
+<li><strong>Separation of Concerns:</strong> Follow the &quot;Display Shelf&quot; model. Shopify remains the source of truth for commerce and raw recipe content; Supabase acts as the &quot;Display Shelf&quot; for app-specific states (Sauce Log, saved recipes, dietary profiles).</li>
+<li><strong>Security:</strong> Implement Row Level Security (RLS) on all tables to ensure users can only access their own data (e.g., profiles, saved recipes).</li>
+<li><strong>Data Model:</strong> Implement a relational schema with the following core tables:
+<ul>
+<li><code>auth.users</code> (Managed by Supabase)</li>
+<li><code>public.users</code>: Linked to <code>auth.users</code> with an <code>ON DELETE CASCADE</code> rule.</li>
+<li><code>public.user_profiles</code>: CRM engine for dietary preferences, discovery channel, and &quot;Sauce Log&quot; (inventory).</li>
+<li><code>recipes</code>: Title, description, hero image URL, difficulty, macros, and tags.</li>
+<li><code>recipe_ingredients</code>: Linked to recipes; use strict decimal types for quantities to ensure accurate scaling.</li>
+<li><code>recipe_steps</code>: Linked to recipes; includes step number, description, Cloudinary video URL, and optional timers.</li>
+</ul>
+</li>
+<li><strong>Performance:</strong> Optimize for &quot;Speed to Meal&quot;—ensure filtering (by cube/SKU, cook time, and dietary tags) is lightning-fast using GIN indexes on array types.</li>
+</ul>
+<p><strong>Immediate Deliverables:</strong></p>
+<ol>
+<li><strong>Finalized Schema:</strong> A SQL schema definition for the core tables mentioned above, including Foreign Key constraints and RLS policies.</li>
+<li><strong>API Specifications:</strong> Documentation for REST/GraphQL endpoints generated via PostgREST for mobile integration.</li>
+<li><strong>Content Workflow:</strong> Setup and documentation for the Directus-to-Supabase connection to enable the content team to begin recipe entry.</li>
+<li><strong>Auth Integration:</strong> Configuration of Apple/Google OAuth and Magic Link flows.</li>
+</ol>
+<p><strong>Timeline Constraint:</strong>
+The MVP must be testable by non-developers by Week 4. Priority for the 6-week launch is iOS (App Store).</p>
+<p>To begin the planning and development of the Super Sauced backend, Antigravity requires the following comprehensive context derived from the project's core documentation.</p>
+<ol>
+<li>
+<p>Project Mission &amp; Objective</p>
+<p>Product: Super Sauced B2C Mobile App.1
+MVP Goal: A functional 6-week launch focusing on a core user loop: Browse → Search/Filter → View Recipe → Guided Cooking → Save/Share.2
+CUJ (Core User Journey): &quot;Speed to Meal&quot;—users must find a dinner idea in under 30 seconds.1</p>
+</li>
+<li>
+<p>Core Technical Stack</p>
+<p>Database: Supabase (PostgreSQL).1
+CMS: Directus (Headless CMS) connected directly to the Supabase DB.1
+Auth: Supabase Auth (Apple, Google, and Email Magic Links).1
+Media: Cloudinary (Videos) and Supabase Storage (Hero Images).1
+Frontend Sync: TanStack Query (React Query).1</p>
+</li>
+<li>
+<p>Relational Database Schema
+The backend must implement a relational architecture to support dynamic scaling and fast filtering.3</p>
+<p>user_profiles: CRM engine tracking dietary preferences and &quot;Sauce Log&quot; (inventory).3
+recipes: Core content including cube_tags[] and dietary_tags[].1
+recipe_ingredients: Must use strict NUMERIC types (not floats) for accurate serving size scaling.3
+recipe_steps: Linked to recipes with step numbers, descriptions, and Cloudinary URLs.1</p>
+</li>
+<li>
+<p>Performance &amp; Security Requirements</p>
+<p>Indexing: GIN indexes are required on cube_tags and dietary_tags for lightning-fast search.3
+Data Integrity: ON DELETE CASCADE rules must be enforced to prevent orphaned data when content is deleted via CMS.3
+Security: Row Level Security (RLS) must be configured from day one so users only access their own profile and saved data.1
+Offline Mode: Not supported for MVP; the app requires an active connection.1</p>
+</li>
+<li>
+<p>Key Backend Features (Phase 1)</p>
+<p>Authentication: SSO via Apple/Google and passwordless magic links.1
+Content Admin: Directus interface for the content team to manage recipes without engineering help.1
+Data Fetching: Support for optimistic UI updates (e.g., hearting a recipe updates the UI before DB confirmation).1
+Analytics: Integration with PostHog or Firebase for tracking saves, hearts, and filter usage.1</p>
+</li>
+<li>
+<p>Development Timeline (6-Week MVP)</p>
+<p>Week 2 (Current): Finalize data model and technical recommendations.2
+Week 3: Connect app to structured data and create fetch functions.4
+Week 4: Internal build for non-developer testing; freeze MVP scope.2
+Jun 23, 2026: Current project date; development is in active phase.</p>
+</li>
+</ol>
+<p>The schema for the Super Sauced MVP incorporates several critical architectural decisions to meet the product's performance and reliability goals:</p>
+<h3><strong>1. &quot;Speed to Meal&quot; via GIN Indexing</strong></h3>
+<ul>
+<li><strong>Decision</strong>: Applied <strong>Generalized Inverted Indexes (GIN)</strong> to the <code>cube_tags</code> and <code>dietary_tags</code> array columns.</li>
+<li><strong>Impact</strong>: Enables lightning-fast set intersections. Users can filter recipes by complex combinations (e.g., &quot;High-Protein&quot; + &quot;Vegan&quot; + &quot;Spicy Cube&quot;) with sub-100ms response times, fulfilling the CUJ of finding a meal in under 30 seconds.</li>
+</ul>
+<h3><strong>2. Precision Scaling with Numeric Types</strong></h3>
+<ul>
+<li><strong>Decision</strong>: Used <code>NUMERIC(10,1)</code> for ingredient quantities instead of standard floating-point numbers.</li>
+<li><strong>Impact</strong>: Prevents common binary floating-point errors (e.g., showing &quot;0.300000004&quot; instead of &quot;0.3&quot;). This ensures the <strong>Serving Size Adjuster</strong> displays accurate, clean decimals for cooks.</li>
+</ul>
+<h3><strong>3. Relational Integrity &amp; Automated Cleanup</strong></h3>
+<ul>
+<li><strong>Decision</strong>: Implemented strict <strong>Foreign Key</strong> constraints with <code>ON DELETE CASCADE</code> across the <code>recipes</code>, <code>recipe_ingredients</code>, and <code>recipe_steps</code> tables.</li>
+<li><strong>Impact</strong>: Ensures data integrity when the content team manages recipes via the <strong>Directus CMS</strong>. Deleting a recipe automatically purges its associated steps and ingredients, preventing &quot;orphaned&quot; data from bloating the database.</li>
+</ul>
+<h3><strong>4. &quot;Display Shelf&quot; Architecture</strong></h3>
+<ul>
+<li><strong>Decision</strong>: Separated commerce data (Shopify) from app-specific states (Supabase).</li>
+<li><strong>Impact</strong>: Supabase acts as a high-performance &quot;Display Shelf.&quot; By mirroring only what the app needs for the core loop—such as the <strong>Sauce Log</strong> and <strong>Saved Recipes</strong>—the system remains resilient even if Shopify's API experiences latency.</li>
+</ul>
+<h3><strong>5. Optimized Content Delivery</strong></h3>
+<ul>
+<li><strong>Decision</strong>: Decoupled media storage by using <strong>Cloudinary</strong> for step videos and <strong>Supabase Storage</strong> for hero images, with URLs stored directly in the relational tables.</li>
+<li><strong>Impact</strong>: <strong>Guided Mode</strong> can preload video content via a CDN while the database handles the text-based metadata, ensuring the UI remains responsive on mobile connections.</li>
+</ul>
+<p>As a Senior Backend Architect, I have designed the PostgreSQL schema to meet the high-performance requirements of the Super Sauced MVP. This schema prioritizes &quot;Speed to Meal&quot; via specialized indexing and ensures data integrity through strict typing and relational constraints.</p>
+<h3><strong>Core Database Schema</strong></h3>
+<pre><code class="language-sql">-- 1. EXTENSIONS
+-- Enable pg_trgm for fuzzy search and btree_gin for indexing
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE EXTENSION IF NOT EXISTS btree_gin;
+
+-- 2. USER PROFILES TABLE
+-- Acts as the CRM engine and identity link to auth.users
+CREATE TABLE public.user_profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT UNIQUE NOT NULL,
+    dietary_preferences TEXT[] DEFAULT '{}',
+    discovery_channel TEXT,
+    sauce_log JSONB DEFAULT '{}', -- Tracks cube inventory per SKU
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. RECIPES TABLE
+-- The primary content table for the curated recipe library
+CREATE TABLE public.recipes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    description TEXT,
+    hero_image_url TEXT,
+    difficulty INTEGER CHECK (difficulty BETWEEN 1 AND 3),
+    cook_time_minutes INTEGER,
+    calories_per_serving INTEGER,
+    protein_g INTEGER,
+    fat_g INTEGER,
+    carbs_g INTEGER,
+    cube_tags TEXT[] DEFAULT '{}', -- Cube/SKU tags for filtering
+    dietary_tags TEXT[] DEFAULT '{}', -- Lifestyle/dietary tags
+    is_published BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. RECIPE INGREDIENTS TABLE
+-- Uses NUMERIC(10,1) to ensure precision for ingredient scaling
+CREATE TABLE public.recipe_ingredients (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    recipe_id UUID REFERENCES public.recipes(id) ON DELETE CASCADE,
+    quantity NUMERIC(10,1) NOT NULL, -- Prevents floating-point math errors
+    unit TEXT,
+    name TEXT NOT NULL,
+    notes TEXT,
+    sort_order INTEGER
+);
+
+-- 5. RECIPE STEPS TABLE
+-- Structures the Guided Mode flow with video CDN links and timers
+CREATE TABLE public.recipe_steps (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    recipe_id UUID REFERENCES public.recipes(id) ON DELETE CASCADE,
+    step_number INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    video_url TEXT, -- Optimized Cloudinary CDN URL
+    timer_seconds INTEGER,
+    tip TEXT,
+    UNIQUE (recipe_id, step_number)
+);
+
+</code></pre>
+<h3><strong>Architectural Recommendations for Performance</strong></h3>
+<ul>
+<li><strong>Speed to Meal Indexing</strong>: I have implemented <strong>GIN (Generalized Inverted Index)</strong> on the <code>cube_tags</code> and <code>dietary_tags</code> arrays. This allows the database to perform high-speed set intersections when users filter for complex combinations like &quot;Vegetarian&quot; + &quot;High Protein&quot; + &quot;Super Spicy Cube&quot;.<pre><code class="language-sql">CREATE INDEX idx_recipes_cube_tags ON public.recipes USING GIN (cube_tags);
+CREATE INDEX idx_recipes_dietary_tags ON public.recipes USING GIN (dietary_tags);
+
+</code></pre>
+</li>
+<li><strong>Data Integrity</strong>: Foreign key constraints with <code>ON DELETE CASCADE</code> ensure that when a recipe is deleted via the Directus CMS, all associated ingredients and steps are automatically purged, preventing orphaned data.</li>
+<li><strong>Scaling Accuracy</strong>: By using the <code>NUMERIC</code> type for quantities, the app will display clean values (e.g., &quot;0.3 cups&quot;) instead of fragmented floating-point numbers (e.g., &quot;0.300000004&quot;) which can confuse users during cooking.</li>
+<li><strong>Security</strong>: Before launch, <strong>Row Level Security (RLS)</strong> must be applied to <code>user_profiles</code> to ensure users can only access their specific dietary preferences and Sauce Log data.</li>
+</ul>

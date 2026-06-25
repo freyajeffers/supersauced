@@ -1,0 +1,137 @@
+<h1>Analytics Documentation</h1>
+<!-- toc -->
+<h2>Overview</h2>
+<p>The Super Sauced MVP captures user interaction data to inform product decisions, improve the <strong>Speed to Meal</strong> experience, and monitor system health. Two analytics services are integrated:</p>
+<ol>
+<li><strong>PostHog</strong> – self‑hosted analytics platform for event tracking, feature flags, and funnel analysis.</li>
+<li><strong>Firebase Analytics</strong> – Google‑backed mobile analytics for iOS (and future Android) apps, providing automated attribution, crash reporting, and integration with other Firebase services.</li>
+</ol>
+<p>Both services ingest events from the mobile client (React Native) and backend (Supabase Edge Functions) and forward them to the respective dashboards.</p>
+<hr />
+<h2>1. PostHog Integration</h2>
+<h3>1.1. Setup</h3>
+<ul>
+<li><strong>Self‑hosted instance</strong>: Deploy a PostHog Docker compose stack on a secure VPS.</li>
+<li><strong>Project API key</strong>: Obtain the project‑level API token from the PostHog UI (<code>Settings → Project API keys</code>).</li>
+<li><strong>Base URL</strong>: <code>https://analytics.supersauced.com</code> (replace with your domain).</li>
+</ul>
+<h3>1.2. Client‑side (React Native) Implementation</h3>
+<pre><code class="language-ts">import { PostHog } from 'posthog-react-native';
+
+const posthog = new PostHog('YOUR_POSTHOG_API_KEY', {
+  host: 'https://analytics.supersauced.com',
+  // optional: enable batch sending for reduced network overhead
+  // requestTimeout: 3000,
+});
+
+// Initialize when app starts
+await posthog.init();
+
+// Example event: User opens the recipe list (Speed to Meal screen)
+posthog.capture('screen_view', {
+  screen: 'recipe_list',
+  duration_ms: 0,
+});
+
+// Example event: User saves a recipe
+posthog.capture('recipe_saved', {
+  recipe_id: recipe.id,
+  user_id: user.id,
+});
+</code></pre>
+<h3>1.3. Backend (Supabase Edge Function) Events</h3>
+<p>When certain backend actions occur (e.g., a new recipe is published), an Edge Function can forward a PostHog event:</p>
+<pre><code class="language-ts">import { serve } from 'https://deno.land/std@0.203.0/http/server.ts';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!);
+
+serve(async (req) =&gt; {
+  const { data, error } = await supabase
+    .from('recipes')
+    .insert(req.json());
+
+  if (!error) {
+    await fetch('https://analytics.supersauced.com/capture/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${Deno.env.get('POSTHOG_API_KEY')}` },
+      body: JSON.stringify({
+        event: 'recipe_created',
+        properties: { recipe_id: data[0].id, author_id: data[0].author_id },
+      }),
+    });
+  }
+
+  return new Response(JSON.stringify({ data, error }));
+});
+</code></pre>
+<h3>1.4. Feature Flags &amp; A/B Tests</h3>
+<p>PostHog’s feature flag system can be queried directly from the client to toggle experimental UI:</p>
+<pre><code class="language-ts">const flags = await posthog.getFeatureFlags();
+if (flags['new_save_button']) {
+  // render new UI variant
+}
+</code></pre>
+<hr />
+<h2>2. Firebase Analytics Integration</h2>
+<h3>2.1. Setup</h3>
+<ol>
+<li>Create a Firebase project (<code>supersauced</code>).</li>
+<li>Add an iOS app in the Firebase console and download <code>GoogleService-Info.plist</code>.</li>
+<li>Place the plist in the Xcode project (or the Expo managed workflow via <code>expo prebuild</code>).</li>
+<li>Enable <strong>Google Analytics</strong> for the project.</li>
+</ol>
+<h3>2.2. React Native (Expo) Integration</h3>
+<p>Install the package:</p>
+<pre><code class="language-bash">expo install expo-firebase-analytics
+</code></pre>
+<pre><code class="language-ts">import * as Analytics from 'expo-firebase-analytics';
+
+// Log a custom event when a user starts cooking
+await Analytics.logEvent('start_cooking', {
+  recipe_id: recipe.id,
+  cuisine: recipe.cuisine,
+});
+
+// Log screen view automatically (optional)
+await Analytics.setCurrentScreen('RecipeDetail');
+</code></pre>
+<h3>2.3. Linking Backend Events</h3>
+<p>For server‑side actions (e.g., a user completes a purchase through Shopify), you can forward a Firebase event using the <strong>REST API</strong>:</p>
+<pre><code class="language-ts">await fetch(`https://firebase.googleapis.com/v1/projects/${process.env.FIREBASE_PROJECT_ID}/events:logEvent?key=${process.env.FIREBASE_API_KEY}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: 'purchase_complete',
+    params: { user_id: user.id, amount_usd: order.total },
+  }),
+});
+</code></pre>
+<h3>2.4. Audiences &amp; Conversions</h3>
+<p>Configure <strong>Audiences</strong> in the Firebase console (e.g., <code>high_engagement_users</code> – users with ≥5 saved recipes). Use these audiences for targeted <strong>Firebase Cloud Messaging</strong> notifications or to seed <strong>Google Ads</strong> campaigns.</p>
+<hr />
+<h2>3. Consolidated Event Schema (Shared Between Services)</h2>
+<p>| Event Name         | Description                                 | Common Properties                               |
+|--------------------|---------------------------------------------|-------------------------------------------------|
+| <code>screen_view</code>      | User navigates to a screen                  | <code>screen</code> (string), <code>duration_ms</code> (number)       |
+| <code>recipe_saved</code>     | User bookmarks a recipe                     | <code>recipe_id</code> (uuid), <code>user_id</code> (uuid)            |
+| <code>recipe_created</code>   | Backend created a new recipe                | <code>recipe_id</code> (uuid), <code>author_id</code> (uuid)          |
+| <code>start_cooking</code>    | User begins cooking a recipe                | <code>recipe_id</code> (uuid), <code>cuisine</code> (string)         |
+| <code>purchase_complete</code>| Shopify checkout completed                  | <code>order_id</code> (string), <code>amount_usd</code> (number)      |</p>
+<p>Both PostHog and Firebase can ingest these events; the client sends to PostHog for detailed funnel analysis, while Firebase provides automatic attribution and integration with other Firebase services.</p>
+<hr />
+<h2>4. GDPR / Privacy Considerations</h2>
+<ul>
+<li><strong>User consent</strong>: Prompt users on first launch to opt‑in to analytics. Store consent in Supabase <code>user_consent</code> table.</li>
+<li><strong>Event de‑identification</strong>: Do not send PII (email, name) in event payloads. Use hashed IDs where needed.</li>
+<li><strong>Data retention</strong>: Configure PostHog retention policy (e.g., 90 days) and Firebase data deletion settings per GDPR requirements.</li>
+</ul>
+<hr />
+<h2>5. Validation &amp; Testing</h2>
+<ol>
+<li>Run the mobile app in a dev build and verify events appear in the PostHog <strong>Live Events</strong> view and Firebase <strong>DebugView</strong>.</li>
+<li>Use the Supabase <code>analytics_events</code> log table (a simple audit trail) to confirm edge‑function forwarding works.</li>
+<li>Unit‑test the edge‑function HTTP request with mock fetch to ensure the correct payload shape.</li>
+</ol>
+<hr />
+<p><em>This documentation should be kept in sync with any changes to the event schema or analytics provider credentials.</em></p>

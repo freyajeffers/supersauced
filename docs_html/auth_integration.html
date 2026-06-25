@@ -1,0 +1,1021 @@
+<h1>Authentication &amp; Onboarding Flow Integration</h1>
+<!-- toc -->
+<!-- toc -->
+<p>This document outlines the architecture, setup, code implementations, and database triggers for the Authentication and Onboarding flow of the Super Sauced B2C mobile application. It details native iOS OAuth, PKCE-based magic links, secure Keychain token storage, database triggers with security isolation, and the Shopify &quot;Display Shelf&quot; synchronization architecture.</p>
+<hr />
+<blockquote>
+<p>[!NOTE]
+<strong>Prerequisites</strong></p>
+<ul>
+<li>Supabase project with Auth enabled</li>
+<li>Apple Developer account (for Sign in with Apple)</li>
+<li>Google Cloud OAuth credentials (for Google Sign-In)</li>
+<li>Expo Secure Store (for token storage)</li>
+</ul>
+</blockquote>
+<h2>1. Authentication Flows &amp; Native SDK Configurations</h2>
+<p>To deliver a premium, low-friction user experience that complies with Apple's App Store Review Guidelines, the iOS application integrates native identity SDKs for Google and Apple authentication. By utilizing native credentials, users benefit from biometric authentication (FaceID/TouchID) without redirecting to external web browsers.</p>
+<pre><code>+-----------------------------------------------------------------------------------+
+|                              AUTHENTICATION FLOWS                                 |
+|                                                                                   |
+| 1. Native Apple / Google OAuth Flow:                                              |
+|    [iOS Native App] --(1. ASAuthorization / GIDSignIn)--&gt; [Apple/Google ID Token] |
+|           |                                                                       |
+|           +--(2. Sign-In With ID Token)--&gt; [Supabase Auth]                        |
+|                                                  |                                |
+|                                        (3. Create auth.users)                     |
+|                                                  |                                |
+|                                       (4. handle_new_user Trigger)                |
+|                                                  |                                |
+|                                                  v                                |
+|                                     [public.user_profiles]                        |
+|                                                                                   |
+| 2. Passwordless Email Magic Link Flow:                                            |
+|    [iOS Native App] --(1. auth.signInWithOtp)--&gt; [Supabase Auth API]              |
+|                                                         |                         |
+|                                             (2. Send Magic Link Email)            |
+|                                                         |                         |
+|                                                         v                         |
+|    [Mail App] &lt;--(3. Clicks Magic Link URL)--------- [User]                       |
+|        |                                                                          |
+|        +--(4. Deep Link Redirect: URL Scheme / Universal Link)--&gt; [iOS Native App]|
+|                                                                         |         |
+|                                                          (5. exchangeCodeSession) |
+|                                                                         |         |
+|                                                                         v         |
+|                                                               [Supabase Session]  |
++-----------------------------------------------------------------------------------+
+</code></pre>
+<h3>1.1. Native Apple Sign-In</h3>
+<p>The application implements Sign-In with Apple using the <code>AuthenticationServices</code> framework:</p>
+<ol>
+<li>
+<p><strong>Requesting Authorization</strong>:
+The app requests the user's full name and email address:</p>
+<pre><code class="language-swift">import AuthenticationServices
+import Supabase
+
+class AuthManager: NSObject {
+    static let shared = AuthManager()
+    
+    func startAppleSignIn() {
+        let provider = ASAuthorizationAppleIDProvider()
+        let request = provider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+    }
+}
+
+extension AuthManager: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -&gt; ASPresentationAnchor {
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+            fatalError(&quot;No key window available.&quot;)
+        }
+        return window
+    }
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Exchanging Apple Identity Token with Supabase</strong>:
+Upon authorization, Apple returns an Identity Token (JWT) and an Authorization Code. The app sends these to the Supabase client:</p>
+<pre><code class="language-swift">extension AuthManager: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        guard let appleCredential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+        
+        guard let identityTokenData = appleCredential.identityToken,
+              let identityTokenString = String(data: identityTokenData, encoding: .utf8) else {
+            print(&quot;Error: Missing Apple identity token.&quot;)
+            return
+        }
+        
+        // Optional but recommended authorization code to verify identity server-side
+        let authorizationCodeString = appleCredential.authorizationCode.flatMap { String(data: $0, encoding: .utf8) }
+        
+        Task {
+            do {
+                let session = try await supabase.auth.signInWithIdToken(
+                    provider: .apple,
+                    idToken: identityTokenString,
+                    accessToken: authorizationCodeString
+                )
+                print(&quot;Supabase Apple OAuth Login successful. User ID: \(session.user.id)&quot;)
+            } catch {
+                print(&quot;Supabase Apple authentication failed: \(error.localizedDescription)&quot;)
+            }
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print(&quot;Apple Sign-In failed: \(error.localizedDescription)&quot;)
+    }
+}
+</code></pre>
+</li>
+</ol>
+<h3>1.2. Native Google Sign-In</h3>
+<p>The application uses the GoogleSignIn SDK for iOS to prompt a native OAuth dialog and fetch the Google ID token:</p>
+<pre><code class="language-swift">import GoogleSignIn
+import Supabase
+
+extension AuthManager {
+    func startGoogleSignIn(presentingViewController: UIViewController) {
+        GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController) { signInResult, error in
+            if let error = error {
+                print(&quot;Google Sign-In failed: \(error.localizedDescription)&quot;)
+                return
+            }
+            
+            guard let user = signInResult?.user,
+                  let idToken = user.idToken?.tokenString else {
+                print(&quot;Error: Google Sign-In result is missing idToken.&quot;)
+                return
+            }
+            
+            Task {
+                do {
+                    let session = try await supabase.auth.signInWithIdToken(
+                        provider: .google,
+                        idToken: idToken
+                    )
+                    print(&quot;Supabase Google OAuth Login successful. User ID: \(session.user.id)&quot;)
+                } catch {
+                    print(&quot;Supabase Google authentication failed: \(error.localizedDescription)&quot;)
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h3>1.3. Email Magic Links (Passwordless OTP) with PKCE</h3>
+<p>For passwordless flows, the application implements PKCE (Proof Key for Code Exchange) to prevent code interception on open custom redirect channels.</p>
+<ol>
+<li>
+<p><strong>Sending Magic Link</strong>:
+The iOS application initiates the passwordless sign-in. The Supabase Swift SDK generates the <code>code_verifier</code> and <code>code_challenge</code> internally, caching the verifier state:</p>
+<pre><code class="language-swift">func sendMagicLink(email: String) async throws {
+    try await supabase.auth.signInWithOTP(
+        email: email,
+        redirectTo: URL(string: &quot;https://supersauced.com/login-callback&quot;)
+    )
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Supabase Redirection Configuration</strong>:
+In the Supabase Dashboard (<code>Authentication -&gt; URL Configuration</code>), register the allowed redirect URIs:</p>
+<ul>
+<li><code>https://supersauced.com/login-callback</code> (Universal Link callback)</li>
+</ul>
+</li>
+</ol>
+<h3>1.4. Deep Linking &amp; Associated Domains Configuration</h3>
+<p>To process callbacks from Universal Links (or custom scheme fallbacks) and exchange authentication codes for sessions, the system is configured as follows:</p>
+<ol>
+<li>
+<p><strong>Associated Domains Setup</strong>:
+Add the <strong>Associated Domains</strong> capability in the Xcode project and specify:</p>
+<pre><code>applinks:supersauced.com
+</code></pre>
+</li>
+<li>
+<p><strong>Apple App Site Association (AASA) JSON Payload</strong>:
+Host the <code>apple-app-site-association</code> file on the root web server at <code>https://supersauced.com/.well-known/apple-app-site-association</code>. The file must be served with Content-Type <code>application/json</code> and no file extension:</p>
+<pre><code class="language-json">{
+  &quot;applinks&quot;: {
+    &quot;apps&quot;: [],
+    &quot;details&quot;: [
+      {
+        &quot;appIDs&quot;: [
+          &quot;ABC123XYZ.com.supersauced.app&quot;
+        ],
+        &quot;components&quot;: [
+          {
+            &quot;/&quot;: &quot;/login-callback&quot;,
+            &quot;comment&quot;: &quot;Authentication &amp; magic link redirect handler&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p><em>Note: For legacy compatibility with versions prior to iOS 13, include the paths parameter:</em></p>
+<pre><code class="language-json">{
+  &quot;applinks&quot;: {
+    &quot;apps&quot;: [],
+    &quot;details&quot;: [
+      {
+        &quot;appID&quot;: &quot;ABC123XYZ.com.supersauced.app&quot;,
+        &quot;paths&quot;: [
+          &quot;/login-callback&quot;
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><strong>URL Callbacks &amp; Code Exchange in Swift</strong>:
+The SwiftUI app interceptor reads the authorization code from the incoming URL query parameters and invokes the session exchange:</p>
+<pre><code class="language-swift">import SwiftUI
+import Supabase
+
+@main
+struct SuperSaucedApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .onOpenURL { url in
+                    handleIncomingURL(url)
+                }
+        }
+    }
+    
+    func handleIncomingURL(_ url: URL) {
+        guard let components = pg_catalog_url_components(url),
+              let queryItems = components.queryItems else { return }
+        
+        if let authCode = queryItems.first(where: { $0.name == &quot;code&quot; })?.value {
+            Task {
+                do {
+                    // Exchanging the single-use OAuth code using the PKCE verifier stored in the client memory
+                    let session = try await supabase.auth.exchangeCodeForSession(code: authCode)
+                    print(&quot;Universal link login success. User ID: \(session.user.id)&quot;)
+                } catch {
+                    print(&quot;Universal Link OAuth exchange code failure: \(error.localizedDescription)&quot;)
+                }
+            }
+        }
+    }
+    
+    private func pg_catalog_url_components(_ url: URL) -&gt; URLComponents? {
+        return URLComponents(url: url, resolvingAgainstBaseURL: true)
+    }
+}
+</code></pre>
+</li>
+</ol>
+<hr />
+<h2>2. Secure Token Storage &amp; Session Lifecycle</h2>
+<p>To safeguard application tokens against data leakage, the Supabase access and refresh tokens must be stored in secure storage. For React Native applications in the Expo ecosystem, <strong><code>expo-secure-store</code></strong> is the primary standard for token storage, which encrypts data and restricts access based on device lock states.</p>
+<hr />
+<h3>2.1. Recommended Standard: <code>expo-secure-store</code> for React Native</h3>
+<p><code>expo-secure-store</code> provides a secure, key-value storage system utilizing Keychain Services on iOS and Keystore on Android.</p>
+<h4>2.1.1. Supabase Client Integration</h4>
+<p>To persist user sessions securely in a React Native app, configure the Supabase client with a custom storage adapter pointing to <code>expo-secure-store</code>. This avoids utilizing vulnerable storage mechanisms (such as standard unencrypted <code>AsyncStorage</code>).</p>
+<pre><code class="language-typescript">import * as SecureStore from 'expo-secure-store';
+import { createClient } from '@supabase/supabase-js';
+
+// Define a secure storage adapter for the Supabase SDK
+const ExpoSecureStoreAdapter = {
+  getItem: async (key: string): Promise&lt;string | null&gt; =&gt; {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (error) {
+      console.error('Failed to retrieve secure item:', error);
+      return null;
+    }
+  },
+  setItem: async (key: string, value: string): Promise&lt;void&gt; =&gt; {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (error) {
+      console.error('Failed to set secure item:', error);
+    }
+  },
+  removeItem: async (key: string): Promise&lt;void&gt; =&gt; {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+      console.error('Failed to delete secure item:', error);
+    }
+  },
+};
+
+const supabaseUrl = 'https://your-supabase-instance.supabase.co';
+const supabaseAnonKey = 'your-anon-key';
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: ExpoSecureStoreAdapter,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false, // Set to false for native apps to prevent internal browser redirect interceptors
+  },
+});
+</code></pre>
+<h4>2.1.2. React Native Session Lifecycle &amp; Proactive Refresh</h4>
+<p>Mobile apps experience complex lifecycle transitions (e.g. background suspension, offline transitions, network dropouts). A robust lifecycle and refresh architecture is required to keep sessions valid.</p>
+<pre><code>                  +-----------------------------------+
+                  |   App Foregrounded / Startup      |
+                  +-----------------------------------+
+                                    |
+                                    v
+                       [Read Stored Secure Session]
+                                    |
+                  +-----------------+-----------------+
+                  |                                   |
+                  v                                   v
+          [JWT Expired / &lt; 5m]               [JWT Token Active]
+                  |                                   |
+                  v                                   |
+      [Invoke SDK refreshSession()]                   |
+                  |                                   |
+        +---------+---------+                         |
+        |                   |                         |
+        v                   v                         |
+    [Success]           [Fail: invalid_grant]         |
+        |                   |                         |
+        v                   v                         v
+  [Save to Storage]    [Force Logout / Clear]  [Load App View]
+</code></pre>
+<ol>
+<li><strong>Event-Driven Lifecycle State Listener</strong>:
+The app hooks into Supabase's <code>onAuthStateChange</code> listener to capture and write updated session tokens to secure storage automatically via the adapter.</li>
+<li><strong>Proactive Foreground Refresh</strong>:
+Since the OS suspends timers in the background, a token might expire while the app is suspended. To prevent API requests from failing upon resume, the application executes a token check and refresh when transitioning back to the active foreground state.</li>
+</ol>
+<p>Here is the TypeScript hook managing both flows:</p>
+<pre><code class="language-typescript">import { useEffect } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
+import { supabase } from './supabaseClient';
+
+export function useAuthSession() {
+  useEffect(() =&gt; {
+    // 1. Listen to authentication state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) =&gt; {
+      console.log(`Auth state changed: ${event}`);
+      if (event === 'SIGNED_OUT') {
+        // Clean up app state, purge cache, redirect to Login screen
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // User logged in or token refreshed. Session is auto-saved by ExpoSecureStoreAdapter
+        console.log(`User ID: ${session?.user?.id} is active.`);
+      }
+    });
+
+    // 2. Evaluate and refresh token proactively when app transitions back to foreground
+    const handleAppStateChange = async (nextAppState: AppStateStatus) =&gt; {
+      if (nextAppState === 'active') {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error fetching session on app foreground:', error.message);
+          return;
+        }
+
+        if (session) {
+          const expiresAt = session.expires_at; // UNIX timestamp in seconds
+          const currentTime = Math.floor(Date.now() / 1000);
+          const bufferTime = 300; // 5-minute buffer in seconds
+
+          if (expiresAt - currentTime &lt; bufferTime) {
+            console.log('Stored session token is expired or close to expiry. Triggering proactive refresh...');
+            const { error: refreshError } = await supabase.auth.refreshSession();
+            
+            if (refreshError) {
+              console.error('Failed to proactively refresh session:', refreshError.message);
+              
+              // Force logout if the API returns 400 (invalid_grant) due to an expired/revoked refresh token
+              if (refreshError.message.includes('invalid_grant')) {
+                console.warn('Invalid session credentials. Revoking local session.');
+                await supabase.auth.signOut();
+              }
+            } else {
+              console.log('Proactive session refresh succeeded.');
+            }
+          }
+        }
+      }
+    };
+
+    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () =&gt; {
+      subscription.unsubscribe();
+      appStateSubscription.remove();
+    };
+  }, []);
+}
+</code></pre>
+<ol start="3">
+<li><strong>Graceful Offline / Online Error Handling</strong>:
+<ul>
+<li><strong>Offline State</strong>: When the connection drops, token refresh requests are paused, and the networking client returns cached data. Outbound operations that require server updates (e.g. syncing Sauce Log) are queued, and the UI notifies the user.</li>
+<li><strong>Online Reconnect</strong>: Once the internet connection is restored, a background task triggers <code>supabase.auth.getSession()</code> to prompt the SDK to execute a deferred refresh using the stored refresh token.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3>2.2. Alternative Native iOS Swift Keychain Implementation</h3>
+<p><em>(Note: Use this native Swift keychain implementation only if your application is not built using React Native/Expo and instead targets native iOS development directly).</em></p>
+<p>Using the native <code>Security</code> framework, token structures are registered with the <code>kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly</code> security attribute. This ensures token records are encrypted and unavailable when the device is locked or backed up.</p>
+<pre><code class="language-swift">import Foundation
+import Security
+
+public enum KeychainError: Error {
+    case duplicateItem
+    case itemNotFound
+    case unhandledError(status: OSStatus)
+    case invalidData
+}
+
+public final class KeychainManager {
+    public static let shared = KeychainManager()
+    private let service = &quot;com.supersauced.auth&quot;
+    
+    private init() {}
+    
+    public func save(key: String, data: Data) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        ]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        
+        if status == errSecDuplicateItem {
+            try update(key: key, data: data)
+        } else if status != errSecSuccess {
+            throw KeychainError.unhandledError(status: status)
+        }
+    }
+    
+    public func retrieve(key: String) throws -&gt; Data {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        var dataTypeRef: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &amp;dataTypeRef)
+        
+        guard status == errSecSuccess else {
+            if status == errSecItemNotFound {
+                throw KeychainError.itemNotFound
+            }
+            throw KeychainError.unhandledError(status: status)
+        }
+        
+        guard let data = dataTypeRef as? Data else {
+            throw KeychainError.invalidData
+        }
+        return data
+    }
+    
+    public func update(key: String, data: Data) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key
+        ]
+        
+        let attributes: [String: Any] = [
+            kSecValueData as String: data
+        ]
+        
+        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        
+        if status == errSecItemNotFound {
+            throw KeychainError.itemNotFound
+        } else if status != errSecSuccess {
+            throw KeychainError.unhandledError(status: status)
+        }
+    }
+    
+    public func delete(key: String) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key
+        ]
+        
+        let status = SecItemDelete(query as CFDictionary)
+        
+        if status != errSecSuccess &amp;&amp; status != errSecItemNotFound {
+            throw KeychainError.unhandledError(status: status)
+        }
+    }
+}
+</code></pre>
+<h4>2.2.1. Session Lifecycle &amp; Refresh Handling (Swift)</h4>
+<ol>
+<li>
+<p><strong>Event-Driven Lifecycle State Listener</strong>:</p>
+<pre><code class="language-swift">import Supabase
+import Combine
+
+class SessionViewModel: ObservableObject {
+    private var cancellables = Set&lt;AnyCancellable&gt;()
+    
+    init() {
+        observeAuthChanges()
+    }
+    
+    func observeAuthChanges() {
+        supabase.auth.onAuthStateChange { [weak self] event, session in
+            guard let self = self else { return }
+            
+            switch event {
+            case .signedIn, .tokenRefreshed:
+                if let session = session {
+                    self.saveSession(session)
+                }
+            case .signedOut, .userDeleted:
+                self.deleteSession()
+            default:
+                break
+            }
+        }
+    }
+    
+    private func saveSession(_ session: Session) {
+        do {
+            let data = try JSONEncoder().encode(session)
+            try KeychainManager.shared.save(key: &quot;supersauced_supabase_session&quot;, data: data)
+        } catch {
+            print(&quot;Failed to store updated session: \(error.localizedDescription)&quot;)
+        }
+    }
+    
+    private func deleteSession() {
+        do {
+            try KeychainManager.shared.delete(key: &quot;supersauced_supabase_session&quot;)
+        } catch {
+            print(&quot;Failed to purge session: \(error.localizedDescription)&quot;)
+        }
+    }
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Proactive Foreground Refresh</strong>:</p>
+<pre><code class="language-swift">import UIKit
+import Supabase
+
+class AppSessionManager {
+    static let shared = AppSessionManager()
+    
+    func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func applicationWillEnterForeground() {
+        Task {
+            await evaluateAndRefreshSession()
+        }
+    }
+    
+    private func evaluateAndRefreshSession() async {
+        do {
+            let data = try KeychainManager.shared.retrieve(key: &quot;supersauced_supabase_session&quot;)
+            let session = try JSONDecoder().decode(Session.self, from: data)
+            
+            let expiration = Date(timeIntervalSince1970: TimeInterval(session.expiresAt))
+            let bufferTime: TimeInterval = 300 // 5-minute buffer
+            
+            if expiration.compare(Date().addingTimeInterval(bufferTime)) == .orderedAscending {
+                print(&quot;Stored access token is expired or expiring. Initiating SDK refresh...&quot;)
+                let refreshedSession = try await supabase.auth.refreshSession()
+                print(&quot;Token refresh successful. New User Session: \(refreshedSession.user.id)&quot;)
+            }
+        } catch KeychainError.itemNotFound {
+            print(&quot;No existing session token found in Keychain.&quot;)
+        } catch {
+            print(&quot;Session validation or network error: \(error.localizedDescription)&quot;)
+            
+            if error.localizedDescription.contains(&quot;invalid_grant&quot;) || (error as NSError).code == 400 {
+                handleForceLogout()
+            }
+        }
+    }
+    
+    private func handleForceLogout() {
+        print(&quot;Critical: Refresh token is invalid/revoked. Performing force logout.&quot;)
+        try? KeychainManager.shared.delete(key: &quot;supersauced_supabase_session&quot;)
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .supabaseForceLogout, object: nil)
+        }
+    }
+}
+
+extension Notification.Name {
+    static let supabaseForceLogout = Notification.Name(&quot;supabaseForceLogout&quot;)
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Graceful Offline / Online Error Handling</strong>:</p>
+<ul>
+<li><strong>Offline State</strong>: When connection drops, token refresh requests are paused. Outbound operations are queued.</li>
+<li><strong>Online Reconnect</strong>: Once internet connection is restored, a background task triggers <code>supabase.auth.getSession()</code> to prompt the SDK to execute a deferred refresh.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>3. Profile Creation Trigger Mechanics</h2>
+<p>During registration, user onboarding parameters (<code>onboarding_survey</code> and <code>sauce_log</code>) are passed from the iOS client app in the signup metadata dictionary (<code>raw_user_meta_data</code>). An automated PostgreSQL trigger captures this payload and initializes the <code>public.user_profiles</code> CRM data.</p>
+<h3>3.1. Profile Schema CRM Column Extensions</h3>
+<p>To capture CRM preferences and the local sauce inventory, run this migration to extend the <code>public.user_profiles</code> schema:</p>
+<pre><code class="language-sql">-- Migration to support CRM onboarding and Shopify display shelf inventory
+ALTER TABLE public.user_profiles 
+ADD COLUMN IF NOT EXISTS onboarding_survey JSONB DEFAULT '{}'::jsonb,
+ADD COLUMN IF NOT EXISTS sauce_log JSONB DEFAULT '{}'::jsonb;
+</code></pre>
+<h3>3.2. Secure trigger design with isolated search paths</h3>
+<p>Because this database trigger function handles system-level inserts on <code>auth.users</code> and writes to the public schema, it must be hardened against search path hijacking.</p>
+<ol>
+<li>
+<p><strong><code>SECURITY DEFINER</code></strong>:
+Elevates execution rights to the database owner (superuser), bypasses public RLS policies, and guarantees successful insertions before RLS can be queried by the user.</p>
+</li>
+<li>
+<p><strong><code>SET search_path = public, pg_temp</code></strong>:
+Isolates execution context. Setting a blank or minimal search path blocks attempts to hijack operator resolution using custom-built local schemas.</p>
+</li>
+<li>
+<p><strong>Qualifying System Invocations</strong>:
+The function qualifies system functions using the <code>pg_catalog.</code> namespace (e.g., <code>pg_catalog.coalesce()</code>) to prevent operator hijacking.</p>
+</li>
+<li>
+<p><strong>Robust Metadata Parsing and Safe Fallbacks</strong>:
+The logic handles missing, incomplete, or null JSON properties, ensuring registration succeeds by defaulting values to <code>'{}'::jsonb</code>.</p>
+</li>
+</ol>
+<pre><code class="language-sql">-- Create or replace database trigger function securely
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    v_username TEXT;
+    v_onboarding_survey JSONB;
+    v_sauce_log JSONB;
+BEGIN
+    -- 1. Extract username, falling back to split email prefix if absent
+    v_username := pg_catalog.coalesce(
+        NEW.raw_user_meta_data-&gt;&gt;'username',
+        NEW.raw_user_meta_data-&gt;&gt;'preferred_username',
+        pg_catalog.split_part(NEW.email, '@', 1)
+    );
+
+    -- 2. Validate and map JSONB metadata, fallback to empty JSONB object '{}' to prevent trigger failure
+    IF NEW.raw_user_meta_data IS NULL THEN
+        v_onboarding_survey := '{}'::jsonb;
+        v_sauce_log := '{}'::jsonb;
+    ELSE
+        -- Extract onboarding survey
+        IF NEW.raw_user_meta_data-&gt;'onboarding_survey' IS NULL OR NEW.raw_user_meta_data-&gt;'onboarding_survey' = 'null'::jsonb THEN
+            v_onboarding_survey := '{}'::jsonb;
+        ELSE
+            v_onboarding_survey := NEW.raw_user_meta_data-&gt;'onboarding_survey';
+        END IF;
+
+        -- Extract sauce log
+        IF NEW.raw_user_meta_data-&gt;'sauce_log' IS NULL OR NEW.raw_user_meta_data-&gt;'sauce_log' = 'null'::jsonb THEN
+            v_sauce_log := '{}'::jsonb;
+        ELSE
+            v_sauce_log := NEW.raw_user_meta_data-&gt;'sauce_log';
+        END IF;
+    END IF;
+
+    -- 3. Resolve username collisions to avoid unique constraint violations
+    IF EXISTS (SELECT 1 FROM public.user_profiles WHERE username = v_username) THEN
+        v_username := v_username || '_' || pg_catalog.substring(pg_catalog.md5(pg_catalog.random()::text) from 1 for 6);
+    END IF;
+
+    -- 4. Perform profile record insertion
+    INSERT INTO public.user_profiles (
+        id, 
+        username, 
+        email, 
+        full_name, 
+        avatar_url, 
+        onboarding_survey, 
+        sauce_log,
+        created_at,
+        updated_at
+    )
+    VALUES (
+        NEW.id,
+        v_username,
+        NEW.email,
+        pg_catalog.coalesce(NEW.raw_user_meta_data-&gt;&gt;'full_name', NEW.raw_user_meta_data-&gt;&gt;'name', ''),
+        pg_catalog.coalesce(NEW.raw_user_meta_data-&gt;&gt;'avatar_url', NEW.raw_user_meta_data-&gt;&gt;'picture', ''),
+        v_onboarding_survey,
+        v_sauce_log,
+        pg_catalog.clock_timestamp(),
+        pg_catalog.clock_timestamp()
+    );
+
+    RETURN NEW;
+END;
+$$;
+
+-- Securely bind trigger to auth.users table
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+</code></pre>
+<hr />
+<h2>4. Shopify Synchronization: &quot;Display Shelf&quot; Sync Architecture</h2>
+<p>The Super Sauced app uses a <strong>Display Shelf</strong> sync model: Shopify manages sales, checkouts, and catalog status, while Supabase mirrors a subset of inventory quantities and logs user purchases for fast local data access.</p>
+<pre><code>+---------------+                    +---------------+                    +---------------+
+|               |  1. orders/paid    |  Supabase     |  2. Match email    |   Supabase    |
+|   Shopify     |-------------------&gt;|  Edge Func    |-------------------&gt;|   Database    |
+|   Webhook     |  (Signed POST)     |  (Verify Sig) |  &amp; update log      | (user_profiles|
+|               |                    |               |                    |  .sauce_log)  |
++---------------+                    +---------------+                    +---------------+
+</code></pre>
+<h3>4.1. Webhook Signature Verification (TypeScript/Deno)</h3>
+<p>Shopify posts a signed JSON payload to <code>/functions/v1/shopify-webhook</code> for every paid checkout event. To prevent spoofing, the Supabase Edge Function verifies the request signature against a shared secret using Deno's Web Crypto API:</p>
+<pre><code class="language-typescript">import { serve } from &quot;https://deno.land/std@0.177.0/http/server.ts&quot;;
+import { crypto } from &quot;https://deno.land/std@0.177.0/crypto/mod.ts&quot;;
+
+const SHOPIFY_WEBHOOK_SECRET = Deno.env.get(&quot;SHOPIFY_WEBHOOK_SECRET&quot;) || &quot;&quot;;
+
+async function verifyShopifySignature(req: Request, rawBody: string): Promise&lt;boolean&gt; {
+  const hmacHeader = req.headers.get(&quot;X-Shopify-Hmac-Sha256&quot;);
+  if (!hmacHeader) return false;
+
+  const encoder = new TextEncoder();
+  const secretKey = await crypto.subtle.importKey(
+    &quot;raw&quot;,
+    encoder.encode(SHOPIFY_WEBHOOK_SECRET),
+    { name: &quot;HMAC&quot;, hash: &quot;SHA-256&quot; },
+    false,
+    [&quot;verify&quot;]
+  );
+
+  // Convert Shopify's Base64 HMAC signature to bytes
+  const signatureBytes = new Uint8Array(
+    atob(hmacHeader).split(&quot;&quot;).map((c) =&gt; c.charCodeAt(0))
+  );
+
+  return await crypto.subtle.verify(
+    &quot;HMAC&quot;,
+    secretKey,
+    signatureBytes,
+    encoder.encode(rawBody)
+  );
+}
+
+serve(async (req) =&gt; {
+  try {
+    const rawBody = await req.clone().text();
+    
+    // Verify payload integrity
+    const isAuthentic = await verifyShopifySignature(req, rawBody);
+    if (!isAuthentic) {
+      console.error(&quot;Signature verification failed.&quot;);
+      return new Response(JSON.stringify({ error: &quot;Unauthorized Signature&quot; }), {
+        status: 401,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; }
+      });
+    }
+
+    const payload = JSON.parse(rawBody);
+    const email = payload.email || payload.customer?.email;
+    const lineItems = payload.line_items || [];
+
+    if (!email) {
+      return new Response(JSON.stringify({ error: &quot;Missing customer identifier&quot; }), {
+        status: 400,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; }
+      });
+    }
+
+    // Process lineItems to update user inventory in Supabase...
+    console.log(`Successfully verified order for: ${email}`);
+    
+    return new Response(JSON.stringify({ received: true }), {
+      status: 200,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; }
+    });
+  } catch (error) {
+    console.error(&quot;Webhook error:&quot;, error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; }
+    });
+  }
+});
+</code></pre>
+<h3>4.2. Sauce Log Mapping &amp; Inventory Integration</h3>
+<p>Purchased line items from the webhook payload are mapped using variant SKUs to the <code>sauce_log</code> JSONB column in <code>public.user_profiles</code>.</p>
+<ol>
+<li>
+<p><strong>Sauce Log JSONB Schema</strong>:
+The <code>sauce_log</code> maps SKU keys to quantities and order metadata:</p>
+<pre><code class="language-json">{
+  &quot;inventory&quot;: {
+    &quot;SKU-CUBE-SPICY&quot;: {
+      &quot;quantity&quot;: 3,
+      &quot;last_updated&quot;: &quot;2026-06-24T04:00:00Z&quot;
+    },
+    &quot;SKU-SAUCE-HABANERO&quot;: {
+      &quot;quantity&quot;: 1,
+      &quot;last_updated&quot;: &quot;2026-06-24T04:00:00Z&quot;
+    }
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Increment SQL Modifier</strong>:
+The Edge Function executes this secure SQL helper to update inventories in Supabase:</p>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION public.add_to_sauce_log(p_user_id UUID, p_sku TEXT, p_quantity INT)
+RETURNS VOID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+BEGIN
+    UPDATE public.user_profiles
+    SET sauce_log = jsonb_set(
+        pg_catalog.coalesce(sauce_log, '{&quot;inventory&quot;:{}}'::jsonb),
+        ARRAY['inventory', p_sku],
+        jsonb_build_object(
+            'quantity', pg_catalog.coalesce((sauce_log-&gt;'inventory'-&gt;p_sku-&gt;&gt;'quantity')::int, 0) + p_quantity,
+            'last_updated', pg_catalog.to_jsonb(pg_catalog.clock_timestamp())
+        )
+    )
+    WHERE id = p_user_id;
+END;
+$$;
+</code></pre>
+</li>
+<li>
+<p><strong>Anonymous Guest Checkout Sync Queue</strong>:
+If a user completes a purchase on Shopify as a guest before registering an account, the Edge Function logs the credit to <code>public.pending_sauce_log_credits</code>:</p>
+<pre><code class="language-sql">CREATE TABLE public.pending_sauce_log_credits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL,
+    sku TEXT NOT NULL,
+    quantity INT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+</code></pre>
+<p>When the user eventually registers with their matching email, the <code>handle_new_user()</code> trigger scans for pending records, updates the user's <code>sauce_log</code>, and deletes the processed queue entries.</p>
+</li>
+</ol>
+<h3>4.3. Loyalty Coupon Generation Flow</h3>
+<p>To incentivize engagement, when a user completes a cooking milestone (e.g. logs cooking 5 unique SKUs in <code>sauce_log</code>), a single-use Shopify coupon is generated.</p>
+<pre><code>+------------------+          1. Reach Milestone          +-------------------+
+|                  |-------------------------------------&gt;|  Supabase DB      |
+|   iOS App UI     |                                      |  Trigger Webhook  |
+|                  |&lt;-------------------------------------|  on sauce_log     |
++------------------+                                      +-------------------+
+        ^                                                           |
+        | 4. Display Code                                           v
++------------------+          3. Generate Coupon          +-------------------+
+|  Supabase DB     |&lt;-------------------------------------|  Supabase Edge    |
+|  user_rewards    |                                      |  Function         |
++------------------+                                      +-------------------+
+                                                                    |
+                                                                    | 2. Shopify GraphQL
+                                                                    v
+                                                          +-------------------+
+                                                          |  Shopify Admin    |
+                                                          |  GraphQL API      |
+                                                          +-------------------+
+</code></pre>
+<ol>
+<li>
+<p><strong>Triggering Coupon Generation</strong>:
+A database trigger monitors <code>sauce_log</code> changes. When eligibility criteria are met (e.g. total unique cooked items &gt;= 5), it sends a webhook payload to the Supabase Edge Function <code>/functions/v1/generate-milestone-coupon</code>.</p>
+</li>
+<li>
+<p><strong>Shopify Admin GraphQL Query</strong>:
+The Supabase Edge Function requests coupon generation via the Shopify Admin GraphQL API:</p>
+<pre><code class="language-graphql">mutation discountCodeBasicCreate($basicDiscount: DiscountCodeBasicInput!) {
+  discountCodeBasicCreate(basicDiscount: $basicDiscount) {
+    discountNode {
+      id
+      discount {
+        ... on DiscountCodeBasic {
+          title
+          codes(first: 1) {
+            nodes {
+              code
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+</code></pre>
+<p><strong>GraphQL Variable Dictionary</strong>:</p>
+<pre><code class="language-json">{
+  &quot;basicDiscount&quot;: {
+    &quot;title&quot;: &quot;Super Sauced Milestone - $10 Off&quot;,
+    &quot;code&quot;: &quot;SAUCED-MS5-981A&quot;,
+    &quot;startsAt&quot;: &quot;2026-06-24T00:00:00Z&quot;,
+    &quot;endsAt&quot;: &quot;2026-12-31T23:59:59Z&quot;,
+    &quot;customerSelection&quot;: {
+      &quot;customers&quot;: {
+        &quot;add&quot;: [&quot;gid://shopify/Customer/987654321&quot;]
+      }
+    },
+    &quot;customerGets&quot;: {
+      &quot;value&quot;: {
+        &quot;discountAmount&quot;: {
+          &quot;amount&quot;: 10.0,
+          &quot;currencyCode&quot;: &quot;USD&quot;
+        }
+      },
+      &quot;items&quot;: {
+        &quot;all&quot;: true
+      }
+    },
+    &quot;usageLimit&quot;: 1
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><strong>UI Display &amp; Redemption</strong>:</p>
+<ul>
+<li>The generated discount code is stored in the database under <code>public.user_rewards</code> and displayed on the user's profile screen.</li>
+<li>For redemption, the iOS app deep links the user directly to checkout with the discount code pre-applied:
+<code>https://shop.supersauced.com/cart/{variant_id}:{qty}?discount=SAUCED-MS5-981A</code></li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>5. Verification &amp; Testing Playbook</h2>
+<p>Use these validation scripts to test the database trigger and verify the profile creation logic:</p>
+<h3>5.1. Trigger Function Security Check</h3>
+<p>Verify the execution privileges are restricted:</p>
+<pre><code class="language-sql">SELECT routine_schema, routine_name, security_type
+FROM information_schema.routines
+WHERE routine_name = 'handle_new_user';
+-- Assert: Result displays 'security_type = DEFINER'
+</code></pre>
+<h3>5.2. Metadata Verification Script</h3>
+<p>Test the trigger's parsing, fallback mapping, and collision handling using this script:</p>
+<pre><code class="language-sql">BEGIN;
+
+-- Scenario A: Complete survey and inventory metadata
+INSERT INTO auth.users (id, email, raw_user_meta_data)
+VALUES (
+  '00000000-0000-0000-0000-000000000001',
+  'complete_meta@test.com',
+  '{&quot;onboarding_survey&quot;: {&quot;dietary_preferences&quot;: [&quot;gluten-free&quot;]}, &quot;sauce_log&quot;: {&quot;SKU-CUBE-SPICY&quot;: 4}}'::jsonb
+);
+
+SELECT * FROM public.user_profiles WHERE id = '00000000-0000-0000-0000-000000000001';
+-- Assert: onboarding_survey -&gt; 'dietary_preferences' = [&quot;gluten-free&quot;]
+-- Assert: sauce_log = {&quot;SKU-CUBE-SPICY&quot;: 4}
+
+-- Scenario B: Missing or null metadata keys
+INSERT INTO auth.users (id, email, raw_user_meta_data)
+VALUES (
+  '00000000-0000-0000-0000-000000000002',
+  'missing_keys@test.com',
+  '{&quot;onboarding_survey&quot;: null, &quot;sauce_log&quot;: null}'::jsonb
+);
+
+SELECT * FROM public.user_profiles WHERE id = '00000000-0000-0000-0000-000000000002';
+-- Assert: onboarding_survey = '{}'::jsonb
+-- Assert: sauce_log = '{}'::jsonb
+
+-- Scenario C: Entirely NULL metadata dictionary
+INSERT INTO auth.users (id, email, raw_user_meta_data)
+VALUES (
+  '00000000-0000-0000-0000-000000000003',
+  'null_dictionary@test.com',
+  NULL
+);
+
+SELECT * FROM public.user_profiles WHERE id = '00000000-0000-0000-0000-000000000003';
+-- Assert: onboarding_survey = '{}'::jsonb
+-- Assert: sauce_log = '{}'::jsonb
+
+ROLLBACK;
+</code></pre>

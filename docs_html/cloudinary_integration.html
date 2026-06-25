@@ -1,0 +1,62 @@
+<h1>Cloudinary Integration</h1>
+<h2>Overview</h2>
+<p>This document describes how to integrate <strong>Cloudinary</strong> for video and image assets within the Super Sauced backend. Cloudinary is used to store step‑by‑step cooking videos and any large media assets, while Supabase storage holds hero images.</p>
+<h2>Prerequisites</h2>
+<blockquote>
+<p>[!NOTE]
+<strong>Prerequisites</strong></p>
+<ul>
+<li>Cloudinary account (free tier is sufficient for development)</li>
+<li>API credentials: Cloud name, API key, API secret</li>
+</ul>
+</blockquote>
+<ul>
+<li>Cloudinary account (free tier is sufficient for development).</li>
+<li>API credentials: <strong>Cloud name</strong>, <strong>API key</strong>, <strong>API secret</strong>.</li>
+</ul>
+<h2>Setup</h2>
+<ol>
+<li>Install the Cloudinary Node.js SDK in your backend (if using server‑side code):<pre><code class="language-bash">npm install cloudinary
+</code></pre>
+</li>
+<li>Create a <code>cloudinary.js</code> helper module:<pre><code class="language-javascript">const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+module.exports = cloudinary;
+</code></pre>
+</li>
+<li>Add the environment variables to your deployment configuration (e.g., Supabase Edge Functions, Vercel, Netlify).</li>
+</ol>
+<h2>Upload Flow</h2>
+<p>When a content author adds a video in Directus:</p>
+<ol>
+<li>The file is uploaded to Cloudinary via the SDK.</li>
+<li>The returned <code>secure_url</code> is stored in the <code>media_assets</code> table in Supabase:<pre><code class="language-javascript">const { data, error } = await supabase
+  .from('media_assets')
+  .insert({
+    name: file.originalname,
+    url: result.secure_url,
+    public_id: result.public_id,
+    type: 'video',
+  });
+</code></pre>
+</li>
+<li>The <code>url</code> can then be used by the mobile app to stream the video.</li>
+</ol>
+<h2>Deleting Assets</h2>
+<pre><code class="language-javascript">await cloudinary.uploader.destroy(publicId);
+await supabase.from('media_assets').delete().eq('public_id', publicId);
+</code></pre>
+<h2>Security Considerations</h2>
+<ul>
+<li>Keep API secret out of client bundles; use server‑side functions.</li>
+<li>Set appropriate upload presets in Cloudinary to enforce size limits and formats.</li>
+</ul>
+<h2>References</h2>
+<ul>
+<li>Cloudinary docs: https://cloudinary.com/documentation</li>
+<li>Cloudinary Node SDK: https://github.com/cloudinary/cloudinary_npm</li>
+</ul>

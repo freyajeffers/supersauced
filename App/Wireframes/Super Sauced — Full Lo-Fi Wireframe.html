@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<!-- saved from url=(0198)file:///Users/goh/Library/CloudStorage/GoogleDrive-gina.oh@supersauced.com/Shared%20drives/Internal%20Super%20Sauced/Interns/App/Wireframes/Super%20Sauced%20%E2%80%94%20Full%20Lo-Fi%20Wireframe.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Sauced — Full Lo-Fi Wireframe</title>
+<link href="file:///Users/goh/Library/CloudStorage/GoogleDrive-gina.oh@supersauced.com/Shared%20drives/Internal%20Super%20Sauced/Interns/App/Wireframes/Super%20Sauced%20%E2%80%94%20Full%20Lo-Fi%20Wireframeasdf_files/css2" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0eeeb;--phone:#fff;--border:#c8c5c0;--border-lt:#e2dfda;
+  --dark:#1a1a1a;--mid:#666;--light:#aaa;--xlight:#ccc;
+  --placeholder:#d8d5d0;--placeholder-dk:#b8b5b0;
+  --surface:#f7f5f2;--surface2:#eeecea;
+}
+body{font-family:'Rubik',sans-serif;background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:24px 16px 80px;gap:18px;min-height:100vh}
+
+/* ── NAV ── */
+.top-nav{width:100%;max-width:980px;display:flex;flex-direction:column;gap:8px}
+.flow-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.flow-label{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;min-width:72px}
+.sbtn{background:#fff;border:1px solid var(--border-lt);color:var(--mid);border-radius:6px;padding:5px 10px;font-family:'Rubik',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .1s;white-space:nowrap}
+.sbtn:hover{border-color:var(--border);color:var(--dark)}
+.sbtn.active{background:var(--dark);border-color:var(--dark);color:#fff}
+
+/* ── ANNOTATION ── */
+.ann{width:100%;max-width:980px;background:#fff;border:1px solid var(--border-lt);border-radius:8px;padding:11px 15px;font-size:12px;color:var(--mid);line-height:1.6}
+.ann strong{color:var(--dark)}
+
+/* ── PHONE ── */
+.phone{width:315px;background:var(--phone);border-radius:38px;border:6px solid #222;overflow:hidden;position:relative;box-shadow:0 0 0 1.5px #3a3a3a,0 20px 56px rgba(0,0,0,.22);display:flex;flex-direction:column;min-height:620px}
+.notch{background:#222;height:24px;width:100px;border-radius:0 0 14px 14px;margin:0 auto;flex-shrink:0;z-index:20}
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden}
+.screen.on{display:flex}
+.scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+
+/* ── SHARED PRIMITIVES ── */
+.img-ph{background:var(--placeholder);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;flex-shrink:0}
+.img-ph .lbl{font-size:9px;font-weight:600;color:var(--placeholder-dk);text-transform:uppercase;letter-spacing:.06em}
+svg.i{fill:none;stroke:var(--mid);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+svg.i.dk{stroke:var(--dark)}
+svg.i.lt{stroke:var(--light)}
+svg.i.wh{stroke:#fff}
+
+.btn{background:var(--dark);color:#fff;border:none;border-radius:10px;padding:13px;font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;cursor:pointer;width:100%;text-align:center}
+.btn:hover{background:#333}
+.btn.sm{font-size:12px;padding:11px}
+.btn-out{background:transparent;color:var(--dark);border:1.5px solid var(--border);border-radius:10px;padding:12px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:500;cursor:pointer;width:100%;display:flex;align-items:center;gap:9px}
+.btn-out:hover{border-color:var(--dark)}
+
+.input{border:1.5px solid var(--border-lt);border-radius:10px;padding:12px 13px;font-family:'Rubik',sans-serif;font-size:13px;color:var(--dark);outline:none;width:100%;background:#fafafa}
+.input::placeholder{color:var(--light)}
+.input:focus{border-color:var(--dark)}
+.input-lbl{font-size:11px;font-weight:600;color:var(--mid);margin-bottom:5px}
+
+.chip{border:1.5px solid var(--border-lt);border-radius:20px;padding:7px 12px;font-family:'Rubik',sans-serif;font-size:12px;font-weight:500;color:var(--mid);cursor:pointer;user-select:none;transition:all .1s;display:flex;align-items:center;gap:5px}
+.chip:hover{border-color:var(--border);color:var(--dark)}
+.chip.sel{border-color:var(--dark);background:var(--surface2);color:var(--dark);font-weight:600}
+
+.divider{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--light);font-weight:500}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-lt)}
+
+.prog-row{display:flex;gap:4px}
+.prog{flex:1;height:3px;border-radius:2px;background:var(--border-lt)}
+.prog.done{background:var(--dark)}
+.prog.cur{background:var(--mid)}
+
+.sec-lbl{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.tag-pill{display:inline-block;background:var(--surface2);border:1px solid var(--border-lt);color:var(--mid);font-size:10px;font-weight:600;border-radius:10px;padding:3px 9px}
+
+.text-ph{background:var(--placeholder);border-radius:3px;height:9px;margin-bottom:5px}
+
+/* Bottom tabs */
+.tabs{background:#fff;border-top:1px solid var(--border-lt);display:flex;padding:7px 0 14px;flex-shrink:0;z-index:10}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:500;color:var(--light);cursor:pointer}
+.tab.on{color:var(--dark)}
+.tab.on svg.i{stroke:var(--dark)}
+
+/* ══════════════════════════════════════
+   S0 — Web landing
+══════════════════════════════════════ */
+#s0{background:#fafaf8}
+.web-bar{background:#fff;border-bottom:1px solid var(--border-lt);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.web-logo{font-size:13px;font-weight:900;color:var(--dark);text-transform:uppercase;letter-spacing:-.01em}
+.web-links{display:flex;gap:9px}
+.web-links span{font-size:10px;color:var(--light);font-weight:500}
+.web-content{padding:12px 13px;display:flex;flex-direction:column;gap:10px}
+.web-recipe-name{font-size:14px;font-weight:700;color:var(--dark)}
+.web-recipe-sub{font-size:11px;color:var(--mid)}
+.app-bar{border:1.5px solid var(--border);border-radius:10px;padding:9px 11px;display:flex;align-items:center;gap:9px;background:#fff}
+.app-bar-icon{width:34px;height:34px;border:1px solid var(--border-lt);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.app-bar-copy{flex:1}
+.app-bar-copy strong{display:block;font-size:11px;font-weight:700;color:var(--dark)}
+.app-bar-copy span{font-size:10px;color:var(--mid)}
+.app-bar-btn{background:var(--dark);color:#fff;border:none;border-radius:7px;padding:7px 11px;font-family:'Rubik',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap}
+.meta-pill{border:1px solid var(--border-lt);border-radius:10px;padding:3px 9px;font-size:10px;font-weight:500;color:var(--mid)}
+
+/* ══════════════════════════════════════
+   S1 — App Store
+══════════════════════════════════════ */
+#s1{background:#f4f4f4}
+.store-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;gap:16px}
+.store-icon{width:76px;height:76px;border:1.5px solid var(--border-lt);border-radius:18px;display:flex;align-items:center;justify-content:center}
+.store-name{font-size:17px;font-weight:700;color:var(--dark)}
+.store-sub{font-size:12px;color:var(--light);text-align:center;line-height:1.5}
+.store-rating{font-size:11px;color:var(--light)}
+.store-btns{display:flex;flex-direction:column;gap:9px;width:100%}
+
+/* ══════════════════════════════════════
+   S2 — Welcome / Sign-up
+══════════════════════════════════════ */
+#s2{background:#fafaf8}
+.welcome-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:20px 22px 18px;gap:10px}
+.welcome-circle{width:110px;height:110px;border-radius:55px}
+.wordmark{font-size:21px;font-weight:900;color:var(--dark);text-transform:uppercase;letter-spacing:-.02em}
+.tagline{font-size:12px;color:var(--mid);text-align:center;line-height:1.5}
+.auth-sheet{background:#fff;border-radius:20px 20px 0 0;border-top:1px solid var(--border-lt);padding:18px 18px 22px;display:flex;flex-direction:column;gap:9px;flex-shrink:0}
+.auth-title{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.auth-note{font-size:10px;color:var(--light);text-align:center}
+
+/* ══════════════════════════════════════
+   S3 — Email entry
+══════════════════════════════════════ */
+#s3{background:#fff}
+.email-screen{flex:1;padding:14px 18px 26px;display:flex;flex-direction:column;gap:13px}
+.back-btn{background:none;border:none;font-family:'Rubik',sans-serif;font-size:13px;font-weight:500;color:var(--mid);cursor:pointer;display:flex;align-items:center;gap:3px;padding:0}
+.screen-h{font-size:19px;font-weight:700;color:var(--dark);line-height:1.2}
+.screen-p{font-size:12px;color:var(--mid);line-height:1.6}
+.spacer{flex:1}
+
+/* ══════════════════════════════════════
+   S4 — Magic link sent
+══════════════════════════════════════ */
+#s4{background:#fff}
+.confirm{flex:1;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center}
+.confirm-icon{width:60px;height:60px;border:1.5px solid var(--border);border-radius:30px;display:flex;align-items:center;justify-content:center}
+.confirm h2{font-size:18px;font-weight:700;color:var(--dark)}
+.confirm p{font-size:12px;color:var(--mid);line-height:1.7}
+.hl{font-weight:700;color:var(--dark)}
+.resend{font-size:12px;color:var(--mid);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.sim-box{border:1px dashed var(--border);border-radius:10px;padding:11px;width:100%;margin-top:4px}
+.sim-lbl{font-size:10px;color:var(--light);margin-bottom:8px;font-weight:500}
+
+/* ══════════════════════════════════════
+   S5/6/7 — Survey
+══════════════════════════════════════ */
+.survey{flex:1;padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px}
+.survey-q{font-size:15px;font-weight:700;color:var(--dark);line-height:1.3}
+.survey-hint{font-size:11px;color:var(--light)}
+.chip-grid{display:flex;flex-wrap:wrap;gap:7px;flex:1;align-content:flex-start}
+.chip-col{display:flex;flex-direction:column;gap:7px;flex:1;align-content:flex-start}
+.cdot{width:8px;height:8px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0}
+.survey-foot{display:flex;justify-content:space-between;align-items:center}
+.skip{font-size:12px;color:var(--light);cursor:pointer;font-weight:500}
+.skip:hover{color:var(--mid)}
+.nxt-btn{background:var(--dark);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+/* ══════════════════════════════════════
+   S8 / S9 — Recipes home
+══════════════════════════════════════ */
+.app-header{padding:4px 14px 9px;flex-shrink:0}
+.app-welcome{font-size:11px;color:var(--light);font-weight:500;margin-bottom:1px}
+.app-title{font-size:21px;font-weight:900;color:var(--dark);letter-spacing:-.02em}
+.search-bar{background:#fff;border:1px solid var(--border-lt);border-radius:9px;padding:9px 11px;font-size:12px;color:var(--light);display:flex;align-items:center;gap:7px;margin-top:7px}
+.filter-row{padding:0 14px 8px;display:flex;gap:6px;overflow-x:auto;flex-shrink:0}
+.fc{background:#fff;border:1px solid var(--border-lt);border-radius:13px;padding:5px 11px;font-size:11px;font-weight:500;color:var(--mid);white-space:nowrap;cursor:pointer;flex-shrink:0}
+.fc.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.deeplink-bar{margin:0 14px 7px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--mid);display:flex;align-items:center;gap:7px;background:#fff;flex-shrink:0}
+.dl-dot{width:6px;height:6px;border-radius:3px;background:var(--dark);flex-shrink:0}
+.card-list{flex:1;overflow-y:auto;padding:0 14px 8px;display:flex;flex-direction:column;gap:9px}
+.rcard{background:#fff;border:1px solid var(--border-lt);border-radius:11px;overflow:hidden;cursor:pointer;flex-shrink:0;transition:border-color .1s}
+.rcard:hover{border-color:var(--border)}
+.rcard.hl{border:1.5px solid var(--dark)}
+.card-img-wrap{position:relative}
+.cube-tag{position:absolute;top:6px;left:6px;background:rgba(255,255,255,.92);border:1px solid var(--border-lt);border-radius:7px;padding:2px 7px;font-size:9px;font-weight:600;color:var(--dark)}
+.bm-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.92);border:1px solid var(--border-lt);border-radius:14px;width:25px;height:25px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.card-body{padding:9px 11px 11px}
+.card-title{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.card-meta{display:flex;gap:9px;font-size:10px;color:var(--light);font-weight:500}
+.cm{display:flex;align-items:center;gap:3px}
+.status-bar{height:16px;background:var(--surface);flex-shrink:0}
+
+/* ══════════════════════════════════════
+   S10 — Filter panel open
+══════════════════════════════════════ */
+#s10{background:#fafaf8}
+.filter-overlay{position:absolute;bottom:0;left:0;right:0;top:60px;background:#fff;border-radius:18px 18px 0 0;border-top:1px solid var(--border-lt);display:flex;flex-direction:column;z-index:15}
+.filter-handle{width:36px;height:4px;background:var(--border-lt);border-radius:2px;margin:10px auto 14px}
+.filter-title{font-size:15px;font-weight:700;color:var(--dark);padding:0 16px 12px}
+.filter-body{flex:1;overflow-y:auto;padding:0 16px}
+.filter-section{margin-bottom:16px}
+.filter-sec-lbl{font-size:11px;font-weight:700;color:var(--mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.filter-chips{display:flex;flex-wrap:wrap;gap:7px}
+.filter-foot{padding:14px 16px;border-top:1px solid var(--border-lt);display:flex;gap:10px}
+.btn-ghost{background:transparent;color:var(--mid);border:1.5px solid var(--border-lt);border-radius:10px;padding:12px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:600;cursor:pointer;flex:1}
+
+/* ══════════════════════════════════════
+   S11 — Recipe Detail
+══════════════════════════════════════ */
+#s11{background:#fff;position:relative}
+.detail-scroll{flex:1;overflow-y:auto;padding-bottom:16px}
+.detail-hero{position:relative;flex-shrink:0}
+.d-back{position:absolute;top:8px;left:9px;background:rgba(255,255,255,.9);border:1px solid var(--border-lt);border-radius:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
+.d-actions{position:absolute;top:8px;right:9px;display:flex;gap:5px;z-index:5}
+.d-act{background:rgba(255,255,255,.9);border:1px solid var(--border-lt);border-radius:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.detail-body{padding:13px 14px 0}
+.detail-tag{margin-bottom:5px}
+.detail-h{font-size:18px;font-weight:800;color:var(--dark);line-height:1.2;margin-bottom:5px}
+.detail-meta{display:flex;gap:10px;margin-bottom:11px}
+.dm{font-size:11px;color:var(--light);font-weight:500;display:flex;align-items:center;gap:3px}
+.macro-grid{display:flex;gap:5px;margin-bottom:13px}
+.mac{flex:1;background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;padding:6px 5px;text-align:center}
+.mac-val{font-size:13px;font-weight:700;color:var(--dark)}
+.mac-lbl{font-size:9px;color:var(--light);text-transform:uppercase;font-weight:600}
+.serving-row{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-lt);border-radius:9px;padding:8px 11px;margin-bottom:13px}
+.sv-lbl{font-size:12px;color:var(--mid);flex:1}
+.sv-ctrl{display:flex;align-items:center;gap:7px}
+.sv-btn{width:25px;height:25px;background:#fff;border:1.5px solid var(--border-lt);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;font-weight:700;font-family:'Rubik',sans-serif;color:var(--dark)}
+.sv-count{font-size:14px;font-weight:700;color:var(--dark);min-width:16px;text-align:center}
+.ingr-list{font-size:12px;color:var(--mid);line-height:2.1;margin-bottom:13px}
+.more-row{display:flex;gap:7px;margin-bottom:13px}
+.mini{flex:1;background:var(--surface);border:1px solid var(--border-lt);border-radius:8px;overflow:hidden}
+.mini-img{height:48px}
+.mini-body{padding:6px 8px}
+.mini-title{font-size:10px;font-weight:700;color:var(--dark)}
+.mini-meta{font-size:9px;color:var(--light);margin-top:2px}
+.cook-btn-bar{padding:8px 12px;flex-shrink:0;background:#fff}
+
+/* ══════════════════════════════════════
+   S12 — Pre-cook checklist
+══════════════════════════════════════ */
+#s12{background:#fff}
+.precook{flex:1;display:flex;flex-direction:column;padding:14px 16px 20px;gap:13px}
+.precook-h{font-size:17px;font-weight:700;color:var(--dark)}
+.precook-sub{font-size:12px;color:var(--mid);line-height:1.5}
+.check-list{display:flex;flex-direction:column;gap:0;flex:1}
+.check-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border-lt);cursor:pointer}
+.check-item:last-child{border-bottom:none}
+.check-box{width:20px;height:20px;border:1.5px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.check-item.chk .check-box{background:var(--dark);border-color:var(--dark)}
+.check-label{font-size:13px;color:var(--dark);font-weight:500}
+.check-item.chk .check-label{color:var(--light);text-decoration:line-through}
+.precook-foot{display:flex;justify-content:space-between;align-items:center}
+
+/* ══════════════════════════════════════
+   S13 — Guided Mode step
+══════════════════════════════════════ */
+#s13{background:#fff;position:relative}
+.guided-scroll{flex:1;overflow-y:auto;padding-bottom:16px}
+.guided-top{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border-lt)}
+.guided-step-badge{font-size:11px;font-weight:700;color:var(--mid);letter-spacing:.04em;text-transform:uppercase}
+.guided-progress{display:flex;gap:4px;align-items:center}
+.gp-seg{width:18px;height:3px;border-radius:2px;background:var(--border-lt)}
+.gp-seg.done{background:var(--dark)}
+.gp-seg.cur{background:var(--mid)}
+.step-video{position:relative}
+.play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(255,255,255,.88);border:1.5px solid var(--border);border-radius:22px;display:flex;align-items:center;justify-content:center}
+.step-body{padding:13px 14px}
+.step-num{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.step-desc{font-size:14px;color:var(--dark);line-height:1.6;margin-bottom:14px}
+.step-tip{background:var(--surface);border:1px solid var(--border-lt);border-radius:9px;padding:10px 12px;font-size:11px;color:var(--mid);display:flex;gap:8px;align-items:flex-start;margin-bottom:14px}
+.tip-icon{flex-shrink:0;margin-top:1px}
+.timer-pill{border:1.5px solid var(--border);border-radius:20px;padding:9px 16px;font-size:13px;font-weight:600;color:var(--dark);display:flex;align-items:center;gap:8px;cursor:pointer;align-self:flex-start}
+.guided-nav{display:flex;gap:9px;padding:8px 12px;flex-shrink:0;background:#fff;border-top:1px solid var(--border-lt)}
+.guided-nav .btn-out{flex:1;justify-content:center}
+.guided-nav .btn{flex:2}
+
+/* ══════════════════════════════════════
+   S14 — Congrats
+══════════════════════════════════════ */
+#s14{background:#fff}
+.congrats{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;gap:14px;text-align:center}
+.congrats-icon{width:72px;height:72px;border:1.5px solid var(--border);border-radius:36px;display:flex;align-items:center;justify-content:center}
+.congrats-h{font-size:22px;font-weight:900;color:var(--dark);letter-spacing:-.02em}
+.congrats-recipe{font-size:14px;font-weight:600;color:var(--mid)}
+.congrats-copy{font-size:12px;color:var(--light);line-height:1.6}
+.eng-row{display:flex;gap:10px;width:100%;margin-top:4px}
+.eng-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;border:1.5px solid var(--border-lt);border-radius:11px;padding:12px 8px;cursor:pointer;background:#fff}
+.eng-btn:hover{border-color:var(--border)}
+.eng-label{font-size:10px;font-weight:600;color:var(--mid)}
+
+/* ══════════════════════════════════════
+   S15 — Saved tab
+══════════════════════════════════════ */
+#s15{background:var(--surface);position:relative}
+.saved-header{padding:4px 14px 9px;flex-shrink:0}
+.saved-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:12px;text-align:center}
+.empty-icon{width:60px;height:60px;border:1.5px solid var(--border-lt);border-radius:30px;display:flex;align-items:center;justify-content:center}
+.empty-h{font-size:15px;font-weight:700;color:var(--dark)}
+.empty-p{font-size:12px;color:var(--light);line-height:1.6}
+
+/* ══════════════════════════════════════
+   S16 — Share sheet
+══════════════════════════════════════ */
+#s16{background:#fff;position:relative}
+.share-overlay{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:18px 18px 0 0;border-top:1px solid var(--border-lt);z-index:15;padding-bottom:14px}
+.share-handle{width:36px;height:4px;background:var(--border-lt);border-radius:2px;margin:10px auto 14px}
+.share-title{font-size:13px;font-weight:700;color:var(--dark);padding:0 16px 12px;border-bottom:1px solid var(--border-lt)}
+.share-apps{display:flex;gap:0;padding:14px 0 10px}
+.share-app{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.share-app-icon{width:44px;height:44px;border:1px solid var(--border-lt);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.share-app-label{font-size:9px;color:var(--mid);font-weight:500}
+.share-actions{padding:0 14px;display:flex;flex-direction:column;gap:0}
+.share-action{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border-lt);cursor:pointer}
+.share-action:last-child{border-bottom:none}
+.share-action span{font-size:13px;color:var(--dark);font-weight:500}
+
+/* ══════════════════════════════════════
+   S17 — Discover tab
+══════════════════════════════════════ */
+#s17{background:var(--surface);position:relative}
+.discover-header{padding:4px 14px 10px;flex-shrink:0}
+.disc-title{font-size:21px;font-weight:900;color:var(--dark);letter-spacing:-.02em}
+.disc-sub{font-size:11px;color:var(--light);margin-top:2px}
+.disc-filter-row{padding:0 14px 10px;display:flex;gap:6px;overflow-x:auto;flex-shrink:0}
+.disc-card-area{flex:1;padding:0 14px 8px;display:flex;flex-direction:column;gap:9px}
+.disc-card-ph{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;flex-shrink:0}
+.disc-card-body{padding:11px 13px}
+.disc-card-h{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.disc-meta{display:flex;gap:9px;font-size:11px;color:var(--light);font-weight:500;margin-bottom:10px}
+.disc-hint{font-size:11px;color:var(--light);text-align:center;padding:8px 0}
+
+/* ══════════════════════════════════════
+   S18 — Discovery card (swipe)
+══════════════════════════════════════ */
+#s18{background:var(--surface);position:relative}
+.disc-full{flex:1;padding:10px 12px 68px;display:flex;flex-direction:column;gap:10px}
+.disc-full-header{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.disc-full-label{font-size:11px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.08em}
+.disc-full-filter{border:1px solid var(--border-lt);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:500;color:var(--mid);cursor:pointer;background:#fff;font-family:'Rubik',sans-serif}
+.disc-full-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.disc-full-img{flex:1;position:relative}
+.disc-card-info{padding:13px 14px}
+.disc-card-title{font-size:17px;font-weight:800;color:var(--dark);margin-bottom:4px}
+.disc-card-meta{display:flex;gap:10px;font-size:12px;color:var(--light);font-weight:500;margin-bottom:10px}
+.disc-actions{display:flex;gap:10px;flex-shrink:0}
+.disc-skip{flex:1;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:13px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:600;color:var(--mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.disc-match{flex:2;background:var(--dark);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ══════════════════════════════════════
+   S19 — Profile tab
+══════════════════════════════════════ */
+#s19{background:var(--surface);position:relative}
+.profile-scroll{flex:1;overflow-y:auto;padding-bottom:16px}
+.profile-header{padding:4px 14px 0;flex-shrink:0}
+.profile-hero{padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.profile-avatar{width:64px;height:64px;border-radius:32px}
+.profile-name{font-size:16px;font-weight:700;color:var(--dark)}
+.profile-email{font-size:11px;color:var(--light)}
+.profile-stats{display:flex;gap:0;border:1px solid var(--border-lt);border-radius:11px;overflow:hidden;background:#fff;margin:0 14px}
+.pstat{flex:1;padding:12px 8px;text-align:center;border-right:1px solid var(--border-lt)}
+.pstat:last-child{border-right:none}
+.pstat-val{font-size:16px;font-weight:700;color:var(--dark)}
+.pstat-lbl{font-size:9px;color:var(--light);text-transform:uppercase;font-weight:600;margin-top:2px}
+.profile-section{padding:14px 14px 0}
+.prof-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--border-lt);cursor:pointer}
+.prof-row:last-child{border-bottom:none}
+.prof-row-label{font-size:13px;font-weight:500;color:var(--dark);flex:1}
+.prof-row-sub{font-size:11px;color:var(--light)}
+
+
+/* Survey Q1 SKU quantity rows */
+.sku-row{display:flex;align-items:center;gap:0;border:1.5px solid var(--border-lt);border-radius:12px;padding:10px 12px;background:#fff;cursor:default}
+.sku-row:hover{border-color:var(--border)}
+.sku-dot{width:9px;height:9px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;margin-right:9px}
+.sku-name{flex:1;font-size:12px;font-weight:600;color:var(--dark)}
+.sku-qty{display:flex;align-items:center;gap:8px}
+.qty-btn{width:26px;height:26px;border:1.5px solid var(--border-lt);border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;font-weight:700;font-family:"Rubik",sans-serif;color:var(--dark);flex-shrink:0}
+.qty-btn:hover{border-color:var(--border)}
+.qty-val{font-size:14px;font-weight:700;color:var(--dark);min-width:18px;text-align:center}
+
+/* ── EDIT MODE ── */
+#edit-toolbar{width:100%;max-width:980px;display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2dfda;border-radius:10px;padding:10px 14px}
+#edit-toolbar .etitle{font-size:12px;font-weight:700;color:#666;flex:1}
+#edit-btn{background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:'Rubik',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
+#edit-btn.active{background:#c05000}
+#save-btn{background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:'Rubik',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:none}
+#edit-hint{font-size:11px;color:#aaa;display:none}
+.phone [contenteditable]{outline:2px dashed #c05000 !important;border-radius:2px;cursor:text}
+.phone [contenteditable]:focus{outline:2px solid #c05000 !important;background:rgba(192,80,0,.06)}
+</style>
+</head>
+<body>
+
+<!-- ── EDIT TOOLBAR ── -->
+<div id="edit-toolbar">
+  <span class="etitle">✏️ Wireframe Editor</span>
+  <span id="edit-hint" style="display: none;">Click any highlighted text to edit</span>
+  <button id="save-btn" onclick="saveHTML()" style="display: none;">⬇ Save &amp; Download</button>
+<button id="edit-btn" onclick="toggleEditMode()" class="">Edit Mode</button>
+</div>
+
+<!-- ── NAV ── -->
+<div class="top-nav">
+  <div class="flow-group">
+    <span class="flow-label">F1 · Onboarding (QR)</span>
+    <button class="sbtn" onclick="go(0)">Web Landing</button>
+    <button class="sbtn" onclick="go(1)">App Store</button>
+    <button class="sbtn" onclick="go(2)">Sign Up</button>
+    <button class="sbtn" onclick="go(3)">Email Entry</button>
+    <button class="sbtn" onclick="go(4)">Link Sent</button>
+    <button class="sbtn" onclick="go(5)">Survey Q1</button>
+    <button class="sbtn" onclick="go(6)">Survey Q2</button>
+    <button class="sbtn" onclick="go(7)">Survey Q3</button>
+    <button class="sbtn" onclick="go(8)">Home (QR)</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">F2 · Direct</span>
+    <button class="sbtn" onclick="go(9)">Home (Direct)</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">F3 · Core Loop</span>
+    <button class="sbtn active" onclick="go(10)">Filters Open</button>
+    <button class="sbtn" onclick="go(11)">Recipe Detail</button>
+    <button class="sbtn" onclick="go(12)">Guided Step</button>
+    <button class="sbtn" onclick="go(12)">Congrats</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">F4 · Saved</span>
+    <button class="sbtn" onclick="go(14)">Saved Tab</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">F5 · Share</span>
+    <button class="sbtn" onclick="go(12)">Share Sheet</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">F6 · Discover</span>
+    <button class="sbtn" onclick="go(15)">Discover Tab</button>
+  </div>
+  <div class="flow-group">
+    <span class="flow-label">App</span>
+    <button class="sbtn" onclick="go(16)">Profile Tab</button>
+  </div>
+</div>
+
+<!-- ── ANNOTATION ── -->
+<div class="ann" id="ann"><strong>F3 · Filter Panel</strong> — Bottom sheet over the recipe list. Filter sections: Cube/SKU, Cook time, Dietary, Difficulty. Multi-select. Clear all + Show Results CTAs.</div>
+
+<!-- ── PHONE ── -->
+<div class="phone">
+<div class="notch"></div>
+
+<!-- ════════════ S0 — Web Landing ════════════ -->
+<div class="screen" id="s0">
+  <div class="scroll">
+    <div class="web-bar">
+      <span class="web-logo">Super Sauced</span>
+      <div class="web-links"><span>Recipes</span><span>Shop</span><span>About</span></div>
+    </div>
+    <div class="web-content">
+      <div class="img-ph" style="height:148px;border-radius:10px;">
+        <svg class="i" width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span class="lbl">Recipe hero image</span>
+      </div>
+      <div>
+        <div class="web-recipe-name">20-Minute Garlic Butter Pasta</div>
+        <div class="web-recipe-sub">Made with the Roasted Garlic cube · 20 min</div>
+      </div>
+      <!-- App download bar — above fold -->
+      <div class="app-bar">
+        <div class="app-bar-icon">
+          <svg class="i dk" width="16" height="16" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="4"></rect><path d="M12 8v8M8 12l4 4 4-4"></path></svg>
+        </div>
+        <div class="app-bar-copy">
+          <strong>Get 50+ recipes in app</strong>
+          <span>Step-by-step guides · Save favourites</span>
+        </div>
+        <button class="app-bar-btn" onclick="go(1)">Get App</button>
+      </div>
+      <div class="meta-row">
+        <span class="meta-pill">20 min</span><span class="meta-pill">480 cal</span><span class="meta-pill">Easy</span>
+      </div>
+      <div>
+        <div class="sec-lbl">Ingredients</div>
+        <div class="text-ph" style="width:88%"></div>
+        <div class="text-ph" style="width:72%"></div>
+        <div class="text-ph" style="width:80%"></div>
+        <div class="text-ph" style="width:60%"></div>
+        <div class="text-ph" style="width:68%"></div>
+      </div>
+      <div style="font-size:11px;color:var(--light)">Full step-by-step guide in the app →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S1 — App Store ════════════ -->
+<div class="screen" id="s1">
+  <div class="scroll">
+    <div class="store-wrap">
+      <div class="store-icon">
+        <svg class="i dk" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+      </div>
+      <div class="store-name">Super Sauced</div>
+      <div class="store-sub">Recipes built around your<br>Super Sauced cubes</div>
+      <div class="store-rating">★★★★★ &nbsp;4.9 · Food &amp; Drink</div>
+      <div class="store-btns">
+        <button class="btn" onclick="go(2)">Get — Free</button>
+        <button class="btn-out" style="justify-content:center" onclick="go(2)">Already have it? Open</button>
+      </div>
+      <div style="font-size:10px;color:var(--light)">12.4 MB · Requires iOS 16+</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S2 — Welcome / Sign-up ════════════ -->
+<div class="screen" id="s2">
+  <div class="scroll" style="background:#fafaf8">
+    <div class="welcome-area">
+      <div class="img-ph welcome-circle">
+        <svg class="i" width="30" height="30" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 13s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+      </div>
+      <div class="wordmark">Super Sauced</div>
+      <div class="tagline">Great meals from the cubes<br>already in your kitchen.</div>
+    </div>
+    <div class="auth-sheet">
+      <div class="auth-title">Create your account</div>
+      <button class="btn-out" onclick="go(8)">
+        <svg class="i dk" width="15" height="15" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg>
+        Continue with Apple
+      </button>
+      <button class="btn-out" onclick="go(8)">
+        <svg class="i dk" width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+        Continue with Google
+      </button>
+      <div class="divider">or</div>
+      <button class="btn-out" onclick="go(3)">
+        <svg class="i dk" width="15" height="15" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="2 7 12 13 22 7"></polyline></svg>
+        Continue with email
+      </button>
+      <div class="auth-note">Have a Shopify account? It'll sync automatically.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S3 — Email entry ════════════ -->
+<div class="screen" id="s3">
+  <div class="scroll">
+    <div class="email-screen">
+      <button class="back-btn" onclick="go(2)">
+        <svg class="i" width="13" height="13" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>Back
+      </button>
+      <div class="screen-h">What's your email?</div>
+      <div class="screen-p">We'll send you a magic link — no password needed.</div>
+      <div>
+        <div class="input-lbl">Email address</div>
+        <input class="input" type="email" placeholder="you@example.com">
+      </div>
+      <div>
+        <div class="input-lbl">Phone number <span style="font-weight:400;color:var(--light)">(optional)</span></div>
+        <input class="input" type="tel" placeholder="+1 (555) 000-0000">
+        <div style="font-size:10px;color:var(--light);margin-top:5px">We may use this for account recovery and order updates.</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn" onclick="go(4)">Send Magic Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S4 — Link sent ════════════ -->
+<div class="screen" id="s4">
+  <div class="scroll">
+    <div class="confirm">
+      <div class="confirm-icon">
+        <svg class="i dk" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="2 7 12 13 22 7"></polyline></svg>
+      </div>
+      <h2>Check your inbox</h2>
+      <p>We sent a sign-in link to<br><span class="hl">you@example.com</span><br><br>Tap the link in the email to open the app and continue.</p>
+      <div class="resend">Resend link</div>
+      <div style="font-size:10px;color:var(--light)">Link expires in 10 minutes</div>
+      <div class="sim-box">
+        <div class="sim-lbl">↳ Simulate tapping magic link in email</div>
+        <button class="btn sm" onclick="go(5)">Open Magic Link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S5 — Survey Q1 Sauces ════════════ -->
+<div class="screen" id="s5">
+  <div class="scroll">
+    <div class="survey">
+      <div class="prog-row"><div class="prog done"></div><div class="prog cur"></div><div class="prog"></div></div>
+      <div class="survey-q">Which Super Sauced sauces did you pick up?</div>
+      <div class="survey-hint">Tell us how many of each so we can personalize your recipes</div>
+      <div style="display:flex;flex-direction:column;gap:8px;flex:1;align-content:flex-start">
+        <div class="sku-row">
+          <span class="sku-dot"></span>
+          <span class="sku-name">Vegan Green Goddess</span>
+          <div class="sku-qty">
+            <button class="qty-btn" onclick="qtyChange(this,-1)">−</button>
+            <span class="qty-val">0</span>
+            <button class="qty-btn" onclick="qtyChange(this,1)">+</button>
+          </div>
+        </div>
+        <div class="sku-row">
+          <span class="sku-dot"></span>
+          <span class="sku-name">Kale Caesar Pesto</span>
+          <div class="sku-qty">
+            <button class="qty-btn" onclick="qtyChange(this,-1)">−</button>
+            <span class="qty-val">0</span>
+            <button class="qty-btn" onclick="qtyChange(this,1)">+</button>
+          </div>
+        </div>
+        <div class="sku-row">
+          <span class="sku-dot"></span>
+          <span class="sku-name">Bell Pepper Romesco</span>
+          <div class="sku-qty">
+            <button class="qty-btn" onclick="qtyChange(this,-1)">−</button>
+            <span class="qty-val">0</span>
+            <button class="qty-btn" onclick="qtyChange(this,1)">+</button>
+          </div>
+        </div>
+        <div class="sku-row">
+          <span class="sku-dot"></span>
+          <span class="sku-name">Beet Tahini Tzatziki</span>
+          <div class="sku-qty">
+            <button class="qty-btn" onclick="qtyChange(this,-1)">−</button>
+            <span class="qty-val">0</span>
+            <button class="qty-btn" onclick="qtyChange(this,1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="survey-foot">
+        <span class="skip" onclick="go(6)">Skip</span>
+        <button class="nxt-btn" onclick="go(6)">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S6 — Survey Q2 Dietary ════════════ -->
+<div class="screen" id="s6">
+  <div class="scroll">
+    <div class="survey">
+      <div class="prog-row"><div class="prog done"></div><div class="prog done"></div><div class="prog cur"></div></div>
+      <div class="survey-q">Any dietary preferences?</div>
+      <div class="survey-hint">We'll personalise your recipe feed · Select all that apply</div>
+      <div class="chip-grid">
+        <div class="chip" onclick="toggleChip(this)">No preference</div>
+        <div class="chip" onclick="toggleChip(this)">Vegan</div>
+        <div class="chip" onclick="toggleChip(this)">Vegetarian</div>
+        <div class="chip" onclick="toggleChip(this)">High-protein</div>
+        <div class="chip" onclick="toggleChip(this)">High Fiber</div>
+        <div class="chip" onclick="toggleChip(this)">Low-Carb</div>
+        <div class="chip" onclick="toggleChip(this)">Paleo</div>
+        <div class="chip" onclick="toggleChip(this)">Gluten-free</div>
+        <div class="chip" onclick="toggleChip(this)">Dairy-free</div>
+        <div class="chip" onclick="toggleChip(this)">Pescatarian</div>
+      </div>
+      <div class="survey-foot">
+        <span class="skip" onclick="go(7)">Skip</span>
+        <button class="nxt-btn" onclick="go(7)">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S7 — Survey Q3 Source ════════════ -->
+<div class="screen" id="s7">
+  <div class="scroll">
+    <div class="survey">
+      <div class="prog-row"><div class="prog done"></div><div class="prog done"></div><div class="prog done"></div></div>
+      <div class="survey-q">How did you hear about us?</div>
+      <div class="survey-hint">Pick one</div>
+      <div class="chip-col">
+        <div class="chip" onclick="selectOne(this)">Instagram</div>
+        <div class="chip" onclick="selectOne(this)">TikTok</div>
+        <div class="chip" onclick="selectOne(this)">Retail / in-store</div>
+        <div class="chip" onclick="selectOne(this)">Friend / word of mouth</div>
+        <div class="chip" onclick="selectOne(this)">Other</div>
+      </div>
+      <div class="survey-foot">
+        <span class="skip" onclick="go(8)">Skip</span>
+        <button class="nxt-btn" onclick="go(8)">Let's go</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ S8 — Recipes Home (deep-linked, Flow 1) ════════════ -->
+<div class="screen" id="s8">
+  <div class="status-bar" style="background:#fafaf8"></div>
+  <div class="app-header" style="background:#fafaf8">
+    <div class="app-welcome">Good evening</div>
+    <div class="app-title">Recipes</div>
+    <div class="search-bar" style="background:#fff">
+      <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Search recipes…
+    </div>
+  </div>
+  <div class="filter-row" style="align-items:center">
+    <button class="fc" onclick="go(10)" style="display:flex;align-items:center;gap:5px;flex-shrink:0"><svg class="i dk" width="13" height="13" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg> Filter</button>
+    <div style="width:1px;height:18px;background:var(--border-lt);flex-shrink:0"></div>
+    <div class="fc on">All</div>
+    <div class="fc">5 min</div>
+    <div class="fc">10 min</div>
+    <div class="fc">30 min</div>
+  </div>
+  <div class="card-list">
+    <div class="rcard hl" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Vegan Green Goddess</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Green Goddess Grain Bowl</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>10 min</span>
+          <span class="cm">340 cal</span>
+          <span class="cm">Vegan</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 128</span>
+        </div>
+      </div>
+    </div>
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Kale Caesar Pesto</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Kale Caesar Pasta</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>15 min</span>
+          <span class="cm">420 cal</span>
+          <span class="cm">Vegetarian</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 94</span>
+        </div>
+      </div>
+    </div>
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Bell Pepper Romesco</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Romesco Chicken Skillet</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>20 min</span>
+          <span class="cm">510 cal</span>
+          <span class="cm">Easy</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 76</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S9 — Recipes Home (direct / returning) ════════════ -->
+<div class="screen" id="s9">
+  <div class="status-bar" style="background:#fafaf8"></div>
+  <div class="app-header" style="background:#fafaf8">
+    <div class="app-welcome">Good evening</div>
+    <div class="app-title">Recipes</div>
+    <div class="search-bar" style="background:#fff">
+      <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Search recipes…
+    </div>
+  </div>
+  <div class="filter-row" style="align-items:center">
+    <button class="fc" onclick="go(10)" style="display:flex;align-items:center;gap:5px;flex-shrink:0"><svg class="i dk" width="13" height="13" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg> Filter</button>
+    <div style="width:1px;height:18px;background:var(--border-lt);flex-shrink:0"></div>
+    <div class="fc on">All</div>
+    <div class="fc">5 min</div>
+    <div class="fc">10 min</div>
+    <div class="fc">30 min</div>
+  </div>
+  <div class="card-list">
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Vegan Green Goddess</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Green Goddess Grain Bowl</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>10 min</span>
+          <span class="cm">340 cal</span>
+          <span class="cm">Vegan</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 128</span>
+        </div>
+      </div>
+    </div>
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Kale Caesar Pesto</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Kale Caesar Pasta</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>15 min</span>
+          <span class="cm">420 cal</span>
+          <span class="cm">Vegetarian</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 94</span>
+        </div>
+      </div>
+    </div>
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Bell Pepper Romesco</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Romesco Chicken Skillet</div>
+        <div class="card-meta">
+          <span class="cm"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>20 min</span>
+          <span class="cm">510 cal</span>
+          <span class="cm">Easy</span>
+          <span class="cm" style="margin-left:auto"><svg class="i lt" width="9" height="9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg> 76</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S10 — Filter panel open ════════════ -->
+<div class="screen on" id="s10">
+  <div class="status-bar" style="background:#fafaf8"></div>
+  <div class="app-header" style="background:#fafaf8">
+    <div class="app-title">Recipes</div>
+    <div class="search-bar" style="background:#fff">
+      <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Search recipes…
+    </div>
+  </div>
+  <!-- Dimmed cards behind -->
+  <div style="flex:1;opacity:.3;padding:8px 14px;display:flex;flex-direction:column;gap:8px;overflow:hidden">
+    <div class="rcard"><div class="img-ph" style="height:80px"></div><div class="card-body"><div class="card-title">20-Min Garlic Butter Pasta</div></div></div>
+    <div class="rcard"><div class="img-ph" style="height:80px"></div><div class="card-body"><div class="card-title">One-Pan Butter Chicken</div></div></div>
+  </div>
+  <!-- Filter bottom sheet -->
+  <div class="filter-overlay">
+    <div class="filter-handle"></div>
+    <div class="filter-title">Filter Recipes</div>
+    <div class="filter-body">
+      <div class="filter-section">
+        <div class="filter-sec-lbl">Cube / SKU</div>
+        <div class="filter-chips">
+          <div class="chip sel" onclick="toggleChip(this)">Vegan Green Goddess</div>
+          <div class="chip sel" onclick="toggleChip(this)">Bell Pepper Romesco</div>
+          <div class="chip sel" onclick="toggleChip(this)">Beet Tahini Tzatziki</div>
+          <div class="chip sel" onclick="toggleChip(this)">Kale Caesar Pesto</div>
+          <div class="chip" onclick="toggleChip(this)"><br></div>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-sec-lbl">Cook time</div>
+        <div class="filter-chips">
+          <div class="chip" onclick="toggleChip(this)">10 min</div>
+          <div class="chip sel" onclick="toggleChip(this)">15 min</div>
+          <div class="chip" onclick="toggleChip(this)">20 min</div>
+          <div class="chip" onclick="toggleChip(this)">30 min+</div>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-sec-lbl">Dietary</div>
+        <div class="filter-chips">
+          <div class="chip" onclick="toggleChip(this)">Vegan</div>
+          <div class="chip" onclick="toggleChip(this)">Gluten-free</div>
+          <div class="chip" onclick="toggleChip(this)">High-protein</div>
+          <div class="chip" onclick="toggleChip(this)">Dairy-free</div>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-sec-lbl">Difficulty</div>
+        <div class="filter-chips">
+          <div class="chip sel" onclick="toggleChip(this)">Easy</div>
+          <div class="chip" onclick="toggleChip(this)">Medium</div>
+          <div class="chip" onclick="toggleChip(this)">Advanced</div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-foot">
+      <button class="btn-ghost" onclick="go(9)">Clear all</button>
+      <button class="btn" style="flex:2" onclick="go(9)">Show Results</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S11 — Recipe Detail ════════════ -->
+<div class="screen" id="s11">
+  <div class="detail-scroll" id="s11-read-panel">
+    <div class="detail-hero">
+      <div class="img-ph" style="height:170px">
+        <svg class="i" width="26" height="26" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span class="lbl">Recipe hero image</span>
+      </div>
+      <button class="d-back" onclick="go(9)"><svg class="i dk" width="13" height="13" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+      <div class="d-actions">
+        <div class="d-act"><svg class="i" width="13" height="13" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg></div>
+        <div class="d-act"><svg class="i" width="13" height="13" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg></div>
+        <div class="d-act" onclick="go(11)"><svg class="i" width="13" height="13" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-tag"><span class="tag-pill">Vegan Green Goddess</span></div>
+      <div class="detail-h">Green Goddess Grain Bowl</div>
+      <div class="detail-meta">
+        <span class="dm"><svg class="i lt" width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>10 min</span>
+        <span class="dm">Easy</span>
+        <span class="dm"><svg class="i lt" width="10" height="10" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path></svg>Serves 2</span>
+      </div>
+      <div class="macro-grid">
+        <div class="mac"><div class="mac-val">340</div><div class="mac-lbl">cal</div></div>
+        <div class="mac"><div class="mac-val">12g</div><div class="mac-lbl">protein</div></div>
+        <div class="mac"><div class="mac-val">48g</div><div class="mac-lbl">carbs</div></div>
+        <div class="mac"><div class="mac-val">10g</div><div class="mac-lbl">fat</div></div>
+      </div>
+      <div class="serving-row">
+        <span class="sv-lbl">Serving size</span>
+        <div class="sv-ctrl">
+          <button class="sv-btn">−</button>
+          <span class="sv-count">2</span>
+          <button class="sv-btn">+</button>
+        </div>
+      </div>
+      <!-- Read / Guide mode toggle — below serving size -->
+      <div style="display:flex;gap:0;margin-bottom:14px">
+        <button id="s11-read-btn" onclick="s11Mode(&#39;read&#39;)" style="flex:1;padding:8px 0;font-family:Rubik,sans-serif;font-size:12px;font-weight:700;border:1.5px solid var(--dark);border-radius:8px 0 0 8px;background:var(--dark);color:#fff;cursor:pointer">Read Mode</button>
+        <button id="s11-guide-btn" onclick="s11Mode(&#39;guide&#39;)" style="flex:1;padding:8px 0;font-family:Rubik,sans-serif;font-size:12px;font-weight:600;border:1.5px solid var(--dark);border-left:none;border-radius:0 8px 8px 0;background:#fff;color:var(--dark);cursor:pointer">Guide Mode</button>
+      </div>
+      <div class="sec-lbl">Ingredients</div>
+      <div class="ingr-list">
+        1 × Super Sauced Vegan Green Goddess sauce<br>
+        1 cup cooked farro or quinoa<br>
+        1 cup mixed greens<br>
+        ½ cucumber, sliced<br>
+        ¼ avocado, sliced<br>
+        2 tbsp pumpkin seeds<br>
+        Salt and pepper to taste
+      </div>
+      <div class="sec-lbl">Instructions</div>
+      <ol style="font-size:12px;color:var(--mid);line-height:2;padding-left:18px;margin-bottom:14px">
+        <li>Cook farro or quinoa according to package instructions and allow to cool slightly.</li>
+        <li>Arrange greens, cucumber, and avocado in a bowl over the grains.</li>
+        <li>Squeeze or spoon the Vegan Green Goddess sauce evenly over the bowl.</li>
+        <li>Scatter pumpkin seeds on top, season with salt and pepper, and serve immediately.</li>
+      </ol>
+      <div class="sec-lbl">Nutrition Facts</div>
+      <div style="border:1px solid var(--border-lt);border-radius:10px;overflow:hidden;margin-bottom:8px;font-size:11px">
+        <div style="background:var(--surface);padding:8px 12px;font-weight:700;color:var(--dark);border-bottom:1px solid var(--border-lt)">Per serving (approx.)</div>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt)"><span style="color:var(--mid)">Calories</span><span style="font-weight:600;color:var(--dark)">340 kcal</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt)"><span style="color:var(--mid)">Total Fat</span><span style="font-weight:600;color:var(--dark)">10g</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt);padding-left:20px"><span style="color:var(--light)">Saturated Fat</span><span style="color:var(--mid)">1.5g</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt)"><span style="color:var(--mid)">Total Carbohydrate</span><span style="font-weight:600;color:var(--dark)">48g</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt);padding-left:20px"><span style="color:var(--light)">Dietary Fiber</span><span style="color:var(--mid)">6g</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border-lt);padding-left:20px"><span style="color:var(--light)">Total Sugars</span><span style="color:var(--mid)">4g</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px"><span style="color:var(--mid)">Protein</span><span style="font-weight:600;color:var(--dark)">12g</span></div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--light);line-height:1.6;margin-bottom:14px;padding:8px 10px;background:var(--surface);border-radius:8px;border:1px solid var(--border-lt)">
+        <strong style="color:var(--mid)">Disclaimer:</strong> Nutrition facts are estimates and may vary based on ingredient brands, preparation methods, serving sizes, and substitutions. This information is provided for general guidance only and should not be used as a substitute for professional nutritional advice.
+      </div>
+      <div class="sec-lbl">More Recipes You'll Love</div>
+      <div class="more-row" style="margin-bottom:16px">
+        <div class="mini"><div class="img-ph mini-img"><svg class="i" width="12" height="12" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><polyline points="21 15 16 10 5 21"></polyline></svg></div><div class="mini-body"><div class="mini-title">Caesar Grain Bowl</div><div class="mini-meta">10 min · Easy</div></div></div>
+        <div class="mini"><div class="img-ph mini-img"><svg class="i" width="12" height="12" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><polyline points="21 15 16 10 5 21"></polyline></svg></div><div class="mini-body"><div class="mini-title">Romesco Toast</div><div class="mini-meta">5 min · Easy</div></div></div>
+        <div class="mini"><div class="img-ph mini-img"><svg class="i" width="12" height="12" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><polyline points="21 15 16 10 5 21"></polyline></svg></div><div class="mini-body"><div class="mini-title">Beet Tahini Wrap</div><div class="mini-meta">10 min · Easy</div></div></div>
+      </div>
+    </div>
+  </div>
+  <!-- Guide Mode panel — shown when Guide Mode toggled -->
+  <div id="s11-guide-panel" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+    <div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-lt);flex-shrink:0">
+      <span style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Step 1 of 5</span>
+      <div style="display:flex;gap:4px">
+        <div style="width:18px;height:3px;border-radius:2px;background:var(--mid)"></div>
+        <div style="width:18px;height:3px;border-radius:2px;background:var(--border-lt)"></div>
+        <div style="width:18px;height:3px;border-radius:2px;background:var(--border-lt)"></div>
+        <div style="width:18px;height:3px;border-radius:2px;background:var(--border-lt)"></div>
+        <div style="width:18px;height:3px;border-radius:2px;background:var(--border-lt)"></div>
+      </div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:14px">
+      <div class="sec-lbl">Ingredient Checklist</div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:12px">Check off each ingredient before you start cooking.</div>
+      <div style="display:flex;flex-direction:column">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">1 × Vegan Green Goddess sauce</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">1 cup farro or quinoa</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">1 cup mixed greens</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">½ cucumber</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">¼ avocado</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-label">2 tbsp pumpkin seeds</span></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:9px;padding:8px 12px;border-top:1px solid var(--border-lt);flex-shrink:0;background:#fff">
+      <button class="btn-out" style="flex:1;justify-content:center" onclick="s11Mode(&#39;read&#39;)">
+        <svg class="i" width="13" height="13" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>Exit
+      </button>
+      <button class="btn" style="flex:2" onclick="go(12)">Next Step</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S13 — Guided Mode step ════════════ -->
+<div class="screen" id="s13">
+  <div class="guided-scroll">
+    <div class="guided-top">
+      <span class="guided-step-badge">Step 2 of 5</span>
+      <div class="guided-progress">
+        <div class="gp-seg done"></div><div class="gp-seg cur"></div><div class="gp-seg"></div><div class="gp-seg"></div><div class="gp-seg"></div>
+      </div>
+      <button onclick="go(11)" style="background:none;border:1.5px solid var(--border-lt);border-radius:7px;padding:4px 10px;font-family:Rubik,sans-serif;font-size:11px;font-weight:600;color:var(--mid);cursor:pointer;display:flex;align-items:center;gap:4px">
+        <svg class="i" width="11" height="11" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Exit
+      </button>
+    </div>
+    <!-- Step video — autoplays and loops, no play button -->
+    <div class="step-video">
+      <div class="img-ph" style="height:180px">
+        <svg class="i" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="3"></rect><path d="M5 3v18M19 3v18"></path></svg>
+        <span class="lbl">Step video (autoplay · loop)</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="step-num">Step 2</div>
+      <div class="step-desc">Add the Vegan Green Goddess sauce to a pan over medium heat. Stir until warmed through, about 1 minute.</div>
+      <div class="timer-pill">
+        <svg class="i dk" width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        1:00 &nbsp;·&nbsp; Tap to start
+      </div>
+      <div class="step-tip" style="margin-top:12px">
+        <div class="tip-icon"><svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+        <span>Keep heat on medium — don't let the sauce reduce too quickly.</span>
+      </div>
+    </div>
+  </div>
+  <div class="guided-nav">
+    <button class="btn-out" onclick="go(11)">
+      <svg class="i" width="13" height="13" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>Back
+    </button>
+    <button class="btn" onclick="go(13)">Next step</button>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S14 — Congrats ════════════ -->
+<div class="screen" id="s14">
+  <div class="scroll" style="background:var(--surface)">
+    <div style="padding:20px 16px 0;display:flex;flex-direction:column;gap:0">
+
+      <!-- Header -->
+      <div style="text-align:center;padding-bottom:16px;border-bottom:1px solid var(--border-lt)">
+        <div style="width:52px;height:52px;border:1.5px solid var(--border-lt);border-radius:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg class="i dk" width="24" height="24" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div style="font-size:20px;font-weight:900;color:var(--dark);letter-spacing:-.02em">You nailed it.</div>
+        <div style="font-size:12px;font-weight:600;color:var(--mid);margin-top:3px">Green Goddess Grain Bowl</div>
+        <div style="font-size:11px;color:var(--light);margin-top:3px;line-height:1.5">Brand voice micro-copy — warm, confident, on-brand.</div>
+        <button onclick="go(11)" style="margin-top:12px;background:none;border:1.5px solid var(--border-lt);border-radius:8px;padding:7px 16px;font-family:Rubik,sans-serif;font-size:12px;font-weight:600;color:var(--mid);cursor:pointer">Back to recipe</button>
+      </div>
+
+      <!-- Section 1: How did you like it? -->
+      <div style="background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:14px;margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:10px;text-align:center">How did you like the recipe?</div>
+        <div style="display:flex;gap:10px">
+          <button onclick="this.style.background=&#39;var(--dark)&#39;;this.style.color=&#39;#fff&#39;;this.querySelector(&#39;svg&#39;).style.stroke=&#39;#fff&#39;" style="flex:1;border:1.5px solid var(--border-lt);border-radius:11px;padding:14px 10px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;font-family:Rubik,sans-serif">
+            <svg class="i" width="22" height="22" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg>
+            <span style="font-size:11px;font-weight:700;color:inherit">Loved it!</span>
+          </button>
+          <button onclick="this.style.background=&#39;var(--dark)&#39;;this.style.color=&#39;#fff&#39;;this.querySelector(&#39;svg&#39;).style.stroke=&#39;#fff&#39;" style="flex:1;border:1.5px solid var(--border-lt);border-radius:11px;padding:14px 10px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;font-family:Rubik,sans-serif">
+            <svg class="i" width="22" height="22" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span style="font-size:11px;font-weight:700;color:inherit">Not for me</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 2: Sauce Log — single sauce used in this recipe -->
+      <div style="background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:14px;margin-top:10px">
+        <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:3px">Update your Sauce Log</div>
+        <div style="font-size:11px;color:var(--light);margin-bottom:12px">How many Vegan Green Goddess sauces do you have left?</div>
+        <div style="display:flex;align-items:center;background:var(--surface);border-radius:9px;padding:10px 12px">
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600;color:var(--dark)">Vegan Green Goddess</div>
+            <div style="font-size:10px;color:var(--light);margin-top:2px">Used 1 today</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button style="width:28px;height:28px;border:1.5px solid var(--border-lt);border-radius:14px;background:#fff;font-family:Rubik,sans-serif;font-size:16px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+            <span style="font-size:15px;font-weight:700;color:var(--dark);min-width:20px;text-align:center">2</span>
+            <button style="width:28px;height:28px;border:1.5px solid var(--border-lt);border-radius:14px;background:#fff;font-family:Rubik,sans-serif;font-size:16px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+          </div>
+        </div>
+        <button class="btn" style="margin-top:12px;font-size:12px;padding:10px">Update Sauce Log</button>
+      </div>
+
+      <!-- Section 3: Save for next time -->
+      <div style="background:#fff;border:1px solid var(--border-lt);border-radius:12px;padding:14px;margin-top:10px;margin-bottom:16px">
+        <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:3px">Save this for next time!</div>
+        <div style="font-size:11px;color:var(--light);margin-bottom:12px">Add it to your Saved tab so you can find it quickly.</div>
+        <button class="btn" style="font-size:13px;padding:12px">Bookmark this recipe</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="go(9)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S15 — Saved tab ════════════ -->
+<div class="screen" id="s15">
+  <div class="status-bar" style="background:var(--surface)"></div>
+  <div class="app-header" style="background:var(--surface)">
+    <div class="app-title">Saved</div>
+    <div class="search-bar" style="background:#fff">
+      <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Search saved recipes…
+    </div>
+  </div>
+  <div class="filter-row" style="align-items:center">
+    <button class="fc" onclick="go(10)" style="display:flex;align-items:center;gap:5px;flex-shrink:0"><svg class="i dk" width="13" height="13" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg> Filter</button>
+    <div style="width:1px;height:18px;background:var(--border-lt);flex-shrink:0"></div>
+    <div class="fc on">All</div>
+    <div class="fc">5 min</div>
+    <div class="fc">10 min</div>
+    <div class="fc">30 min</div>
+  </div>
+  <div class="card-list">
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Vegan Green Goddess</div>
+        <div class="bm-btn" style="background:var(--dark)"><svg class="i wh" width="11" height="11" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg></div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">20-Min Garlic Butter Pasta</div>
+        <div class="card-meta"><span class="cm">20 min</span><span class="cm">480 cal</span><span class="cm">Easy</span></div>
+      </div>
+    </div>
+    <div class="rcard" onclick="go(11)">
+      <div class="card-img-wrap">
+        <div class="img-ph" style="height:110px"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="lbl">Recipe image</span></div>
+        <div class="cube-tag">Kale Caesar Pesto</div>
+        <div class="bm-btn" style="background:var(--dark)"><svg class="i wh" width="11" height="11" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg></div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Thai Green Veg Curry</div>
+        <div class="card-meta"><span class="cm">20 min</span><span class="cm">390 cal</span><span class="cm">Vegan</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab" onclick="go(9)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab on" onclick="go(14)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S17 — Discover tab ════════════ -->
+<div class="screen" id="s17">
+  <div class="status-bar" style="background:var(--surface)"></div>
+  <div class="app-header" style="background:var(--surface)">
+    <div class="app-title">Discover</div>
+    <div style="font-size:11px;color:var(--light);font-weight:500;margin-top:2px">Tap to view &nbsp;·&nbsp; Swipe left to skip</div>
+  </div>
+  <div class="filter-row" style="align-items:center">
+    <button class="fc" onclick="go(10)" style="display:flex;align-items:center;gap:5px;flex-shrink:0"><svg class="i dk" width="13" height="13" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg> Filter</button>
+    <div style="width:1px;height:18px;background:var(--border-lt);flex-shrink:0"></div>
+    <div class="fc on">All</div>
+    <div class="fc">5 min</div>
+    <div class="fc">10 min</div>
+    <div class="fc">30 min</div>
+  </div>
+  <div class="disc-card-area">
+    <!-- Stack peek (cards behind) -->
+    <div style="position:relative;flex:1">
+      <div style="position:absolute;bottom:8px;left:8px;right:8px;height:calc(100% - 24px);background:#fff;border:1px solid var(--border-lt);border-radius:14px;opacity:.5;transform:scale(.96)"></div>
+      <div style="position:absolute;bottom:4px;left:4px;right:4px;height:calc(100% - 16px);background:#fff;border:1px solid var(--border-lt);border-radius:14px;opacity:.3;transform:scale(.98)"></div>
+      <!-- Top card -->
+      <div class="disc-card-ph" style="position:absolute;inset:0">
+        <div class="img-ph" style="height:240px">
+          <svg class="i" width="28" height="28" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span class="lbl">Recipe hero image</span>
+        </div>
+        <div class="disc-card-body">
+          <div class="disc-card-h">One-Pan Butter Chicken</div>
+          <div class="disc-meta"><span>25 min</span><span>540 cal</span><span>Easy</span></div>
+          <div class="meta-row">
+            <span class="meta-pill">Butter Chicken</span>
+            <span class="meta-pill">High-protein</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="disc-hint">3 more recipes in your stack</div>
+    <div class="disc-actions">
+      <button class="disc-skip">
+        <svg class="i" width="14" height="14" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        Skip
+      </button>
+      <button class="disc-match" onclick="go(11)">
+        <svg class="i wh" width="14" height="14" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        View Recipe
+      </button>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab" onclick="go(9)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab on" onclick="go(15)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab" onclick="go(16)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════ S19 — Profile ════════════ -->
+<div class="screen" id="s19">
+  <div class="status-bar" style="background:var(--surface)"></div>
+  <div class="profile-scroll">
+    <div class="profile-header" style="background:var(--surface)">
+      <div class="app-title">Profile</div>
+    </div>
+
+    <!-- Avatar + name -->
+    <div class="profile-hero">
+      <div class="img-ph profile-avatar"><svg class="i" width="24" height="24" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+      <div class="profile-name">Gina</div>
+      <div class="profile-email">gina@example.com</div>
+    </div>
+
+    <!-- Stats: Cooked / Saved / Hearts -->
+    <div class="profile-stats">
+      <div class="pstat"><div class="pstat-val">24</div><div class="pstat-lbl">Cooked</div></div>
+      <div class="pstat"><div class="pstat-val">12</div><div class="pstat-lbl">Saved</div></div>
+      <div class="pstat"><div class="pstat-val">18</div><div class="pstat-lbl">Hearts</div></div>
+    </div>
+
+    <!-- Sauce Log -->
+    <div class="profile-section">
+      <div class="sec-lbl" style="margin-bottom:8px">Sauce Log</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <!-- SKU row component -->
+        <div style="background:#fff;border:1px solid var(--border-lt);border-radius:11px;padding:12px 13px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:12px;font-weight:700;color:var(--dark)">Vegan Green Goddess</div>
+            <div style="font-size:10px;color:var(--light);font-weight:500">Tap to edit</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <!-- Cubes -->
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Cubes</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="cubes-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">8</span>
+                <button onclick="sauceAdj(this,1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+            <!-- Servings -->
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Servings</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="servings-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">2</span>
+                <button onclick="sauceAdj(this,1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--light);margin-top:8px">1 serving = 4 cubes</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-lt);border-radius:11px;padding:12px 13px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:12px;font-weight:700;color:var(--dark)">Kale Caesar Pesto</div>
+            <div style="font-size:10px;color:var(--light);font-weight:500">Tap to edit</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Cubes</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="cubes-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">12</span>
+                <button onclick="sauceAdj(this,1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Servings</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="servings-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">3</span>
+                <button onclick="sauceAdj(this,1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--light);margin-top:8px">1 serving = 4 cubes</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-lt);border-radius:11px;padding:12px 13px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:12px;font-weight:700;color:var(--dark)">Bell Pepper Romesco</div>
+            <div style="font-size:10px;color:var(--light);font-weight:500">Tap to edit</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Cubes</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="cubes-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">0</span>
+                <button onclick="sauceAdj(this,1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Servings</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="servings-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">0</span>
+                <button onclick="sauceAdj(this,1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--light);margin-top:8px">1 serving = 4 cubes</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-lt);border-radius:11px;padding:12px 13px;margin-bottom:4px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:12px;font-weight:700;color:var(--dark)">Beet Tahini Tzatziki</div>
+            <div style="font-size:10px;color:var(--light);font-weight:500">Tap to edit</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Cubes</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="cubes-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">4</span>
+                <button onclick="sauceAdj(this,1,&#39;cubes&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+            <div style="flex:1;background:var(--surface);border-radius:8px;padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Servings</div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button onclick="sauceAdj(this,-1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+                <span class="servings-val" style="font-size:15px;font-weight:700;color:var(--dark);min-width:22px;text-align:center">1</span>
+                <button onclick="sauceAdj(this,1,&#39;servings&#39;)" style="width:24px;height:24px;border:1.5px solid var(--border-lt);border-radius:12px;background:#fff;font-family:Rubik,sans-serif;font-size:14px;font-weight:700;color:var(--dark);cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--light);margin-top:8px">1 serving = 4 cubes</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Preferences -->
+    <div class="profile-section">
+      <div class="sec-lbl" style="margin-bottom:2px">Preferences</div>
+      <div class="prof-row">
+        <svg class="i" width="15" height="15" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg>
+        <span class="prof-row-label">Dietary preferences</span>
+        <span class="prof-row-sub">High-protein, Vegan</span>
+        <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div class="profile-section">
+      <div class="sec-lbl" style="margin-bottom:2px">Account</div>
+      <div class="prof-row">
+        <svg class="i" width="15" height="15" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span class="prof-row-label">Account details</span>
+        <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+      <div class="prof-row">
+        <svg class="i" width="15" height="15" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="4"></rect><path d="M12 8v8M8 12l4 4 4-4"></path></svg>
+        <span class="prof-row-label">Notifications</span>
+        <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+      <div class="prof-row" style="border-bottom:none">
+        <svg class="i" width="15" height="15" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
+        <span class="prof-row-label">Sign out</span>
+        <svg class="i lt" width="13" height="13" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="tabs">
+    <div class="tab" onclick="go(9)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>Recipes</div>
+    <div class="tab" onclick="go(14)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>Saved</div>
+    <div class="tab" onclick="go(15)"><svg class="i lt" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>Discover</div>
+    <div class="tab on" onclick="go(16)"><svg class="i dk" width="18" height="18" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</div>
+  </div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+const ANNS = [
+  "<strong>F1 · Web Landing</strong> — Customer scans QR on packaging and lands on supersauced.com. App download bar is <strong>above the fold</strong>, paired with the recipe from the packaging. Recipe content continues below.",
+  "<strong>F1 · App Store</strong> — Standard iOS install sheet. Two CTAs: fresh install or open if already installed. Both continue to the sign-up screen.",
+  "<strong>F1 · Sign Up</strong> — Brand-forward welcome with three auth options: Apple, Google, email magic link. No password field anywhere. Shopify sync note for existing customers.",
+  "<strong>F1 · Email Entry</strong> — Email address + optional phone number. Single magic link CTA. No password.",
+  "<strong>F1 · Magic Link Sent</strong> — Confirmation state. Shows submitted email, resend option, 10-min expiry. Simulate box lets you continue the prototype flow.",
+  "<strong>F1 · Survey Q1 — Sauces</strong> — 4 real SKUs: Vegan Green Goddess, Kale Caesar Pesto, Bell Pepper Romesco, Beet Tahini Tzatziki. Qty stepper per SKU (0–9). Row highlights when qty &gt; 0. Personalisation language explains why we ask. Skippable.",
+  "<strong>F1 · Survey Q2 — Dietary</strong> — No preference first (default). Correct spelling: High Fiber. Added Low-Carb and Paleo. Multi-select. Skippable.",
+  "<strong>F1 · Survey Q3 — Source</strong> — QR option removed. Instagram and TikTok listed separately, before Retail. Single-select. Skippable.",
+  "<strong>F1 · Recipes Home (QR flow)</strong> — Filter button opens in-depth filter panel. Quick filters are time-based (5/10/30 min). Cards show heart count, no save button on card. Correct SKU names. Deep-link banner removed.",
+  "<strong>F2 · Recipes Home (direct / returning)</strong> — Same layout as above, no deep-link banner. Normal ordered recipe library.",
+  "<strong>F3 · Filter Panel</strong> — Bottom sheet over the recipe list. Filter sections: Cube/SKU, Cook time, Dietary, Difficulty. Multi-select. Clear all + Show Results CTAs.",
+  "<strong>F3 · Recipe Detail</strong> — Read/Guide mode toggle at the top. Read Mode: scrollable recipe with ingredients, numbered instructions, nutrition facts table, and legal disclaimer. Guide Mode: inline guided cooking starting with ingredient checklist (same flow as S12/S13). Heart / Save / Share in top-right. Tap share icon to see Flow 5.",
+  "<strong>F3 · Guided Mode — Step</strong> — Exit button top-right returns to recipe Read Mode. Video placeholder autoplays and loops (no play button). Step number, description, timer pill, tip callout. Back / Next step CTAs at bottom.",
+  "<strong>F3 · Congrats Screen</strong> — (1) How did you like the recipe? — Loved it or Not for me. (2) Update your Sauce Log — single sauce used in this recipe, inline stepper, Update Sauce Log CTA. (3) Save this for next time. Back to recipe at top. Bottom nav for easy navigation.",
+  "<strong>F4 · Saved Tab</strong> — Saved recipes list. Bookmark icon filled/dark to indicate saved state. Tap any card to view full recipe detail.",
+  "<strong>F6 · Discover Tab</strong> — Phase 2 feature. Stack of recipe cards. Filter chips at top. Card stack peek shows depth. Two CTAs per card: Skip (left) or View Recipe (opens full detail). Card count shown.",
+  "<strong>App · Profile Tab</strong> — Stats: Cooked, Saved, Hearts. Sauce Log: all 4 SKUs with live Cubes + Servings steppers (1 serving = 4 cubes — updating one auto-updates the other). Preferences and Account sections below."
+];
+
+let cur = 0;
+const screens = document.querySelectorAll('.screen');
+const btns = document.querySelectorAll('.sbtn');
+const ann = document.getElementById('ann');
+
+function go(n) {
+  screens[cur].classList.remove('on');
+  btns[cur].classList.remove('active');
+  cur = n;
+  screens[n].classList.add('on');
+  btns[n].classList.add('active');
+  ann.innerHTML = ANNS[n];
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function s11Mode(mode) {
+  const readPanel = document.getElementById('s11-read-panel');
+  const guidePanel = document.getElementById('s11-guide-panel');
+  const readBtn = document.getElementById('s11-read-btn');
+  const guideBtn = document.getElementById('s11-guide-btn');
+  if (mode === 'guide') {
+    readPanel.style.display = 'none';
+    guidePanel.style.display = 'flex';
+    readBtn.style.background = '#fff'; readBtn.style.color = 'var(--dark)'; readBtn.style.fontWeight = '600';
+    guideBtn.style.background = 'var(--dark)'; guideBtn.style.color = '#fff'; guideBtn.style.fontWeight = '700';
+  } else {
+    readPanel.style.display = '';
+    guidePanel.style.display = 'none';
+    readBtn.style.background = 'var(--dark)'; readBtn.style.color = '#fff'; readBtn.style.fontWeight = '700';
+    guideBtn.style.background = '#fff'; guideBtn.style.color = 'var(--dark)'; guideBtn.style.fontWeight = '600';
+  }
+}
+function sauceAdj(btn, delta, field) {
+  const card = btn.closest('[style*="border-radius:11px"]');
+  const cubesEl = card.querySelector('.cubes-val');
+  const servingsEl = card.querySelector('.servings-val');
+  const CUBES_PER_SERVING = 4;
+  if (field === 'cubes') {
+    let c = Math.max(0, parseInt(cubesEl.textContent) + delta);
+    cubesEl.textContent = c;
+    servingsEl.textContent = (c / CUBES_PER_SERVING % 1 === 0)
+      ? (c / CUBES_PER_SERVING)
+      : (c / CUBES_PER_SERVING).toFixed(2).replace(/0+$/, '');
+  } else {
+    let s = Math.max(0, parseFloat(servingsEl.textContent) + delta * 0.5);
+    servingsEl.textContent = s % 1 === 0 ? s : s.toFixed(1);
+    cubesEl.textContent = Math.round(s * CUBES_PER_SERVING);
+  }
+}
+function toggleChip(el) { el.classList.toggle('sel'); }
+function qtyChange(btn, delta) {
+  const valEl = btn.parentElement.querySelector('.qty-val');
+  let v = parseInt(valEl.textContent) + delta;
+  if (v < 0) v = 0;
+  if (v > 9) v = 9;
+  valEl.textContent = v;
+  // highlight row if qty > 0
+  const row = btn.closest('.sku-row');
+  row.style.borderColor = v > 0 ? 'var(--dark)' : 'var(--border-lt)';
+  row.style.background = v > 0 ? 'var(--surface2)' : '#fff';
+}
+function selectOne(el) {
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function toggleCheck(el) { el.classList.toggle('chk'); }
+
+ann.innerHTML = ANNS[0];
+btns[0].classList.add('active');
+
+// ── EDIT MODE ──
+let editMode = false;
+const SKIP_TAGS = new Set(['SCRIPT','STYLE','SVG','PATH','POLYLINE','LINE','CIRCLE','RECT','ELLIPSE','POLYGON','DEFS','G','USE']);
+const SKIP_CLASSES = new Set(['lbl','img-ph']); // image placeholders
+
+function getEditableElements() {
+  const phone = document.querySelector('.phone');
+  const candidates = [];
+  // Walk all elements inside phone
+  const all = phone.querySelectorAll('*');
+  all.forEach(el => {
+    if (SKIP_TAGS.has(el.tagName)) return;
+    // Skip if ancestor is SVG
+    if (el.closest('svg')) return;
+    // Skip buttons (they're interactive controls)
+    if (el.tagName === 'BUTTON') return;
+    // Skip input elements
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
+    // Skip image placeholder labels (they're just decorative)
+    if (el.classList.contains('img-ph')) return;
+    // Check: has direct text content (non-whitespace) and children are only text/BR nodes
+    const hasTextChild = Array.from(el.childNodes).some(n => n.nodeType === 3 && n.textContent.trim());
+    const allChildrenSimple = Array.from(el.children).every(c => c.tagName === 'BR');
+    if (hasTextChild && allChildrenSimple) {
+      candidates.push(el);
+    }
+  });
+  return candidates;
+}
+
+function toggleEditMode() {
+  editMode = !editMode;
+  const editBtn = document.getElementById('edit-btn');
+  const saveBtn = document.getElementById('save-btn');
+  const editHint = document.getElementById('edit-hint');
+
+  if (editMode) {
+    getEditableElements().forEach(el => {
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('data-edit', '1');
+    });
+    editBtn.textContent = '✕ Exit Edit';
+    editBtn.classList.add('active');
+    saveBtn.style.display = '';
+    editHint.style.display = '';
+  } else {
+    document.querySelectorAll('[data-edit]').forEach(el => {
+      el.removeAttribute('contenteditable');
+      el.removeAttribute('data-edit');
+    });
+    editBtn.textContent = 'Edit Mode';
+    editBtn.classList.remove('active');
+    saveBtn.style.display = 'none';
+    editHint.style.display = 'none';
+  }
+}
+
+function downloadHTML() {
+  saveHTML();
+}
+
+function saveHTML() {
+  // Clone full document
+  const clone = document.documentElement.cloneNode(true);
+  // Remove contenteditable markers
+  clone.querySelectorAll('[contenteditable]').forEach(el => {
+    el.removeAttribute('contenteditable');
+    el.removeAttribute('data-edit');
+  });
+  // Remove edit-btn active state
+  const eb = clone.getElementById('edit-btn');
+  if (eb) { eb.textContent = 'Edit Mode'; eb.classList.remove('active'); }
+  // Hide save btn
+  const sb = clone.getElementById('save-btn');
+  if (sb) sb.style.display = 'none';
+  const eh = clone.getElementById('edit-hint');
+  if (eh) eh.style.display = 'none';
+  // Reset editMode var in script — inject a reset
+  const scripts = clone.querySelectorAll('script');
+  scripts.forEach(s => {
+    if (s.textContent.includes('editMode')) {
+      s.textContent = s.textContent.replace('let editMode = false;', 'let editMode = false; // saved');
+    }
+  });
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'supersauced_wireframe_edited.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+
+</body></html>

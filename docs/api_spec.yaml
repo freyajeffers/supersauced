@@ -1,0 +1,609 @@
+openapi: "3.0.1"
+info:
+  title: Supabase/PostgREST API Documentation
+  version: "1.0.0"
+servers:
+  - url: https://your-supabase-instance.supabase.co/rest/v1/
+paths:
+  /user_profiles:
+    get:
+      summary: Retrieve user profiles
+      tags: [User Profiles]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Number of items to skip before starting to collect the result set
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of user profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+    post:
+      summary: Create a new user profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /user_profiles/{id}:
+    get:
+      summary: Retrieve a single user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User profile object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    put:
+      summary: Update a user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    delete:
+      summary: Delete a user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No content
+  /recipes:
+    get:
+      summary: List recipes with optional filtering
+      tags: [Recipes]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: cube_tags
+          in: query
+          description: Filter by cube tags (comma separated)
+          schema:
+            type: string
+        - name: dietary_tags
+          in: query
+          description: Filter by dietary tags (comma separated)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+    post:
+      summary: Create a new recipe
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+      responses:
+        '201':
+          description: Recipe created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+  /recipes/{id}:
+    get:
+      summary: Get a recipe by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Recipe object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+    put:
+      summary: Update a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+      responses:
+        '200':
+          description: Updated recipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+    delete:
+      summary: Delete a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No content
+  /recipe_ingredients:
+    get:
+      summary: List ingredients (paginated)
+      tags: [Ingredients]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of ingredients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeIngredient'
+    post:
+      summary: Add a new ingredient
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeIngredient'
+      responses:
+        '201':
+          description: Ingredient created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeIngredient'
+  /recipe_ingredients/{id}:
+    get:
+      summary: Get ingredient by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Ingredient object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeIngredient'
+    put:
+      summary: Update ingredient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeIngredient'
+      responses:
+        '200':
+          description: Updated ingredient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeIngredient'
+    delete:
+      summary: Delete ingredient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No content
+  /recipe_steps:
+    get:
+      summary: List steps (paginated)
+      tags: [Steps]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of steps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeStep'
+    post:
+      summary: Add a new step
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeStep'
+      responses:
+        '201':
+          description: Step created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeStep'
+  /recipe_steps/{id}:
+    get:
+      summary: Get step by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Step object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeStep'
+    put:
+      summary: Update step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeStep'
+      responses:
+        '200':
+          description: Updated step
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeStep'
+    delete:
+      summary: Delete step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No content
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserProfile:
+      type: object
+      required:
+        - id
+        - email
+        - onboarding_survey
+        - sauce_log
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the user (references auth.users.id)
+        email:
+          type: string
+          format: email
+          description: The unique email address of the user
+        username:
+          type: string
+          nullable: true
+          description: The unique username of the user
+        full_name:
+          type: string
+          nullable: true
+          description: The full name of the user
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+          description: The URL of the user's avatar image
+        onboarding_survey:
+          type: object
+          description: Survey responses in JSONB format
+        sauce_log:
+          type: object
+          description: Sauce log/history in JSONB format
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the profile was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the profile was last updated
+    Recipe:
+      type: object
+      required:
+        - id
+        - title
+        - slug
+        - difficulty
+        - cube_tags
+        - dietary_tags
+        - is_published
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the recipe
+        title:
+          type: string
+          description: The title of the recipe
+        slug:
+          type: string
+          description: The unique slug for routing
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the recipe
+        hero_image_url:
+          type: string
+          format: uri
+          nullable: true
+          description: The URL of the main image of the recipe
+        difficulty:
+          type: integer
+          minimum: 1
+          maximum: 3
+          description: Difficulty rating from 1 (easy) to 3 (hard)
+        cook_time_minutes:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Cook time in minutes
+        calories_per_serving:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Calories per serving
+        protein_g:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Protein content in grams
+        fat_g:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Fat content in grams
+        carbs_g:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Carbohydrates content in grams
+        cube_tags:
+          type: array
+          items:
+            type: string
+          description: List of cube tags associated with the recipe
+        dietary_tags:
+          type: array
+          items:
+            type: string
+          description: List of dietary tags associated with the recipe
+        servings_default:
+          type: integer
+          minimum: 1
+          nullable: true
+          description: Default number of servings
+        is_published:
+          type: boolean
+          description: Whether the recipe is published and visible
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recipe was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the recipe was last updated
+    RecipeIngredient:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the ingredient item
+        recipe_id:
+          type: string
+          format: uuid
+          description: Reference to the parent recipe
+        quantity:
+          type: number
+          format: float
+          minimum: 0.0
+          nullable: true
+          description: Amount/quantity of the ingredient
+        unit:
+          type: string
+          nullable: true
+          description: Unit of measurement (e.g., grams, cups, tsp)
+        name:
+          type: string
+          description: Name of the ingredient
+        notes:
+          type: string
+          nullable: true
+          description: Additional notes or preparation instructions
+        position:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Order of appearance in the recipe list
+    RecipeStep:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - step_number
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the step
+        recipe_id:
+          type: string
+          format: uuid
+          description: Reference to the parent recipe
+        step_number:
+          type: integer
+          minimum: 1
+          description: The chronological order of the step
+        description:
+          type: string
+          description: Text description/instruction of the step
+        video_url:
+          type: string
+          format: uri
+          nullable: true
+          description: Optional video instruction URL
+        timer_seconds:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Optional duration for the step timer in seconds
+        tip:
+          type: string
+          nullable: true
+          description: Optional chef tip or advice for this step
