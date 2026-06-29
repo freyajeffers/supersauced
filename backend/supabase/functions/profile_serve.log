@@ -1,4 +1,0 @@
-Using workdir /home/freya/supersauced/backend
-WARN: config section [inbucket] is deprecated. Please use [local_smtp] instead.
-supabase start is not running.
-Try rerunning the command with --debug to troubleshoot the error.

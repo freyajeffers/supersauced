@@ -1,0 +1,58 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+web_flat_packages/
+
+# Build and deployment outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# Coverage and testing outputs
+.coverage
+htmlcov/
+.pytest_cache/
+.eslintcache
+.stylelintcache
+
+# Python cache and bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Operating System and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Super Sauced temporary/pid files and server logs
+*_pid.txt
+*_serve.log
+*.log
+wip/
+gdrive/
+*verification_report.txt
+*verification_log.txt
+
+# Supabase Local Storage and Temp files
+.supabase/
+supabase/.temp/
+backend/supabase/.temp/
