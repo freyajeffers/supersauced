@@ -79,9 +79,9 @@ INSERT INTO public.product_nutrition (product_id, serving_size_grams, calories, 
 ON CONFLICT (product_id) DO NOTHING;
 
 -- 6. RECIPES & METRICS
-INSERT INTO public.recipes (id, author_id, title, slug, description, status, published_at) VALUES
-('c1111111-1111-1111-1111-111111111111', 'e7b39a3f-e8b9-47bb-a951-40439d5e3111', 'Vegan Spicy Chili', 'vegan-spicy-chili', 'A hearty, slow-simmered vegan chili loaded with beans and vegetables, spiked with our Spicy Sauced Cube.', 'published', NOW() - INTERVAL '1 day'),
-('c2222222-2222-2222-2222-222222222222', 'e7b39a3f-e8b9-47bb-a951-40439d5e3111', 'Gluten-Free Garlic Pasta', 'gf-garlic-pasta', 'Simple, elegant, and aromatic pasta tossed in garlic and herb olive oil using the Classic Sauced Cube.', 'published', NOW() - INTERVAL '12 hours')
+INSERT INTO public.recipes (id, author_id, title, slug, description, status, published_at, dietary_tags, cube_tags) VALUES
+('c1111111-1111-1111-1111-111111111111', 'e7b39a3f-e8b9-47bb-a951-40439d5e3111', 'Vegan Spicy Chili', 'vegan-spicy-chili', 'A hearty, slow-simmered vegan chili loaded with beans and vegetables, spiked with our Spicy Sauced Cube.', 'published', NOW() - INTERVAL '1 day', ARRAY['Vegan', 'Vegetarian', 'Gluten-Free']::TEXT[], ARRAY['spicy']::TEXT[]),
+('c2222222-2222-2222-2222-222222222222', 'e7b39a3f-e8b9-47bb-a951-40439d5e3111', 'Gluten-Free Garlic Pasta', 'gf-garlic-pasta', 'Simple, elegant, and aromatic pasta tossed in garlic and herb olive oil using the Classic Sauced Cube.', 'published', NOW() - INTERVAL '12 hours', ARRAY['Gluten-Free', 'Vegetarian']::TEXT[], ARRAY['classic']::TEXT[])
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.recipe_metrics (recipe_id, prep_time_seconds, cook_time_seconds, servings, difficulty_level) VALUES
@@ -96,10 +96,6 @@ INSERT INTO public.categories (id, parent_id, name) VALUES
 ('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001', 'Pasta Dishes')
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO public.recipe_categories (recipe_id, category_id) VALUES
-('c1111111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000002'),
-('c2222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000003')
-ON CONFLICT (recipe_id, category_id) DO NOTHING;
 
 -- 8. INGREDIENTS & UNITS
 INSERT INTO public.units (id, name, abbreviation) VALUES

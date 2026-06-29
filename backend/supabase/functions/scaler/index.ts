@@ -21,35 +21,35 @@ app.get('/recipes/:recipe_id/adjust-servings', async (c) => {
 
   const client = getUserClient(c)
   try {
-    const { data: recipe, error: recErr } = await client
-      .from('recipes')
-      .select('servings_default')
-      .eq('id', recipeId)
-      .single()
+    // Utilize the optimized database RPC for native serving size calculations
+    const { data, error } = await client
+      .rpc('scale_recipe_servings', { p_recipe_id: recipeId, p_target_servings: targetServings })
 
-    if (recErr || !recipe || !recipe.servings_default) {
-      return c.json({ detail: 'Recipe missing default servings' }, 400)
+    if (error) {
+      return c.json({ detail: `Serving adjustment failed: ${error.message}` }, 400)
     }
 
-    const defaultServings = recipe.servings_default
-    const factor = targetServings / defaultServings
-
-    const { data: ingredients, error: ingErr } = await client
-      .from('recipe_ingredients')
-      .select('id,quantity,unit')
-      .eq('recipe_id', recipeId)
-
-    if (ingErr) {
-      return c.json({ detail: `Serving adjustment failed: ${ingErr.message}` }, 400)
+    if (!data || data.length === 0) {
+      // Check if recipe exists at all or simply has no ingredients loaded
+      const { data: recCheck } = await client.from('recipes').select('id').eq('id', recipeId).single()
+      if (!recCheck) {
+        return c.json({ detail: 'Recipe missing default servings' }, 400)
+      }
+      return c.json({ target_servings: targetServings, ingredients: [] })
     }
 
-    const scaled = ingredients.map(ing => {
-      const scaled_quantity = (ing.quantity !== null && ing.quantity !== undefined)
-        ? Math.round(ing.quantity * factor * 100) / 100
-        : undefined;
+    const scaled = data.map((item: any) => {
+      const qty = item.quantity_decimal !== null ? Number(item.quantity_decimal) : null;
+      const scaledQty = item.scaled_quantity !== null ? Number(item.scaled_quantity) : undefined;
       return {
-        ...ing,
-        scaled_quantity
+        id: item.ingredient_id,
+        recipe_id: item.recipe_id,
+        quantity: qty,
+        quantity_decimal: qty,
+        scaled_quantity: scaledQty,
+        name: item.ingredient_name || '',
+        unit: item.unit_abbreviation || '',
+        notes: item.preparation_state
       }
     })
 

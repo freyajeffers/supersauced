@@ -34,8 +34,8 @@ router.get('/', async (c) => {
         servings: metrics?.servings || 1,
         difficulty: metrics?.difficulty_level === 'easy' ? 1 : metrics?.difficulty_level === 'medium' ? 2 : 3,
         difficulty_level: metrics?.difficulty_level || 'easy',
-        cube_tags: [],
-        dietary_tags: []
+        cube_tags: r.cube_tags || [],
+        dietary_tags: r.dietary_tags || []
       }
     })
 
@@ -74,8 +74,8 @@ router.get('/:id', async (c) => {
     servings: metrics?.servings || 1,
     difficulty: metrics?.difficulty_level === 'easy' ? 1 : metrics?.difficulty_level === 'medium' ? 2 : 3,
     difficulty_level: metrics?.difficulty_level || 'easy',
-    cube_tags: [],
-    dietary_tags: []
+    cube_tags: data.cube_tags || [],
+    dietary_tags: data.dietary_tags || []
   })
 })
 
@@ -94,7 +94,9 @@ router.post('/', async (c) => {
     description: body.description || '',
     status: body.status || 'draft',
     published_at: body.published_at || null,
-    author_id: currentUser.id
+    author_id: currentUser.id,
+    cube_tags: body.cube_tags || [],
+    dietary_tags: body.dietary_tags || []
   }
 
   try {
@@ -123,7 +125,9 @@ router.post('/', async (c) => {
       id: recipe.id,
       ...recipe,
       ...metricsPayload,
-      servings_default: metricsPayload.servings
+      servings_default: metricsPayload.servings,
+      cube_tags: recipe.cube_tags || [],
+      dietary_tags: recipe.dietary_tags || []
     }, 201)
   } catch (err) {
     return c.json({ detail: `Failed to create recipe: ${(err as any).message}` }, 400)
@@ -144,6 +148,8 @@ router.put('/:id', async (c) => {
   if (body.description !== undefined) recipeUpdate.description = body.description
   if (body.status !== undefined) recipeUpdate.status = body.status
   if (body.published_at !== undefined) recipeUpdate.published_at = body.published_at
+  if (body.cube_tags !== undefined) recipeUpdate.cube_tags = body.cube_tags
+  if (body.dietary_tags !== undefined) recipeUpdate.dietary_tags = body.dietary_tags
 
   const metricsUpdate: any = {}
   if (body.prep_time_seconds !== undefined) metricsUpdate.prep_time_seconds = body.prep_time_seconds
@@ -191,7 +197,9 @@ router.put('/:id', async (c) => {
       cook_time_seconds: metrics.cook_time_seconds || 0,
       servings: metrics.servings || 1,
       servings_default: metrics.servings || 1,
-      difficulty_level: metrics.difficulty_level || 'easy'
+      difficulty_level: metrics.difficulty_level || 'easy',
+      cube_tags: recipe.cube_tags || [],
+      dietary_tags: recipe.dietary_tags || []
     })
   } catch (err) {
     return c.json({ detail: `Failed to update recipe: ${(err as any).message}` }, 400)

@@ -96,12 +96,34 @@ Deno.test("GET /recipe_steps - list steps", async () => {
 });
 
 Deno.test("GET /recipes/:id/adjust-servings - scale ingredients", async () => {
-  const mockIngredients = [
-    { id: "ing-1", quantity_decimal: 100, ingredient: { name: "Garlic" }, unit: { abbreviation: "g" } },
-    { id: "ing-2", quantity_decimal: null, ingredient: { name: "Salt" }, unit: null }
+  const mockRpcData = [
+    {
+      ingredient_id: "ing-1",
+      recipe_id: "recipe-123",
+      quantity_decimal: 100,
+      scaled_quantity: 200,
+      ingredient_name: "Garlic",
+      unit_abbreviation: "g",
+      preparation_state: null
+    },
+    {
+      ingredient_id: "ing-2",
+      recipe_id: "recipe-123",
+      quantity_decimal: null,
+      scaled_quantity: null,
+      ingredient_name: "Salt",
+      unit_abbreviation: null,
+      preparation_state: null
+    }
   ];
 
   const customClient = {
+    rpc(fn: string, args: any) {
+      if (fn === 'scale_recipe_servings') {
+        return Promise.resolve({ data: mockRpcData, error: null });
+      }
+      return Promise.resolve({ data: null, error: { message: `Unknown RPC: ${fn}` } });
+    },
     from(table: string) {
       return {
         select(cols: string = "*") {
@@ -111,10 +133,10 @@ Deno.test("GET /recipes/:id/adjust-servings - scale ingredients", async () => {
           return this;
         },
         single() {
-          return Promise.resolve({ data: { servings: 2 }, error: null });
+          return Promise.resolve({ data: { id: "recipe-123" }, error: null });
         },
         then(resolve: any) {
-          resolve({ data: mockIngredients, error: null });
+          resolve({ data: [], error: null });
         }
       };
     }

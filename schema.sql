@@ -90,8 +90,14 @@ CREATE TABLE public.recipes (
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     status VARCHAR(50) DEFAULT 'draft',
-    published_at TIMESTAMPTZ
+    published_at TIMESTAMPTZ,
+    dietary_tags TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
+    cube_tags TEXT[] NOT NULL DEFAULT '{}'::TEXT[]
 );
+
+-- GIN indexes for lightning-fast tagging and filtering
+CREATE INDEX IF NOT EXISTS idx_recipes_dietary_tags ON public.recipes USING GIN (dietary_tags);
+CREATE INDEX IF NOT EXISTS idx_recipes_cube_tags ON public.recipes USING GIN (cube_tags);
 
 CREATE TABLE public.recipe_metrics (
     recipe_id UUID PRIMARY KEY REFERENCES public.recipes(id) ON DELETE CASCADE,
@@ -107,11 +113,6 @@ CREATE TABLE public.categories (
     name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE public.recipe_categories (
-    recipe_id UUID REFERENCES public.recipes(id) ON DELETE CASCADE,
-    category_id UUID REFERENCES public.categories(id) ON DELETE CASCADE,
-    PRIMARY KEY (recipe_id, category_id)
-);
 
 -- 5. RECIPE CONSTRUCTION (Ingredients & Units)
 CREATE TABLE public.units (

@@ -14,7 +14,7 @@ router.get('/search', async (c) => {
   const offset = parseInt(c.req.query('offset') || '0')
 
   try {
-    // Simply fetch recipes with metrics. We ignore tag contains filters since they are removed from schema.sql.
+    // Simply fetch recipes with metrics. We select the new cube_tags and dietary_tags arrays from recipes.
     const { data, error } = await client
       .from('recipes')
       .select('*, metrics:recipe_metrics(*)')
@@ -36,8 +36,8 @@ router.get('/search', async (c) => {
         published_at: r.published_at,
         servings: metrics?.servings || 1,
         difficulty_level: metrics?.difficulty_level || 'easy',
-        cube_tags: [],
-        dietary_tags: []
+        cube_tags: r.cube_tags || [],
+        dietary_tags: r.dietary_tags || []
       }
     })
 
@@ -295,7 +295,7 @@ router.get('/recipes/recommendations', async (c) => {
   const limit = parseInt(c.req.query('limit') || '5')
 
   try {
-    // Return recent recipes since tag-based arrays are removed
+    // Return recent recipes with dietary_tags and cube_tags
     const { data, error } = await client
       .from('recipes')
       .select('*, metrics:recipe_metrics(*)')
@@ -314,7 +314,9 @@ router.get('/recipes/recommendations', async (c) => {
         description: r.description,
         status: r.status,
         servings: metrics?.servings || 1,
-        difficulty_level: metrics?.difficulty_level || 'easy'
+        difficulty_level: metrics?.difficulty_level || 'easy',
+        cube_tags: r.cube_tags || [],
+        dietary_tags: r.dietary_tags || []
       }
     })
 
@@ -356,43 +358,35 @@ router.get('/recipes/:recipe_id/adjust-servings', async (c) => {
 
   const client = getUserClient(c)
   try {
-    const { data: recipeData, error: recErr } = await client
-      .from('recipe_metrics')
-      .select('servings')
-      .eq('recipe_id', recipeId)
-      .single()
+    // Utilize the optimized database RPC for native serving size calculations
+    const { data, error } = await client
+      .rpc('scale_recipe_servings', { p_recipe_id: recipeId, p_target_servings: targetServings })
 
-    if (recErr || !recipeData || !recipeData.servings) {
-      return c.json({ detail: 'Recipe missing default servings' }, 400)
+    if (error) {
+      return c.json({ detail: `Serving adjustment failed: ${error.message}` }, 400)
     }
 
-    const defaultServings = recipeData.servings
-    const factor = targetServings / defaultServings
-
-    // Select ingredients with their nested name/unit info
-    const { data: ingredients, error: ingErr } = await client
-      .from('recipe_ingredients')
-      .select('*, ingredient:ingredients(name), unit:units(abbreviation)')
-      .eq('recipe_id', recipeId)
-
-    if (ingErr) {
-      return c.json({ detail: `Serving adjustment failed: ${ingErr.message}` }, 400)
+    if (!data || data.length === 0) {
+      // Check if recipe exists at all or simply has no ingredients loaded
+      const { data: recCheck } = await client.from('recipes').select('id').eq('id', recipeId).single()
+      if (!recCheck) {
+        return c.json({ detail: 'Recipe missing default servings' }, 400)
+      }
+      return c.json({ target_servings: targetServings, ingredients: [] })
     }
 
-    const scaled = (ingredients || []).map(ing => {
-      const qty = ing.quantity_decimal !== null ? Number(ing.quantity_decimal) : null
-      const scaled_quantity = (qty !== null && qty !== undefined)
-        ? Math.round(qty * factor * 100) / 100
-        : undefined;
+    const scaled = data.map((item: any) => {
+      const qty = item.quantity_decimal !== null ? Number(item.quantity_decimal) : null;
+      const scaledQty = item.scaled_quantity !== null ? Number(item.scaled_quantity) : undefined;
       return {
-        id: ing.id,
-        recipe_id: ing.recipe_id,
+        id: item.ingredient_id,
+        recipe_id: item.recipe_id,
         quantity: qty,
         quantity_decimal: qty,
-        scaled_quantity,
-        name: (ing as any).ingredient?.name || '',
-        unit: (ing as any).unit?.abbreviation || '',
-        notes: ing.preparation_state
+        scaled_quantity: scaledQty,
+        name: item.ingredient_name || '',
+        unit: item.unit_abbreviation || '',
+        notes: item.preparation_state
       }
     })
 
