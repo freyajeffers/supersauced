@@ -37,3 +37,15 @@
 ---
 
 *Keep this README up‑to‑date as new documentation files are added.*
+
+## Deploying Supabase Edge Functions
+
+To deploy all edge functions locally, run the helper script:
+
+```bash
+cd backend/supabase/functions
+./deploy_edge_functions.sh
+```
+
+Make sure you have the Supabase CLI installed and are logged in.
+

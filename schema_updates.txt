@@ -1,0 +1,50 @@
+Thanks for providing the schema. It’s well-normalized, which is great for data integrity. However, in a high-concurrency app like Super Sauced, this level of normalization can lead to "Join Hell" when fetching recipe details.
+Identified Bottlenecks (Dry-Run Analysis)
+
+Based on your schema, here are the most likely performance hotspots:
+
+    The "Recipe Detail" Fetch:
+
+        The Problem: To display a full recipe, you are likely joining recipes + recipe_metrics + recipe_ingredients + ingredients + instruction_steps + recipe_categories.
+
+        Bottleneck: Deep joins result in high CPU usage and temporary disk writes during sorting/grouping.
+
+        Recommendation: Denormalization is your friend here. Consider a recipe_content_cache table or a materialized view that flattens the recipe structure for read-heavy operations.
+
+    Shopping List/Ingredient Lookup:
+
+        The Problem: Querying shopping_list_items requires constant joins across ingredients and products.
+
+        Bottleneck: Frequent writes/updates to is_checked_off on a table that is often joined for read operations.
+
+        Recommendation: Partial indexes on shopping_list_items where is_checked_off = false will drastically speed up active shopping list views.
+
+    Full-Text Search:
+
+        The Problem: Your recipes table uses title and description (TEXT). If users search for ingredients, you currently have no search capability defined in the schema.
+
+        Bottleneck: LIKE '%query%' queries will trigger full table scans.
+
+        Recommendation: Use Postgres tsvector and tsquery (GIN indexes) for fast searching.
+
+Targeted Optimization Plan
+
+Let's look at the Recipe Detail Query specifically. If you were to run:
+SQL
+
+EXPLAIN ANALYZE 
+SELECT * FROM recipes 
+JOIN instruction_steps ON recipes.id = instruction_steps.recipe_id
+WHERE recipes.slug = 'my-best-sauce';
+
+Predicted Results:
+
+    Without Index: Postgres will perform a Seq Scan on instruction_steps because the foreign key is present but the recipe_id is not the first column in a covering index for the join.
+
+    Resulting Latency: Noticeable delay as the table grows > 5,000 steps.
+
+Optimization Action:
+SQL
+
+CREATE INDEX idx_instruction_steps_recipe_id ON public.instruction_steps(recipe_id);
+CREATE INDEX idx_recipes_slug ON public.recipes(slug);
