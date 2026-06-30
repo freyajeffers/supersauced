@@ -4,31 +4,49 @@ import { delay } from "https://deno.land/std@0.213.0/async/delay.ts";
 const COOK_USER_ID = "e7b39a3f-e8b9-47bb-a951-40439d5e3222";
 const JWT_SECRET = "super-secret-jwt-token-with-at-least-32-characters-long";
 
-async function createSignedJwt(payload: any, secret: string): Promise<string> {
-  const header = { alg: "HS256", typ: "JWT" };
+async function createSignedJwt(payload: any, _secret?: string): Promise<string> {
+  const header = {
+    alg: "ES256",
+    typ: "JWT",
+    kid: "b81269f1-21d8-4f2e-b719-c2240a840d90"
+  };
+
   const base64urlEncode = (arr: Uint8Array) => {
     const binString = String.fromCharCode(...arr);
     return btoa(binString).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
   };
+
   const encoder = new TextEncoder();
   const headerB64 = base64urlEncode(encoder.encode(JSON.stringify(header)));
   const payloadB64 = base64urlEncode(encoder.encode(JSON.stringify(payload)));
 
-  const keyData = encoder.encode(secret);
-  const key = await crypto.subtle.importKey(
-    'raw',
-    keyData,
-    { name: 'HMAC', hash: 'SHA-256' },
+  const privateJwk = {
+    kty: "EC",
+    crv: "P-256",
+    x: "M5Sjqn5zwC9Kl1zVfUUGvv9boQjCGd45G8sdopBExB4",
+    y: "P6IXMvA2WYXSHSOMTBH2jsw_9rrzGy89FjPf6oOsIxQ",
+    d: "dIhR8wywJlqlua4y_yMq2SLhlFXDZJBCvFrY1DCHyVU"
+  };
+
+  const privateKey = await crypto.subtle.importKey(
+    "jwk",
+    privateJwk,
+    { name: "ECDSA", namedCurve: "P-256" },
     false,
-    ['sign']
+    ["sign"]
   );
 
   const data = encoder.encode(`${headerB64}.${payloadB64}`);
-  const signatureBuffer = await crypto.subtle.sign('HMAC', key, data);
+  const signatureBuffer = await crypto.subtle.sign(
+    { name: "ECDSA", hash: { name: "SHA-256" } },
+    privateKey,
+    data
+  );
   const signatureB64 = base64urlEncode(new Uint8Array(signatureBuffer));
 
   return `${headerB64}.${payloadB64}.${signatureB64}`;
 }
+
 
 async function postAnalytics(payload: any) {
   const url = "http://127.0.0.1:54321/functions/v1/analytics/analytics_event";

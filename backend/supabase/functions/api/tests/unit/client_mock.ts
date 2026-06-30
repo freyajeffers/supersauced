@@ -23,6 +23,10 @@ export class MockBuilder {
     return this;
   }
 
+  upsert(data: any, options?: any) {
+    return this;
+  }
+
   delete() {
     return this;
   }

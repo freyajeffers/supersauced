@@ -1,4 +1,6 @@
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.8'
+import { createSupabaseContext } from 'npm:@supabase/server'
+import { createContextClient, createAdminClient, extractCredentials } from 'npm:@supabase/server/core'
+import { SupabaseClient } from 'npm:@supabase/supabase-js'
 import { Context } from 'https://deno.land/x/hono@v3.11.8/mod.ts'
 import { HTTPException } from 'https://deno.land/x/hono@v3.11.8/http-exception.ts'
 import { CurrentUser } from './types.ts'
@@ -68,39 +70,102 @@ export function overrideAuth(claims: any, user: any) {
   getCurrentUserOverride = user;
 }
 
-export async function getJwtClaims(c: Context): Promise<any> {
-  if (getJwtClaimsOverride) return getJwtClaimsOverride;
-  const token = c.req.header('Authorization')?.replace('Bearer ', '') || '';
-  const secretsToTry = [
-    Deno.env.get('JWT_SECRET'),
-    Deno.env.get('SUPABASE_JWT_SECRET'),
-    'super-secret-jwt-token-with-at-least-32-characters-long',
-    'test-secret-at-least-32-characters-long'
-  ].filter(Boolean) as string[];
-
-  let lastError: any = null;
-  for (const secret of secretsToTry) {
+const getEnvOverrides = () => {
+  const url = Deno.env.get('SUPABASE_URL') || 'http://localhost:54321';
+  const pubKey = Deno.env.get('SUPABASE_PUBLISHABLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY') || 'public-anon-key';
+  const secKey = Deno.env.get('SUPABASE_SECRET_KEY') || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || 'service-role-key';
+  console.log(`DEBUG getEnvOverrides: url=${url} pubKey=${pubKey.substring(0, 15)}... secKey=${secKey.substring(0, 15)}...`);
+  
+  let jwks = null;
+  const rawJwks = Deno.env.get('SUPABASE_JWKS');
+  if (rawJwks && rawJwks.trim()) {
     try {
-      return await verifyAndDecodeJwt(token, secret);
-    } catch (err) {
-      lastError = err;
+      jwks = JSON.parse(rawJwks);
+    } catch (_) {}
+  }
+  
+  if (!jwks) {
+    const rawJwksUrl = Deno.env.get('SUPABASE_JWKS_URL');
+    if (rawJwksUrl && rawJwksUrl.trim()) {
+      try {
+        jwks = new URL(rawJwksUrl);
+      } catch (_) {}
+    }
+  }
+  
+  if (!jwks) {
+    const jwtSecret = Deno.env.get('SUPABASE_JWT_SECRET') || Deno.env.get('JWT_SECRET');
+    if (jwtSecret) {
+      try {
+        const secretBytes = new TextEncoder().encode(jwtSecret);
+        const binString = String.fromCharCode(...secretBytes);
+        const k = btoa(binString).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+        jwks = {
+          keys: [
+            {
+              kty: "oct",
+              alg: "HS256",
+              k: k,
+              use: "sig",
+              kid: "default"
+            }
+          ]
+        };
+      } catch (_) {}
     }
   }
 
-  const errorMsg = lastError instanceof Error ? lastError.message : String(lastError);
-  throw new HTTPException(401, { message: errorMsg });
+  if (!jwks && (url.includes('localhost') || url.includes('127.0.0.1'))) {
+    try {
+      jwks = new URL(url + '/auth/v1/.well-known/jwks.json');
+    } catch (_) {}
+  }
+
+  return {
+    url,
+    publishableKeys: {
+      default: pubKey,
+    },
+    secretKeys: {
+      default: secKey,
+    },
+    jwks
+  };
+};
+
+export async function getJwtClaims(c: Context): Promise<any> {
+  if (getJwtClaimsOverride) return getJwtClaimsOverride;
+  const env = getEnvOverrides();
+  const { data, error } = await createSupabaseContext(c.req.raw, {
+    auth: 'user',
+    env
+  });
+  if (error) {
+    throw new HTTPException(401, { message: error.message });
+  }
+  return data.jwtClaims;
 }
 
 export async function getCurrentUser(c: Context): Promise<CurrentUser> {
   if (getCurrentUserOverride) return getCurrentUserOverride;
-  const claims = await getJwtClaims(c);
+  const env = getEnvOverrides();
+  const { data, error } = await createSupabaseContext(c.req.raw, {
+    auth: 'user',
+    env
+  });
+  if (error) {
+    throw new HTTPException(401, { message: error.message });
+  }
+  const claims = data.userClaims;
+  if (!claims) {
+    throw new HTTPException(401, { message: 'Unauthorized' });
+  }
   return {
-    id: claims.sub,
+    id: claims.id,
     email: claims.email || '',
     role: claims.role || 'authenticated'
   };
 }
-
 
 let serviceClientOverride: any = null;
 let userClientOverride: any = null;
@@ -112,23 +177,17 @@ export function overrideClients(service: any, user: any) {
 
 export function getServiceClient(): SupabaseClient {
   if (serviceClientOverride) return serviceClientOverride;
-  const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'http://localhost:54321';
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY') || 'test-key';
-  return createClient(supabaseUrl, serviceKey);
+  const env = getEnvOverrides();
+  return createAdminClient({ env });
 }
 
 export function getUserClient(c: Context): SupabaseClient {
   if (userClientOverride) return userClientOverride;
-  const authHeader = c.req.header('Authorization');
-  const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'http://localhost:54321';
-  // Use a non-privileged anon key; avoid pulling in service role key which can bypass RLS.
-  const anonKey = Deno.env.get('SUPABASE_ANON_KEY') || 'public-anon-key';
-  return createClient(supabaseUrl, anonKey, {
-    global: {
-      headers: {
-        Authorization: authHeader || '',
-        apikey: anonKey,
-      }
-    }
+  const creds = extractCredentials(c.req.raw);
+  const env = getEnvOverrides();
+  return createContextClient({
+    auth: { token: creds.token },
+    env
   });
 }
+

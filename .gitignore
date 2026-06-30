@@ -17,6 +17,9 @@ htmlcov/
 .pytest_cache/
 .eslintcache
 .stylelintcache
+cov_profile/
+cov_profile
+
 
 # Python cache and bytecode
 __pycache__/

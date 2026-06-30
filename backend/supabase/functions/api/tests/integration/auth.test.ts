@@ -3,7 +3,7 @@ import { app } from "../../index.ts";
 import { clearMocks, getAuthHeaderForUser, COOK_USER_ID } from "./setup.ts";
 
 Deno.test("Integration: POST /auth/signup & /auth/login workflow", async () => {
-  clearMocks();
+  await clearMocks();
   
   const testEmail = `integration-test-${Date.now()}@example.com`;
   const testPassword = "SecurePassword123!";
@@ -43,7 +43,7 @@ Deno.test("Integration: POST /auth/signup & /auth/login workflow", async () => {
 });
 
 Deno.test("Integration: GET /auth/user profile fetch", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 

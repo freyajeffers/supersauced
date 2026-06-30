@@ -3,7 +3,7 @@ import { app } from "../../index.ts";
 import { clearMocks, getAuthHeaderForUser, CHEF_USER_ID, COOK_USER_ID } from "./setup.ts";
 
 Deno.test("Integration: GET /subscriptions access rights", async () => {
-  clearMocks();
+  await clearMocks();
 
   // 1. Regular user gets 403
   const cookAuthHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
@@ -27,7 +27,7 @@ Deno.test("Integration: GET /subscriptions access rights", async () => {
 });
 
 Deno.test("Integration: POST /subscriptions/webhook processes RevenueCat events", async () => {
-  clearMocks();
+  await clearMocks();
 
   Deno.env.set("REVENUECAT_WEBHOOK_SECRET", "rc-integration-secret");
 

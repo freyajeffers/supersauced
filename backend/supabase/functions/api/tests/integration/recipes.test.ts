@@ -3,11 +3,12 @@ import { app } from "../../index.ts";
 import { clearMocks, getAuthHeaderForUser, CHEF_USER_ID, COOK_USER_ID, CHILI_RECIPE_ID } from "./setup.ts";
 
 Deno.test("Integration: GET /recipes lists seeded recipes", async () => {
-  clearMocks();
+  await clearMocks();
 
   const res = await app.request("/recipes");
   assertEquals(res.status, 200);
   const body = await res.json();
+  console.log("RECIPES BODY:", JSON.stringify(body, null, 2));
   // Ensure both seeded recipes are present
   assertNotEquals(body.length, 0);
   const chili = body.find((r: any) => r.id === CHILI_RECIPE_ID);
@@ -16,7 +17,7 @@ Deno.test("Integration: GET /recipes lists seeded recipes", async () => {
 });
 
 Deno.test("Integration: GET /recipes/:id details fetch", async () => {
-  clearMocks();
+  await clearMocks();
 
   const res = await app.request(`/recipes/${CHILI_RECIPE_ID}`);
   assertEquals(res.status, 200);
@@ -26,7 +27,7 @@ Deno.test("Integration: GET /recipes/:id details fetch", async () => {
 });
 
 Deno.test("Integration: GET /api/v1/features/recipes/:id/adjust-servings calculates serving adjustments on seeded ingredients", async () => {
-  clearMocks();
+  await clearMocks();
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
   const res = await app.request(`/api/v1/features/recipes/${CHILI_RECIPE_ID}/adjust-servings?target_servings=8`, {
@@ -53,7 +54,7 @@ Deno.test("Integration: GET /api/v1/features/recipes/:id/adjust-servings calcula
 });
 
 Deno.test("Integration: POST /recipes role checks", async () => {
-  clearMocks();
+  await clearMocks();
 
   // 1. Authenticated regular user (cook) should get 403 Forbidden
   const cookAuthHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");

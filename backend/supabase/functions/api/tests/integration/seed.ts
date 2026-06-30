@@ -121,7 +121,7 @@ export async function seedDatabase() {
 
   // ---- Recipes & metrics ----
   try {
-    await client.from("recipes").upsert(
+    const r1 = await client.from("recipes").upsert(
       [
         {
           id: CHILI_RECIPE_ID,
@@ -144,14 +144,22 @@ export async function seedDatabase() {
       ],
       { onConflict: "id" }
     );
-    await client.from("recipe_metrics").upsert(
+    if (r1.error) {
+      console.error("Error seeding recipes:", r1.error);
+    }
+    const r2 = await client.from("recipe_metrics").upsert(
       [
         { recipe_id: CHILI_RECIPE_ID, servings: 4, difficulty_level: "medium" },
         { recipe_id: PASTA_RECIPE_ID, servings: 2, difficulty_level: "easy" },
       ],
       { onConflict: "recipe_id" }
     );
-  } catch (_) {}
+    if (r2.error) {
+      console.error("Error seeding recipe metrics:", r2.error);
+    }
+  } catch (err) {
+    console.error("Unexpected exception seeding recipes/metrics:", err);
+  }
 
   // ---- Recipe ingredients for scaling test ----
   try {

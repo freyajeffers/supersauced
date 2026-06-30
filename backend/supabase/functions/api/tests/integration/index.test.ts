@@ -3,7 +3,7 @@ import { app } from "../../index.ts";
 import { clearMocks } from "./setup.ts";
 
 Deno.test("Integration: GET /health returns 200 OK", async () => {
-  clearMocks();
+  await clearMocks();
   const res = await app.request("/health");
   assertEquals(res.status, 200);
   const body = await res.json();
@@ -12,7 +12,7 @@ Deno.test("Integration: GET /health returns 200 OK", async () => {
 });
 
 Deno.test("Integration: OPTIONS /health returns CORS headers", async () => {
-  clearMocks();
+  await clearMocks();
   const res = await app.request("/health", {
     method: "OPTIONS"
   });

@@ -53,16 +53,18 @@ app.route('/api/v1/features', featuresRouter)
 app.route('/v1/features', featuresRouter)
 
 // Serve request by rewriting path prefix if running in Supabase local/hosted function env
+export async function handleRequest(req: Request): Promise<Response> {
+  const url = new URL(req.url)
+  // Strip "/functions/v1/api" or "/api" (if not /api/v1) prefix if it exists to match our registered Hono routes
+  if (url.pathname.startsWith('/functions/v1/api')) {
+    url.pathname = url.pathname.replace('/functions/v1/api', '')
+  } else if (url.pathname.startsWith('/api') && !url.pathname.startsWith('/api/v1')) {
+    url.pathname = url.pathname.replace('/api', '')
+  }
+  const newReq = new Request(url.toString(), req)
+  return await app.fetch(newReq)
+}
+
 if (import.meta.main) {
-  Deno.serve(async (req) => {
-    const url = new URL(req.url)
-    // Strip "/functions/v1/api" or "/api" (if not /api/v1) prefix if it exists to match our registered Hono routes
-    if (url.pathname.startsWith('/functions/v1/api')) {
-      url.pathname = url.pathname.replace('/functions/v1/api', '')
-    } else if (url.pathname.startsWith('/api') && !url.pathname.startsWith('/api/v1')) {
-      url.pathname = url.pathname.replace('/api', '')
-    }
-    const newReq = new Request(url.toString(), req)
-    return await app.fetch(newReq)
-  })
+  Deno.serve(handleRequest)
 }

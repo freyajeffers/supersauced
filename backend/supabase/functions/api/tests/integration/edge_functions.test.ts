@@ -46,7 +46,7 @@ Deno.test("Integration: POST /functions/auth_callback creates profile & settings
 });
 
 Deno.test("Integration: POST /functions/shopify_sync validates signature and processes order", async () => {
-  clearMocks();
+  await clearMocks();
 
   const secret = "shopify-integration-secret";
   Deno.env.set("SHOPIFY_WEBHOOK_SECRET", secret);
@@ -76,7 +76,7 @@ Deno.test("Integration: POST /functions/shopify_sync validates signature and pro
 });
 
 Deno.test("Integration: POST /functions/analytics_event forwards proxy events", async () => {
-  clearMocks();
+  await clearMocks();
 
   const res = await app.request("/functions/analytics_event", {
     method: "POST",

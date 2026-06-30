@@ -3,7 +3,7 @@ import { app } from "../../index.ts";
 import { clearMocks, getAuthHeaderForUser, CHEF_USER_ID, COOK_USER_ID } from "./setup.ts";
 
 Deno.test("Integration: GET /user_profiles lists user's own profile only under RLS", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
@@ -22,7 +22,7 @@ Deno.test("Integration: GET /user_profiles lists user's own profile only under R
 });
 
 Deno.test("Integration: GET /user_profiles/:id - success on own profile", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
@@ -39,7 +39,7 @@ Deno.test("Integration: GET /user_profiles/:id - success on own profile", async 
 });
 
 Deno.test("Integration: GET /user_profiles/:id - 404 (access denied) on other user's profile due to RLS", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
@@ -55,7 +55,7 @@ Deno.test("Integration: GET /user_profiles/:id - 404 (access denied) on other us
 });
 
 Deno.test("Integration: PUT /user_profiles/:id - success on own profile", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
@@ -76,7 +76,7 @@ Deno.test("Integration: PUT /user_profiles/:id - success on own profile", async 
 });
 
 Deno.test("Integration: PUT /user_profiles/:id - 403 Forbidden on other user's profile", async () => {
-  clearMocks();
+  await clearMocks();
 
   const authHeader = await getAuthHeaderForUser(COOK_USER_ID, "authenticated", "cook@test.com");
 
